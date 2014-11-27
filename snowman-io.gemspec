@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["vakhov@gmail.com"]
   spec.summary       = %q{The heart of snowman}
   spec.description   = %q{Gem for continuously parameters checks}
-  spec.homepage      = ""
+  spec.homepage      = "http://snowman.io"
   spec.license       = "MIT"
 
   spec.files         = Dir['{bin/*,lib/**/*}'] +
