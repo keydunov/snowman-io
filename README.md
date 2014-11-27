@@ -1,4 +1,4 @@
-# Snowman::Io
+# SnowmanIO
 
 TODO: Write a gem description
 
