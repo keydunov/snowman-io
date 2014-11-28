@@ -1,4 +1,4 @@
-# SnowmanIO
+# SnowManIO
 
 Zero maintenance power parameters checks.
 
