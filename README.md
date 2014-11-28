@@ -2,6 +2,8 @@
 
 Zero maintenance power parameters checks.
 
+[![Build Status](https://travis-ci.org/snowman-io/snowman-io.svg)](https://travis-ci.org/snowman-io/snowman-io)
+
 ## Installation
 
 Add this line to your application's Gemfile:
