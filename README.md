@@ -1,6 +1,6 @@
 # SnowmanIO
 
-TODO: Write a gem description
+Zero maintenance power parameters checks.
 
 ## Installation
 
@@ -21,6 +21,11 @@ Or install it yourself as:
 ## Usage
 
 TODO: Write usage instructions here
+
+## Authors
+
+* Alexey Vakhov
+* Artyom Keydunov
 
 ## Contributing
 
