@@ -1,5 +1,9 @@
 require "snowman-io/version"
+require "snowman-io/api"
 
 module SnowmanIO
-  # Your code goes here...
+  def self.start
+    # start Sinatra based Web UI
+    API.run!
+  end
 end
