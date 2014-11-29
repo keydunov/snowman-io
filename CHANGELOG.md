@@ -1,6 +1,6 @@
 # SnowmanIO
 
-Version
+Version 0.0.2 - 2014.11.29
 - Add travis.ci support
 - Sinatra bases web UI scaffold
 
