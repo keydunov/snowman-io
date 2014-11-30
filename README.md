@@ -4,25 +4,9 @@ Zero maintenance power parameters checks.
 
 [![Build Status](https://travis-ci.org/snowman-io/snowman-io.svg)](https://travis-ci.org/snowman-io/snowman-io)
 
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'snowman-io'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install snowman-io
-
 ## Usage
 
-TODO: Write usage instructions here
+Fire command `snowman server` to run SnowManIO server.
 
 ## Authors
 
