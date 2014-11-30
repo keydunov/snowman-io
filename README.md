@@ -4,9 +4,11 @@ Zero maintenance power parameters checks.
 
 [![Build Status](https://travis-ci.org/snowman-io/snowman-io.svg)](https://travis-ci.org/snowman-io/snowman-io)
 
-## Usage
+## Installation
 
-Fire command `snowman server` to run SnowManIO server.
+Press a button below to install your private Heroku SnowManIO instance for free.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/snowman-io/sample-app)
 
 ## Authors
 
