@@ -1,5 +1,8 @@
 # SnowmanIO
 
+Version
+- ...
+
 Version 0.0.3 - 2014.11.30
 - API changes: to run SnowManIO server fire command `snowman server`
 
