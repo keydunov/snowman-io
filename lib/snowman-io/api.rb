@@ -9,7 +9,7 @@ module SnowmanIO
     end
 
     get "/" do
-      "SnowManIO #{VERSION}: Home Page"
+      "SnowmanIO #{VERSION}: Home Page"
     end
   end
 end

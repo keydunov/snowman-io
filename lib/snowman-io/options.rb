@@ -13,7 +13,7 @@ module SnowmanIO
 
         opts.separator ""
         opts.separator "Commands"
-        opts.separator "  server       Run SnowManIO server"
+        opts.separator "  server       Run SnowmanIO server"
 
         opts.separator ""
         opts.separator "Server options:"
