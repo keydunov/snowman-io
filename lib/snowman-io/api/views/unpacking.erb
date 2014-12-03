@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="page-header">
+    <h1>SnowmanIO: Installation</h1>
+  </div>
+
+  <% if @empty_password_warning %>
+    <div class="alert alert-danger">
+      Empty password is not allowed.
+    </div>
+  <% end %>
+
+  <div class="col-sm-6">
+    <form action="/unpacking" method="POST" role="form">
+      <div class="form-group">
+        <label for=password>Admin password</label>
+        <input type=text name=password class="form-control">
+      </div>
+      <input type=submit value="Set Admin Password" class="btn btn-primary">
+    </form>
+  </div>
+</div>

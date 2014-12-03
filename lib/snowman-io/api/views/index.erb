@@ -1,28 +1,26 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+<% content_for :head do %>
   <meta content="<%= SnowmanIO::VERSION %>" name="snowman-io-version" />
-  <title>SnowmanIO: be a little snowy</title>
-  <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <script type="text/x-handlebars">
-    <h2>Welcome to SnowmanIO</h2>
+<% end %>
 
-    {{outlet}}
-  </script>
+<script type="text/x-handlebars">
+<div class="container">
+  <h2>
+    Welcome to SnowmanIO
+    <small><a href="/logout">logout</a></small>
+  </h2>
 
-  <script type="text/x-handlebars" id="index">
-    <p>Version: {{model.version}}</p>
-  </script>
+  {{outlet}}
+</div>
+</script>
 
-  <script src="/js/libs/jquery-1.10.2.js"></script>
-  <script src="/js/libs/handlebars-v1.3.0.js"></script>
-  <script src="/js/libs/ember-1.8.1.js"></script>
-  <script src="/js/app.js"></script>
-  <!-- to activate the test runner, add the "?test" query string parameter -->
-  <script src="/tests/runner.js"></script>
-</body>
-</html>
+<script type="text/x-handlebars" id="index">
+  <p>Version: {{model.version}}</p>
+</script>
+
+<script src="/js/libs/jquery-1.10.2.js"></script>
+<script src="/js/libs/handlebars-v1.3.0.js"></script>
+<script src="/js/libs/ember-1.8.1.js"></script>
+<script src="/js/app.js"></script>
+<!-- to activate the test runner, add the "?test" query string parameter -->
+<script src="/tests/runner.js"></script>

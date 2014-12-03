@@ -1,4 +1,4 @@
-require 'snowman-io'
+require 'spec_helper'
 
 RSpec.describe SnowmanIO::Options do
   before do
