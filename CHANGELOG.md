@@ -1,5 +1,8 @@
 # SnowmanIO
 
+Version
+- ...
+
 Version 0.0.4 - 2014.12.4
 - First kernel version
 - Very simple web UI
