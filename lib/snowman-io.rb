@@ -17,16 +17,11 @@ module SnowmanIO
 
     Celluloid.logger = (options[:verbose] ? SnowmanIO.logger : nil)
 
-    case options[:command]
-    when "server"
-      launcher = Launcher.new(load_checks)
-      launcher.start
+    launcher = Launcher.new(load_checks)
+    launcher.start
 
-      # start web server on main thread
-      API.start(options)
-    else
-      abort "Unreacheable point. Please report the bug to https://github.com/snowman-io/snowman-io/issues"
-    end
+    # start web server on main thread
+    API.start(options)
   end
 
   def self.load_checks
