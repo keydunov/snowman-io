@@ -1,0 +1,15 @@
+<h1>SnowmanIO: Prepare</h1>
+
+<% if @empty_password_warning %>
+  <div class="alert alert-danger">
+    Empty password is not allowed.
+  </div>
+<% end %>
+
+<form action="/unpacking" method="POST">
+  <div>
+    <label for=password>Set admin password</label>
+    <input type=text name=password>
+  </div>
+  <input type=submit value="Set Password">
+</form>

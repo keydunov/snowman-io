@@ -1,0 +1,15 @@
+<h1>SnowmanIO: Auth</h1>
+
+<% if @wrong_password_warning %>
+  <div class="alert alert-danger">
+    Wrong password.
+  </div>
+<% end %>
+
+<form action="/login" method="POST">
+  <div>
+    <label for=password>Password</label>
+    <input type=password name=password>
+  </div>
+  <input type=submit value="Login">
+</form>

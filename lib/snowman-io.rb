@@ -1,5 +1,6 @@
 require 'logger'
 require 'redis'
+require 'bcrypt'
 require 'celluloid/autostart'
 
 require "snowman-io/version"

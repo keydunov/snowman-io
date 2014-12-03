@@ -11,7 +11,17 @@ RSpec.describe SnowmanIO::API, type: :feature do
   end
 
   it "unpacking" do
+    # 1. go to main page
     visit "/"
+    expect(current_path).to eq("/unpacking")
+
+    # 2. create admin password
+    fill_in "password", with: "secret"
+    click_button "Set Password"
     expect(current_path).to eq("/")
+
+    # 3. logout
+    visit "/logout"
+    expect(current_path).to eq("/login")
   end
 end
