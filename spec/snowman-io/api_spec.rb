@@ -17,7 +17,7 @@ RSpec.describe SnowmanIO::API, type: :feature do
 
     # 2. create admin password
     fill_in "password", with: "secret"
-    click_button "Set Password"
+    click_button "Set Admin Password"
     expect(current_path).to eq("/")
 
     # 3. logout
