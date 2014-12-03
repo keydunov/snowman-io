@@ -9,26 +9,15 @@ module SnowmanIO
       options = default_options
 
       opt_parser = OptionParser.new do |opts|
-        opts.banner = "Usage: snowman COMMAND [options]"
+        opts.banner = "Usage: snowman [options]"
 
         opts.separator ""
-        opts.separator "Commands"
-        opts.separator "  server       Run SnowmanIO server"
-
-        opts.separator ""
-        opts.separator "Server options:"
+        opts.separator "Options:"
         opts.on("-p", "--port PORT", "use PORT (default: 4567)") do |port|
           options[:port] = port.to_i
         end
 
-        if args.empty?
-          puts opts
-          exit
-        end
-
-        options[:command] = args.shift
-        unless AVAILABLE_COMMANDS.include?(options[:command])
-          puts "Error: Command '#{options[:command]}' not recognized"
+        opts.on("-h", "--help", "show this message") do
           puts opts
           exit
         end
