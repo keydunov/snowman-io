@@ -2,23 +2,20 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ember Starter Kit</title>
+  <meta content="<%= SnowmanIO::VERSION %>" name="snowman-io-version" />
+  <title>SnowmanIO: be a little snowy</title>
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <script type="text/x-handlebars">
-    <h2>Welcome to Ember.js</h2>
+    <h2>Welcome to SnowmanIO</h2>
 
     {{outlet}}
   </script>
 
   <script type="text/x-handlebars" id="index">
-    <ul>
-    {{#each item in model}}
-      <li>{{item}}</li>
-    {{/each}}
-    </ul>
+    <p>Version: {{model.version}}</p>
   </script>
 
   <script src="/js/libs/jquery-1.10.2.js"></script>
