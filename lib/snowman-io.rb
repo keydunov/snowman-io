@@ -5,6 +5,7 @@ require 'celluloid/autostart'
 require "snowman-io/version"
 require "snowman-io/api"
 require "snowman-io/options"
+require "snowman-io/checks/hosted_graphite"
 require "snowman-io/check"
 require "snowman-io/check_result"
 
