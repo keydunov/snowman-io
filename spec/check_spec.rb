@@ -1,4 +1,4 @@
-require 'snowman-io'
+require 'spec_helper'
 
 RSpec.describe SnowmanIO::Check do
   let(:check) { SnowmanIO::Check.new }
