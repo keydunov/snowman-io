@@ -5,11 +5,13 @@ module SnowmanIO
     def self.start(options)
       sinatra_options = {}
       sinatra_options[:port] = options[:port]
+      sinatra_options[:public_folder] = File.dirname(__FILE__) + "/api/public"
+      sinatra_options[:views] = File.dirname(__FILE__) + "/api/views"
       run!(sinatra_options)
     end
 
     get "/" do
-      "SnowmanIO #{VERSION}: Home Page"
+      erb :index
     end
   end
 end
