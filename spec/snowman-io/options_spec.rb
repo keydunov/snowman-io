@@ -26,4 +26,10 @@ RSpec.describe SnowmanIO::Options do
     options = SnowmanIO::Options.new.parse!(args)
     expect(options).to eq(port: 1234)
   end
+
+  it "parses verbose option" do
+    args = ["-v"]
+    options = SnowmanIO::Options.new.parse!(args)
+    expect(options[:verbose]).to be_truthy
+  end
 end

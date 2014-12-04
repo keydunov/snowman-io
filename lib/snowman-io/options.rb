@@ -17,6 +17,10 @@ module SnowmanIO
           options[:port] = port.to_i
         end
 
+        opts.on "-v", "--verbose", "print more verbose output" do |arg|
+          options[:verbose] = arg
+        end
+
         opts.on("-h", "--help", "show this message") do
           puts opts
           exit
