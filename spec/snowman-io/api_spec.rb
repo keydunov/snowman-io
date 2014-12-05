@@ -25,6 +25,13 @@ RSpec.describe SnowmanIO::API, type: :feature do
     expect(current_path).to eq("/login")
   end
 
+  it "authenticates user with right password" do
+    register_admin('secret')
+    fill_in "password", with: "secret"
+    click_button "Login"
+    expect(current_path).to eq("/")
+  end
+
   it "demands not empty password" do
     visit "/unpacking"
     fill_in "password", with: ""
@@ -37,12 +44,5 @@ RSpec.describe SnowmanIO::API, type: :feature do
     fill_in "password", with: "wrong-password"
     click_button "Login"
     expect(page).to have_content("Wrong password")
-  end
-
-  it "authenticates user with right password" do
-    register_admin('secret')
-    fill_in "password", with: "secret"
-    click_button "Login"
-    expect(current_path).to eq("/")
   end
 end
