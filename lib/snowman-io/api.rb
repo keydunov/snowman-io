@@ -13,8 +13,7 @@ module SnowmanIO
     helpers Sinatra::ContentFor
     set :public_folder, File.dirname(__FILE__) + "/api/public"
     set :views, File.dirname(__FILE__) + "/api/views"
-    # TODO: fix it
-    set :session_secret, 'super secret'
+    set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
     ADMIN_PASSWORD_KEY = "admin_password_hash"
 
