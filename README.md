@@ -2,7 +2,7 @@
 
 Zero maintenance power parameters checks.
 
-[![Build Status](https://travis-ci.org/snowman-io/snowman-io.svg)](https://travis-ci.org/snowman-io/snowman-io)
+[![Gem Version](https://badge.fury.io/rb/snowman-io.svg)](http://badge.fury.io/rb/snowman-io) [![Build Status](https://travis-ci.org/snowman-io/snowman-io.svg)](https://travis-ci.org/snowman-io/snowman-io)
 
 ## Installation
 
