@@ -24,7 +24,7 @@ See your development version of application on `http://localhost:4200` by defaul
 Execute snowman backend.
 
 ``` bash
-rerun -d lib bundle exec snowman
+EMBER_DEV=1 rerun -d lib bundle exec snowman
 ```
 
 __NOTE:__ if you update sources in UI folder dont forget compile app:
