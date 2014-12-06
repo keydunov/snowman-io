@@ -19,7 +19,7 @@ __NOTE:__ if you update sources in UI folder dont forget compile app:
 
 ``` bash
 cd ui
-ember build
+./release_new_ui
 ```
 
 ## Document Changelog

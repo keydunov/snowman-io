@@ -1,26 +1,41 @@
-<% content_for :head do %>
-  <meta content="<%= SnowmanIO::VERSION %>" name="snowman-io-version" />
-  <link rel="stylesheet" href="/css/style.css">
-<% end %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SnowmanIO: be a little snowy</title>
+    <meta content="<%= SnowmanIO::VERSION %>" name="snowman-io-version" />
 
-<script type="text/x-handlebars">
-<div class="container">
-  <h2>
-    Welcome to SnowmanIO
-    <small><a href="/logout">logout</a></small>
-  </h2>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 
-  {{outlet}}
-</div>
-</script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-<script type="text/x-handlebars" id="index">
-  <p>Version: {{model.version}}</p>
-</script>
+    <base href="/" />
+<meta name="ui/config/environment" content="%7B%22modulePrefix%22%3A%22ui%22%2C%22environment%22%3A%22production%22%2C%22baseURL%22%3A%22/%22%2C%22locationType%22%3A%22auto%22%2C%22EmberENV%22%3A%7B%22FEATURES%22%3A%7B%7D%7D%2C%22APP%22%3A%7B%7D%2C%22contentSecurityPolicyHeader%22%3A%22Content-Security-Policy-Report-Only%22%2C%22contentSecurityPolicy%22%3A%7B%22default-src%22%3A%22%27none%27%22%2C%22script-src%22%3A%22%27self%27%22%2C%22font-src%22%3A%22%27self%27%22%2C%22connect-src%22%3A%22%27self%27%22%2C%22img-src%22%3A%22%27self%27%22%2C%22style-src%22%3A%22%27self%27%22%2C%22media-src%22%3A%22%27self%27%22%7D%2C%22exportApplicationGlobal%22%3Afalse%7D" />
 
-<script src="/js/libs/jquery-1.10.2.js"></script>
-<script src="/js/libs/handlebars-v1.3.0.js"></script>
-<script src="/js/libs/ember-1.8.1.js"></script>
-<script src="/js/app.js"></script>
-<!-- to activate the test runner, add the "?test" query string parameter -->
-<script src="/tests/runner.js"></script>
+
+
+    <link rel="stylesheet" href="assets/vendor-d41d8cd98f00b204e9800998ecf8427e.css">
+    <link rel="stylesheet" href="assets/ui-d41d8cd98f00b204e9800998ecf8427e.css">
+
+    
+
+  </head>
+  <body>
+    
+
+
+    <script src="assets/vendor-55667499ff2eb7f6cb5b6dfc3f473694.js"></script>
+    <script src="assets/ui-3247d4a075e61758f5205bd49e659f78.js"></script>
+
+    
+
+  </body>
+</html>
