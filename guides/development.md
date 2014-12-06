@@ -1,7 +1,7 @@
 # SnowmanIO Development Guide
 
-UI is Ember.js application backed with Sinatra as backend. The UI is developing using
-[ember-cli](http://www.ember-cli.com/). Sources are located at `ui` folder.
+UI is Ember.js application backed with Sinatra. The UI was developed with help of
+[ember-cli](http://www.ember-cli.com/). The application sources are located at `ui` folder.
 
 ## Prepare
 
