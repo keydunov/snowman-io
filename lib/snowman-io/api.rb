@@ -26,15 +26,22 @@ module SnowmanIO
     end
 
     before do
-      if !admin_exists?
-        redirect to('/unpacking') if request.path_info != '/unpacking'
-      elsif !admin_authenticated?
-        redirect to('/login') if request.path_info != '/login'
+      if request.path =~ /^\/api/
+        if !admin_authenticated?
+          # Ignore authorization only during app development
+          halt 403, 'Access Denied' unless ENV["EMBER_DEV"].to_i == 1
+        end
+      else
+        if !admin_exists?
+          redirect to('/unpacking') if request.path_info != '/unpacking'
+        elsif !admin_authenticated?
+          redirect to('/login') if request.path_info != '/login'
+        end
       end
     end
 
     get "/" do
-      erb :index
+      erb :index, layout: false
     end
 
     get "/login" do
@@ -69,6 +76,21 @@ module SnowmanIO
         SnowmanIO.redis.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
+    end
+
+    get "/api/checks" do
+      if ENV["EMBER_DEV"].to_i == 1
+        # Enable CORS in development mode
+        response.headers['Access-Control-Allow-Origin'] = '*'
+      end
+
+      content_type :json
+      {
+        checks: [
+          {id: 1, name: "First check from server"},
+          {id: 2, name: "Second check from server"}
+        ]
+      }.to_json
     end
   end
 end

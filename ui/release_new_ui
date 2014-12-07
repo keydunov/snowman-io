@@ -1,0 +1,11 @@
+#!/bin/bash
+cd $(dirname $0)
+
+dest=../lib/snowman-io/api/public
+
+echo Start Building UI
+rm -fr $dest
+ember build --environment=production --output-path=$dest
+cat $dest/index.html | sed 's/__SnowmanIO_VERSION__/<%= SnowmanIO::VERSION %>/g' > $dest/../views/index.erb
+rm -f $dest/index.html 
+echo Done.
