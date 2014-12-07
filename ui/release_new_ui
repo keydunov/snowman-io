@@ -20,4 +20,9 @@ cat $dest/../views/layout.erb | \
   sed "s/__URL__/$escaped_url/" > $dest/../views/layout.erb.tmp
 mv $dest/../views/layout.erb.tmp $dest/../views/layout.erb
 
+# Add notification
+echo -e This folder is build automatically by ./ui/release_new_ui script.\\n\
+        DO NOT MODIFY IT MANUALLY! \
+        > $dest/AUTO_GENERATED_FOLDER
+
 echo Done.
