@@ -28,7 +28,7 @@ module SnowmanIO
     before do
       if request.path =~ /^\/api/
         if !admin_authenticated?
-          # Ignore authorization during app development
+          # Ignore authorization only during app development
           halt 403, 'Access Denied' unless ENV["EMBER_DEV"].to_i == 1
         end
       else
