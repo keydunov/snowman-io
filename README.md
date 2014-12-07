@@ -6,9 +6,7 @@ Zero maintenance power parameters checks.
 
 ## Installation
 
-Press a button below to install your private Heroku SnowmanIO instance for free.
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/snowman-io/sample-app)
+Please follow instructions on project site http://snowman.io.
 
 ## Authors
 
