@@ -46,6 +46,7 @@ module SnowmanIO
       Dir[Dir.pwd + '/**/*_check.rb'].map do |path|
         require path
         klass = path.sub(Dir.pwd + '/checks/', '').sub(/\.rb$/, '').camelize
+        SnowmanIO.logger.debug("Load check #{klass}")
         Kernel.const_get(klass)
       end
     end

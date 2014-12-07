@@ -86,10 +86,9 @@ module SnowmanIO
 
       content_type :json
       {
-        checks: [
-          {id: 1, name: "First check from server"},
-          {id: 2, name: "Second check from server"}
-        ]
+        checks: SnowmanIO.redis.keys("history:*").map{ |key|
+          {id: key, name: "#{key}: #{SnowmanIO.redis.llen(key)}"}
+        }
       }.to_json
     end
   end
