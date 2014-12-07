@@ -3,8 +3,6 @@ require 'optparse'
 module SnowmanIO
   # Parse command line.
   class Options
-    AVAILABLE_COMMANDS = %w[server]
-
     def parse!(args)
       options = default_options
 
