@@ -12,13 +12,8 @@ ember build --environment=production --output-path=$dest
 cat $dest/index.html | sed 's/__SnowmanIO_VERSION__/<%= SnowmanIO::VERSION %>/g' > $dest/../views/index.erb
 rm -f $dest/index.html 
 
-# update layout.erb
-url=`grep href.*bootstrap $dest/../views/index.erb | sed 's/^.*href="\([^"]*\)".*$/\1/'`
-escaped_url=$(echo $url | sed -e 's/\//\\\//g')
-cat $dest/../views/layout.erb | \
-  sed 's/href="\/bootstrap[^"]*"/href="__URL__"/' | \
-  sed "s/__URL__/$escaped_url/" > $dest/../views/layout.erb.tmp
-mv $dest/../views/layout.erb.tmp $dest/../views/layout.erb
+# copy bootstrap for Sinatra
+cp -r vendor/bootstrap-3.3.1 $dest/
 
 # Add notification
 echo -e This folder is build automatically by ./ui/release_new_ui script.\\n\
