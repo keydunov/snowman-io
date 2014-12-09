@@ -1,3 +1,5 @@
+import Ember from 'ember';
+
 // http://yoranbrondsema.com/live-polling-system-ember-js/
 export default Ember.Object.extend({
    interval: function() {

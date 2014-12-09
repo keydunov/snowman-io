@@ -5,6 +5,6 @@ export default DS.Model.extend({
   status: DS.attr('string'),
   
   isFailed: function() {
-    return this.get("status") == 'failed';
+    return this.get("status") === 'failed';
   }.property("status")
 });
