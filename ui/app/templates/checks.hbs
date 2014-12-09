@@ -1,5 +1,19 @@
-<ul>
+<div class="table-responsive">
+<table class="table">
+  <tr>
+    <th>Key</th>
+    <th>Count</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+
   {{#each check in model}}
-    <li>{{check.name}}</li>
+    <tr {{bind-attr class="check.isFailed:danger"}}>
+      <td>{{check.id}}</td>
+      <td>{{check.count}}</td>
+      <td>{{check.status}}</td>
+      <td>{{#link-to "check" check}}show{{/link-to}}</td>
+    </tr>
   {{/each}}
-</ul>
+</table>
+</div>

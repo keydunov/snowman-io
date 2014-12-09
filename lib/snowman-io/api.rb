@@ -27,6 +27,13 @@ module SnowmanIO
 
     before do
       if request.path =~ /^\/api/
+        content_type :json
+
+        if ENV["EMBER_DEV"].to_i == 1
+          # Enable CORS in development mode
+          response.headers['Access-Control-Allow-Origin'] = '*'
+        end
+
         if !admin_authenticated?
           # Ignore authorization only during app development
           halt 403, 'Access Denied' unless ENV["EMBER_DEV"].to_i == 1
@@ -79,15 +86,24 @@ module SnowmanIO
     end
 
     get "/api/checks" do
-      if ENV["EMBER_DEV"].to_i == 1
-        # Enable CORS in development mode
-        response.headers['Access-Control-Allow-Origin'] = '*'
-      end
-
-      content_type :json
       {
         checks: SnowmanIO.redis.keys("history:*").map{ |key|
-          {id: key, name: "#{key}: #{SnowmanIO.redis.llen(key)}"}
+          {
+            id: key.sub("history:", ""),
+            count: SnowmanIO.redis.llen(key),
+            status: JSON.load(SnowmanIO.redis.lrange(key, -1, -1)[0])["status"]
+          }
+        }
+      }.to_json
+    end
+
+    get "/api/checks/:key" do
+      key = "history:" + params[:key]
+      {
+        check: {
+          id: key.sub("history:", ""),
+          count: SnowmanIO.redis.llen(key),
+          status: JSON.load(SnowmanIO.redis.lrange(key, -1, -1)[0])["status"]
         }
       }.to_json
     end
