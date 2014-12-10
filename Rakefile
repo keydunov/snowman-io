@@ -3,7 +3,7 @@ require "bundler/gem_tasks"
 namespace :dev do
   task :run do
     pids = [
-      spawn("EMBER_DEV=1 bundle exec snowman"),
+      spawn("cd demo-app && EMBER_DEV=1 bundle exec snowman"),
       spawn("cd ui && ./node_modules/.bin/ember server"),
     ]
 
