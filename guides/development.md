@@ -12,29 +12,15 @@ npm install && bower install
 
 ## Run
 
-Fire ember-cli server:
-
 ``` bash
-cd ui
-ember s
+rake dev:run
 ```
 
-See your development version of application on `http://localhost:4200` by default.
+See your development version of Eber application on `http://localhost:4200` by default and
+snowman at `http://localhost:4567`.
 
-Execute snowman backend.
-
-``` bash
-EMBER_DEV=1 rerun -d lib bundle exec snowman
-```
-
-__NOTE:__ if you update sources in UI folder dont forget compile app:
+__NOTE:__ Complile app if you update source in `up` folder:
 
 ``` bash
-cd ui
-./release_new_ui
+./ui/release_new_ui
 ```
-
-## Document Changelog
-
-2014.12.17
-- First Draft
