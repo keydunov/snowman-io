@@ -19,6 +19,10 @@ module SnowmanIO
           options[:verbose] = arg
         end
 
+        opts.on '-t', '--timeout NUM', "shutdown timeout" do |arg|
+          options[:timeout] = Integer(arg)
+        end
+
         opts.on("-h", "--help", "show this message") do
           puts opts
           exit
@@ -33,7 +37,8 @@ module SnowmanIO
 
     def default_options
       {
-        port: 4567
+        port: 4567,
+        timeout: 8
       }
     end
   end

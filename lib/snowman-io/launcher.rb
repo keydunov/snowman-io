@@ -7,10 +7,12 @@ module SnowmanIO
 
     attr_reader :scheduler, :handler
 
-    def initialize(checks)
+    def initialize(options)
+      @finished_condition = Celluloid::Condition.new
       @handler = Handler.new_link
-      @scheduler = Scheduler.new_link(checks)
+      @scheduler = Scheduler.new_link(@finished_condition, options[:checks])
       @scheduler.handler = handler
+      @options = options
     end
 
     def start
@@ -18,7 +20,10 @@ module SnowmanIO
     end
 
     def stop
-      #TODO
+      handler.terminate if handler.alive?
+      scheduler.async.stop(@options[:timeout])
+      @finished_condition.wait
+      scheduler.terminate
     end
   end
 end
