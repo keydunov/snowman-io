@@ -17,22 +17,23 @@ module SnowmanIO
       end
     end
 
-    def start
-      # FIXME
-      every(1) do
-        schedule_checks unless @done
-      end
-    end
-
     def schedule_checks
+      return if stopped?
+
       @time.each do |check, time|
         if time <= Time.now
-          processor = Processor.new_link(current_actor)
-          @in_progress << processor
-          processor.async.process(check)
+          assign_processing(check)
           @time[check] = Time.now + check.interval
         end
       end
+
+      after(1) { schedule_checks }
+    end
+
+    def assign_processing(check)
+      processor = Processor.new_link(current_actor)
+      @in_progress << processor
+      processor.async.process(check)
     end
 
     def processor_done(processor, result)
@@ -55,8 +56,6 @@ module SnowmanIO
       @done
     end
 
-    private
-
     def hard_shutdown_in(timeout)
       SnowmanIO.logger.info { "Pausing up to #{timeout} seconds to allow checks to finish..." }
       after(timeout) do
@@ -69,7 +68,6 @@ module SnowmanIO
         @finished.signal
       end
     end
-
 
     def processor_died(_actor, _reason)
       # TODO

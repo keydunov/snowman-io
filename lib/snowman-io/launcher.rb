@@ -16,7 +16,7 @@ module SnowmanIO
     end
 
     def start
-      scheduler.async.start
+      scheduler.async.schedule_checks
     end
 
     def stop
