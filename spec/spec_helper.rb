@@ -1,5 +1,6 @@
 require 'snowman-io'
 require 'capybara/rspec'
+require 'celluloid/rspec'
 require 'coveralls'
 Coveralls.wear!
 
