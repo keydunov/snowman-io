@@ -1,5 +1,6 @@
 require 'snowman-io/scheduler'
 require 'snowman-io/handler'
+require 'snowman-io/web_server'
 
 module SnowmanIO
   class Launcher
@@ -16,6 +17,7 @@ module SnowmanIO
     end
 
     def start
+      @web_server_supervisor = WebServer.supervise_as(:web_server, API, @options)
       scheduler.async.schedule_checks
     end
 
@@ -23,6 +25,7 @@ module SnowmanIO
       handler.terminate if handler.alive?
       scheduler.async.stop(@options[:timeout])
       @finished_condition.wait
+      @web_server_supervisor.terminate # TODO: shutdown blocking?
       scheduler.terminate
     end
   end

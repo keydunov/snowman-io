@@ -37,8 +37,9 @@ module SnowmanIO
 
     def default_options
       {
-        port: 4567,
-        timeout: 8
+        :port    => 4567,
+        :timeout => 8,
+        :host    => "0.0.0.0"
       }
     end
   end
