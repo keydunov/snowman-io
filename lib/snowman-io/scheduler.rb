@@ -62,7 +62,7 @@ module SnowmanIO
         SnowmanIO.logger.warn { "Terminating #{@in_progress.size} running checks" }
 
         @in_progress.each do |processor|
-          processor.terminate if processor.alive?
+          Celluloid::Actor.kill(processor) if processor.alive?
         end
 
         @finished.signal

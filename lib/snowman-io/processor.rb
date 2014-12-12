@@ -14,11 +14,12 @@ module SnowmanIO
         SnowmanIO.logger.info("Processing check #{check.human}, started at #{Time.now}")
         result = check.new.perform
       rescue Exception => e
+        puts "Error inside processor #{e.message}"
         result = result_from_exception(check, e)
         raise
       ensure
         SnowmanIO.logger.info("Processing check #{check.human}, finished at #{Time.now}")
-        @scheduler.processor_done(current_actor, result)
+        @scheduler.processor_done(current_actor, result) if result
       end
     end
 
