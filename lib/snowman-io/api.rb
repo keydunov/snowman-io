@@ -3,12 +3,6 @@ require 'sinatra/content_for'
 
 module SnowmanIO
   class API < Sinatra::Base
-    def self.start(options)
-      sinatra_options = {}
-      sinatra_options[:port] = options[:port]
-      run!(sinatra_options)
-    end
-
     enable :sessions
     helpers Sinatra::ContentFor
     set :public_folder, File.dirname(__FILE__) + "/api/public"

@@ -42,9 +42,6 @@ module SnowmanIO
         launcher.stop
         exit(0)
       end
-
-      # start web server on main thread
-      # API.start(port: options[:port])
     end
 
     private
