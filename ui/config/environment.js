@@ -17,7 +17,7 @@ module.exports = function(environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    baseHost: (environment === 'development' ? 'http://localhost:4567' : null)
+    baseHost: (environment === 'development' ? 'http://localhost:4567' : '')
   };
 
   if (environment === 'development') {
