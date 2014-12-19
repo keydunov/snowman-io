@@ -18,13 +18,13 @@ RSpec.describe SnowmanIO::Options do
   it "sets default port" do
     args = []
     options = SnowmanIO::Options.new.parse!(args)
-    expect(options).to eq(port: 4567)
+    expect(options[:port]).to eq(4567)
   end
 
   it "parses port option" do
     args = ["-p", "1234"]
     options = SnowmanIO::Options.new.parse!(args)
-    expect(options).to eq(port: 1234)
+    expect(options[:port]).to eq(1234)
   end
 
   it "parses verbose option" do
