@@ -98,5 +98,11 @@ module SnowmanIO
         check: SnowmanIO.storage.check_to_json(params[:id])
       }.to_json
     end
+
+    post "/api/checks/:id/resolve" do
+      fail_count_key = "checks:#{params[:id]}:fail_count"
+      SnowmanIO.redis.set(fail_count_key, 0)
+      {hr: 'ok'}.to_json
+    end
   end
 end
