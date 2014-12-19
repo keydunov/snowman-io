@@ -104,5 +104,9 @@ module SnowmanIO
       SnowmanIO.redis.set(fail_count_key, 0)
       {hr: 'ok'}.to_json
     end
+
+    get '/*' do
+      erb :index, layout: false
+    end
   end
 end
