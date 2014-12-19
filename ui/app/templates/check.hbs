@@ -1,4 +1,7 @@
 <p>{{#link-to "checks"}}back{{/link-to}}</p>
 <p><b>Key:</b> {{model.id}}</p>
 <p><b>Count:</b> {{model.count}}</p>
-<p><b>Status:</b> {{model.status}}</p>
+<p>
+  <b>Status:</b>
+  <span {{bind-attr class=":label model.isFailed:label-danger:label-success"}}>{{model.status}}</span>
+</p>
