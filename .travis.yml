@@ -1,6 +1,9 @@
 language: ruby
 rvm:
   - 2.1.3
+before_script: 
+  - npm install bower
+  - cd ui && bower install
 script:
   - bundle exec rspec
   - cd ui && ember test
