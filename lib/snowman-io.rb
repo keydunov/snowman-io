@@ -9,6 +9,7 @@ require "snowman-io/options"
 require "snowman-io/checks/hosted_graphite"
 require "snowman-io/check"
 require "snowman-io/check_result"
+require "snowman-io/store"
 
 require "snowman-io/launcher"
 require "snowman-io/cli"
@@ -23,6 +24,10 @@ module SnowmanIO
       ENV["REDISGREEN_URL"] ||
       ENV["REDIS_URL"]
     @redis ||= Redis.new(url: url)
+  end
+
+  def self.store
+    @store ||= Store.new
   end
 
   def self.logger

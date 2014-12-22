@@ -9,10 +9,12 @@
 
   {{#each check in model}}
     <tr {{bind-attr class="check.isFailed:danger"}}>
-      <td>{{check.id}}</td>
+      <td>{{#link-to "check" check}}{{check.id}}{{/link-to}}</td>
       <td>{{check.count}}</td>
-      <td>{{check.status}}</td>
-      <td>{{#link-to "check" check}}show{{/link-to}}</td>
+      <td>
+        <span {{bind-attr class=":label check.isFailed:label-danger:label-success"}}>{{check.status}}</span>
+      </td>
+      <td></td>
     </tr>
   {{/each}}
 </table>

@@ -81,25 +81,26 @@ module SnowmanIO
 
     get "/api/checks" do
       {
-        checks: SnowmanIO.redis.keys("history:*").map{ |key|
-          {
-            id: key.sub("history:", ""),
-            count: SnowmanIO.redis.llen(key),
-            status: JSON.load(SnowmanIO.redis.lrange(key, -1, -1)[0])["status"]
-          }
+        checks: SnowmanIO.store.check_ids.map { |id|
+          SnowmanIO.store.check_to_json(id)
         }
       }.to_json
     end
 
-    get "/api/checks/:key" do
-      key = "history:" + params[:key]
+    get "/api/checks/:id" do
       {
-        check: {
-          id: key.sub("history:", ""),
-          count: SnowmanIO.redis.llen(key),
-          status: JSON.load(SnowmanIO.redis.lrange(key, -1, -1)[0])["status"]
-        }
+        check: SnowmanIO.store.check_to_json(params[:id])
       }.to_json
+    end
+
+    post "/api/checks/:id/resolve" do
+      fail_count_key = "checks:#{params[:id]}:fail_count"
+      SnowmanIO.redis.set(fail_count_key, 0)
+      {hr: 'ok'}.to_json
+    end
+
+    get '/*' do
+      erb :index, layout: false
     end
   end
 end

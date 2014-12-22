@@ -6,15 +6,14 @@ module SnowmanIO
 
     def handle(result)
       history_key = "history:#{result.check_name.underscore}"
+      fail_count_key = "checks:#{result.check_name.underscore}:fail_count"
       SnowmanIO.redis.rpush(history_key, result.serialize)
       history = SnowmanIO.redis.lrange(history_key, -4, -1).map { |result| JSON.load(result) }
-      previous_status_failed = if history.size < 4
-        false
-      else
-        ["failed", "exception"].include?(history.shift["status"])
-      end
-      if !previous_status_failed && history.size >= 3 && history.all? { |result| result["status"] == "failed" || result["status"] == "exception" }
-        notify_fail(result)
+
+      if result.status == 'failed' || result.status == 'exception'
+        if SnowmanIO.redis.incr(fail_count_key) == 1
+          notify_fail(result)
+        end
       end
     end
 
