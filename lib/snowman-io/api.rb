@@ -87,15 +87,15 @@ module SnowmanIO
 
     get "/api/checks" do
       {
-        checks: SnowmanIO.storage.check_ids.map { |id|
-          SnowmanIO.storage.check_to_json(id)
+        checks: SnowmanIO.store.check_ids.map { |id|
+          SnowmanIO.store.check_to_json(id)
         }
       }.to_json
     end
 
     get "/api/checks/:id" do
       {
-        check: SnowmanIO.storage.check_to_json(params[:id])
+        check: SnowmanIO.store.check_to_json(params[:id])
       }.to_json
     end
 

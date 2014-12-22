@@ -9,7 +9,7 @@ require "snowman-io/options"
 require "snowman-io/checks/hosted_graphite"
 require "snowman-io/check"
 require "snowman-io/check_result"
-require "snowman-io/storage"
+require "snowman-io/store"
 
 require "snowman-io/launcher"
 require "snowman-io/cli"
@@ -26,8 +26,8 @@ module SnowmanIO
     @redis ||= Redis.new(url: url)
   end
 
-  def self.storage
-    @storage ||= Storage.new
+  def self.store
+    @store ||= Store.new
   end
 
   def self.logger

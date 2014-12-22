@@ -1,8 +1,7 @@
 module SnowmanIO
-  # Class to work with storage.
-  class Storage
-
-    # Returns all check IDs from storage
+  # Class to work with models.
+  class Store
+    # Returns all check IDs
     def check_ids
       SnowmanIO.redis.keys("history:*").map do |key|
         key.sub("history:", "")
