@@ -5,9 +5,9 @@ before_install:
   - "npm config set spin false"
   - "npm install -g npm@^2"
 install:
-  - cd ui && npm install -g bower
-  - cd ui && npm install
-  - cd ui && bower install
+  - pushd ui && npm install -g bower && popd
+  - pushd ui && npm install && popd
+  - pushd ui && bower install && popd
 script:
   - bundle exec rspec
   - cd ui && ember test
