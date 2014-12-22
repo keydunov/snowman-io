@@ -14,16 +14,47 @@ module SnowmanIO
 
     def run
       setup_logger
-      setup_signal_traps
+      options[:checks] = load_checks
 
-      launcher = Launcher.new(load_checks)
-      launcher.start
+      # Self-pipe for deferred signal-handling (http://cr.yp.to/docs/selfpipe.html)
+      self_read, self_write = IO.pipe
 
-      # start web server on main thread
-      API.start(options)
+      %w(INT TERM USR1 USR2 TTIN).each do |sig|
+        begin
+          trap sig do
+            self_write.puts(sig)
+          end
+        rescue ArgumentError
+          puts "Signal #{sig} not supported"
+        end
+      end
+
+      launcher = Launcher.new(options)
+
+      begin
+        launcher.start
+        while readable_io = IO.select([self_read])
+          signal = readable_io.first[0].gets.strip
+          handle_signal(signal)
+        end
+      rescue Interrupt
+        SnowmanIO.logger.info 'Shutting down'
+        launcher.stop
+        exit(0)
+      end
     end
 
     private
+
+    def handle_signal(sig)
+      SnowmanIO.logger.debug "Received #{sig} signal"
+      case sig
+      when 'TERM'
+        raise Interrupt
+      when 'INT'
+        raise Interrupt
+      end
+    end
 
     def setup_logger
       Celluloid.logger = (options[:verbose] ? SnowmanIO.logger : nil)
@@ -32,14 +63,6 @@ module SnowmanIO
       else
         SnowmanIO.logger.level = ::Logger::INFO
       end
-    end
-
-    def setup_signal_traps
-      %w(INT TERM).each { |sig| trap(sig) { stop } }
-    end
-
-    def stop
-      # TODO: graceful shutdown
     end
 
     def load_checks
