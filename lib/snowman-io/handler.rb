@@ -5,13 +5,10 @@ module SnowmanIO
     include Celluloid
 
     def handle(result)
-      history_key = "history:#{result.check_name.underscore}"
-      fail_count_key = "checks:#{result.check_name.underscore}:fail_count"
-      SnowmanIO.redis.rpush(history_key, result.serialize)
-      history = SnowmanIO.redis.lrange(history_key, -4, -1).map { |result| JSON.load(result) }
+      SnowmanIO.store.add_history_check(result.check_name.underscore, result)
 
       if result.status == 'failed' || result.status == 'exception'
-        if SnowmanIO.redis.incr(fail_count_key) == 1
+        if SnowmanIO.store.on_fail_check(result.check_name.underscore) == 1
           notify_fail(result)
         end
       end

@@ -9,10 +9,8 @@ module SnowmanIO
     set :views, File.dirname(__FILE__) + "/api/views"
     set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
-    ADMIN_PASSWORD_KEY = "admin_password_hash"
-
     def admin_exists?
-      !!SnowmanIO.redis.get(ADMIN_PASSWORD_KEY)
+      SnowmanIO.store.admin_password_setted?
     end
 
     def admin_authenticated?
@@ -30,7 +28,9 @@ module SnowmanIO
 
         if !admin_authenticated?
           # Ignore authorization only during app development
-          halt 403, 'Access Denied' unless ENV["EMBER_DEV"].to_i == 1
+          unless ENV["EMBER_DEV"].to_i == 1
+            halt 403, 'Access Denied'
+          end
         end
       else
         if !admin_exists?
@@ -50,7 +50,7 @@ module SnowmanIO
     end
 
     post "/login" do
-      if BCrypt::Password.new(SnowmanIO.redis.get(ADMIN_PASSWORD_KEY)) == params["password"]
+      if SnowmanIO.store.auth_admin?(params["password"])
         session[:user] = "admin"
         redirect to('/')
       else
@@ -74,7 +74,7 @@ module SnowmanIO
         erb :unpacking
       else
         session[:user] = "admin"
-        SnowmanIO.redis.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
+        SnowmanIO.store.set_admin_password(params["password"])
         redirect to('/')
       end
     end
@@ -82,20 +82,19 @@ module SnowmanIO
     get "/api/checks" do
       {
         checks: SnowmanIO.store.check_ids.map { |id|
-          SnowmanIO.store.check_to_json(id)
+          SnowmanIO.store.check(id)
         }
       }.to_json
     end
 
     get "/api/checks/:id" do
       {
-        check: SnowmanIO.store.check_to_json(params[:id])
+        check: SnowmanIO.store.check(params[:id])
       }.to_json
     end
 
     post "/api/checks/:id/resolve" do
-      fail_count_key = "checks:#{params[:id]}:fail_count"
-      SnowmanIO.redis.set(fail_count_key, 0)
+      SnowmanIO.store.resolve_check(params[:id])
       {hr: 'ok'}.to_json
     end
 
