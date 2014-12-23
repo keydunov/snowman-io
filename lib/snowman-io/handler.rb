@@ -5,12 +5,10 @@ module SnowmanIO
     include Celluloid
 
     def handle(result)
-      SnowmanIO.store.add_history_check(result.check_name.underscore, result)
+      failed = (result.status == 'failed' || result.status == 'exception')
 
-      if result.status == 'failed' || result.status == 'exception'
-        if SnowmanIO.store.on_fail_check(result.check_name.underscore) == 1
-          notify_fail(result)
-        end
+      if SnowmanIO.store.check_on_handle(result.check_name, failed) == :failed
+        notify_fail(result)
       end
     end
 

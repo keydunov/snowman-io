@@ -18,33 +18,70 @@ module SnowmanIO
 
     ## Work with checks
     # Returns all check IDs
-    def check_ids
-      SnowmanIO.redis.keys("history:*").map do |key|
-        key.sub("history:", "")
+    def register_check(name, sha1)
+      unless SnowmanIO.redis.get("checks:#{name}:sha1") == sha1
+        if SnowmanIO.redis.get("checks:#{name}:sha1")
+          positive = SnowmanIO.redis.get("checks:#{name}:positive_count")
+          failed = SnowmanIO.redis.get("checks:#{name}:fail_count")
+          add_check_history_entry(name, "sha1 changes [#{positive}/#{failed}]")
+        end
+        SnowmanIO.redis.set("checks:#{name}:sha1", sha1)
+        SnowmanIO.redis.set("checks:#{name}:positive_count", 0)
+        SnowmanIO.redis.set("checks:#{name}:fail_count", 0)
       end
     end
 
-    def check(id)
+    def checks
+      SnowmanIO.redis.keys("checks:*:sha1").map do |key|
+        key.split(":", 3)[1]
+      end
+    end
+
+    def check(name)
       {
-        id: id,
-        count: SnowmanIO.redis.llen("history:" + id),
-        status: SnowmanIO.redis.get("checks:#{id}:fail_count").to_i > 0 ? 'failed' : 'success'
+        id: name,
+        positive_count: SnowmanIO.redis.get("checks:#{name}:positive_count"),
+        fail_count: SnowmanIO.redis.get("checks:#{name}:fail_count"),
+        status: SnowmanIO.redis.get("checks:#{name}:fail_count").to_i > 0 ? 'failed' : 'success',
+        raw_history: SnowmanIO.redis.lrange("checks:#{name}:history", 0, -1).map { |entry|
+          JSON.load(entry)
+        }.to_json
       }
     end
 
-    def resolve_check(id)
-      fail_count_key = "checks:#{id}:fail_count"
-      SnowmanIO.redis.set(fail_count_key, 0)
+    def check_on_handle(name, is_failed)
+      if is_failed
+        SnowmanIO.redis.incr("checks:#{name}:fail_count")
+      else
+        SnowmanIO.redis.incr("checks:#{name}:positive_count")
+      end
+
+      failed = SnowmanIO.redis.get("checks:#{name}:fail_count").to_i
+
+      if failed > 1
+        :failed_already
+      elsif failed == 1
+        :failed
+      else
+        :success
+      end
     end
 
-    def on_fail_check(id)
-      fail_count_key = "checks:#{id}:fail_count"
-      SnowmanIO.redis.incr(fail_count_key)
+    def resolve_check(name)
+      positive = SnowmanIO.redis.get("checks:#{name}:positive_count")
+      failed = SnowmanIO.redis.get("checks:#{name}:fail_count")
+      add_check_history_entry(name, "manual resolve [#{positive}/#{failed}]")
+      SnowmanIO.redis.set("checks:#{name}:positive_count", 0)
+      SnowmanIO.redis.set("checks:#{name}:fail_count", 0)
     end
 
-    def add_history_check(id, result)
-      history_key = "history:#{id}"
-      SnowmanIO.redis.rpush(history_key, result.serialize)
+    private
+
+    def add_check_history_entry(name, reason)
+      SnowmanIO.redis.lpush("checks:#{name}:history", {at: Time.now.to_s, reason: reason}.to_json)
+      while SnowmanIO.redis.llen("checks:#{name}:history") > 10
+        SnowmanIO.redis.rpop("checks:#{name}:history")
+      end
     end
   end
 end

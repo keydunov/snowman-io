@@ -1,6 +1,6 @@
 <p>{{#link-to "checks"}}back{{/link-to}}</p>
 <p><b>Key:</b> {{model.id}}</p>
-<p><b>Count:</b> {{model.count}}</p>
+<p><b>Positive/Failed:</b> {{model.positive_count}}/{{model.fail_count}}</p>
 <p>
   <b>Status:</b>
   <span {{bind-attr class=":label model.isFailed:label-danger:label-success"}}>{{model.status}}</span>
@@ -8,3 +8,7 @@
 {{#if model.isFailed}}
   <p><a href="#" {{bind-attr class=":btn :btn-sm :btn-primary resolveInProgress:disabled"}} {{action 'resolve'}}>Resolve</a></p>
 {{/if}}
+<h3>History</h3>
+{{#each entry in model.history}}
+  <div><b>{{entry.at}}</b>: {{entry.reason}}</div>
+{{/each}}

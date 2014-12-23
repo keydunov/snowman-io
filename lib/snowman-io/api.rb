@@ -81,7 +81,7 @@ module SnowmanIO
 
     get "/api/checks" do
       {
-        checks: SnowmanIO.store.check_ids.map { |id|
+        checks: SnowmanIO.store.checks.map { |id|
           SnowmanIO.store.check(id)
         }
       }.to_json
