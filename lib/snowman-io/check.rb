@@ -23,7 +23,7 @@ module SnowmanIO
         if value
           @human = value
         else
-          self.name + ": #{@human}"
+          [self.name, @human].compact.join(": ")
         end
       end
 
