@@ -68,7 +68,7 @@ module SnowmanIO
     end
 
     def load_checks
-      Dir[Dir.pwd + '/**/*_check.rb'].map do |path|
+      Dir[Dir.pwd + '/checks/**/*_check.rb'].map do |path|
         require path
         klass = path.sub(Dir.pwd + '/checks/', '').sub(/\.rb$/, '').camelize
         check = Kernel.const_get(klass)
