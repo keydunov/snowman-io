@@ -3,6 +3,7 @@ require 'open-uri'
 require "active_support/time"
 
 require 'snowman-io/notifiers/slack'
+require 'snowman-io/notifiers/mail'
 
 module SnowmanIO
   class Check
@@ -27,7 +28,7 @@ module SnowmanIO
       end
 
       def notifiers
-        @notifiers ||= [Notifiers::Slack].select { |notifier| notifier.configured? }
+        @notifiers ||= [Notifiers::Slack, Notifiers::Mail].select { |notifier| notifier.configured? }
       end
     end
 

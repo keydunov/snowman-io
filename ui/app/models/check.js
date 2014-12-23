@@ -7,7 +7,7 @@ export default DS.Model.extend({
   raw_history: DS.attr('string'),
 
   history: function() {
-    return JSON.parse(this.get("raw_history"))
+    return JSON.parse(this.get("raw_history"));
   }.property("raw_history"),
   
   isFailed: function() {
