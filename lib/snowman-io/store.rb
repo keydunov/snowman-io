@@ -50,6 +50,8 @@ module SnowmanIO
     end
 
     def check_on_handle(name, is_failed)
+      fail_count = SnowmanIO.redis.get("checks:#{name}:fail_count").to_i
+
       if is_failed
         SnowmanIO.redis.incr("checks:#{name}:fail_count")
       else
@@ -58,7 +60,7 @@ module SnowmanIO
 
       failed = SnowmanIO.redis.get("checks:#{name}:fail_count").to_i
 
-      if failed > 1
+      if fail_count > 0 || failed > 1
         :failed_already
       elsif failed == 1
         :failed
