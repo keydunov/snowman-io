@@ -7,11 +7,7 @@ export default DS.Model.extend({
   raw_history: DS.attr('string'),
 
   resolve: function() {
-    return Ember.$.ajax({
-      url: this._resolveUrl(),
-      type: "POST",
-      data: JSON.stringify({})
-    });
+    return Ember.$.post(this._resolveUrl())
   },
 
   _resolveUrl: function() {
