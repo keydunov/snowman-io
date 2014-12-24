@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import Ember from 'ember';
 
 export default DS.Model.extend({
   status: DS.attr('string'),
@@ -7,12 +8,12 @@ export default DS.Model.extend({
   raw_history: DS.attr('string'),
 
   resolve: function() {
-    return Ember.$.post(this._resolveUrl())
+    return Ember.$.post(this._resolveUrl());
   },
 
   _resolveUrl: function() {
     var adapter = this.container.lookup('adapter:application');
-    return adapter.buildURL('checks', this.get('id')) + '/resolve'
+    return adapter.buildURL('checks', this.get('id')) + '/resolve';
   },
 
   history: function() {
