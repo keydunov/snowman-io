@@ -1,4 +1,8 @@
-<p>{{#link-to "checks"}}back{{/link-to}}</p>
+<ol class="breadcrumb">
+  <li>{{#link-to "checks"}}Checks{{/link-to}}</li>
+  <li class="active">{{model.id}}</li>
+</ol>
+
 <p><b>Key:</b> {{model.id}}</p>
 <p><b>Positive/Failed:</b> {{model.positive_count}}/{{model.fail_count}}</p>
 <p>
