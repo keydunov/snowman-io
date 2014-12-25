@@ -8,6 +8,7 @@
     <th>Key</th>
     <th>Positive/Failed</th>
     <th>Status</th>
+    <th>At</th>
     <th>Action</th>
   </tr>
 
@@ -17,6 +18,13 @@
       <td>{{check.positive_count}}/{{check.fail_count}}</td>
       <td>
         <span {{bind-attr class=":label check.isFailed:label-danger:label-success"}}>{{check.status}}</span>
+      </td>
+      <td>
+        {{#if check.isFailed}}
+          <span {{bind-attr title=check.failed_at}}>{{check.failed_at_human}}</span>
+        {{else}}
+          <span {{bind-attr title=check.positive_from}}>{{check.positive_from_human}}</span>
+        {{/if}}
       </td>
       <td></td>
     </tr>

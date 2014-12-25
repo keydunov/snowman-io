@@ -1,3 +1,7 @@
+body {
+  padding-bottom: 42px;
+}
+
 .navbar {
   border-radius: 0 !important;
 }

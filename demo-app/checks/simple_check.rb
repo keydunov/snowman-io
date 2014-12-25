@@ -1,7 +1,7 @@
 class SimpleCheck < SnowmanIO::Check
-  interval 3.seconds
+  interval 2.seconds
 
   def ok?
-    [false, true].sample
+    [false, true, true, true, true].sample
   end
 end

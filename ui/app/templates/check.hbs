@@ -8,11 +8,18 @@
 <p>
   <b>Status:</b>
   <span {{bind-attr class=":label model.isFailed:label-danger:label-success"}}>{{model.status}}</span>
+  {{#if model.isFailed}}
+    <span {{bind-attr title=model.failed_at}}>{{model.failed_at_human}}</span>
+  {{else}}
+    <span {{bind-attr title=model.positive_from}}>{{model.positive_from_human}}</span>
+  {{/if}}
 </p>
+
 {{#if model.isFailed}}
   <p><a href="#" {{bind-attr class=":btn :btn-sm :btn-primary resolveInProgress:disabled"}} {{action 'resolve'}}>Resolve</a></p>
 {{/if}}
+
 <h3>History</h3>
 {{#each entry in model.history}}
-  <div><b>{{entry.at}}</b>: {{entry.reason}}</div>
+  <div><b {{bind-attr title=entry.at}}>{{moment entry.at "MMMM Do YYYY, h:mm a"}}</b>: {{entry.reason}}</div>
 {{/each}}

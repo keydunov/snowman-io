@@ -1,8 +1,15 @@
+require 'action_view'
+
 module SnowmanIO
   # Class to work with models.
   class Store
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
+
+    # Very ugly solution to get `time_ago_in_words` method
+    class ActionViewHelpers
+      include ActionView::Helpers::DateHelper
+    end
 
     ## Work with admin password
     def set_admin_password(password)
@@ -31,13 +38,16 @@ module SnowmanIO
     def register_check(name, sha1)
       unless SnowmanIO.redis.get("checks@#{name}@sha1") == sha1
         if SnowmanIO.redis.get("checks@#{name}@sha1")
-          positive = SnowmanIO.redis.get("checks@#{name}@positive_count")
-          failed = SnowmanIO.redis.get("checks@#{name}@fail_count")
-          add_check_history_entry(name, "sha1 changes [#{positive}/#{failed}]")
+          add_check_history_entry(name, "sha1 updated")
+        else
+          add_check_history_entry(name, "initialized")
         end
         SnowmanIO.redis.set("checks@#{name}@sha1", sha1)
         SnowmanIO.redis.set("checks@#{name}@positive_count", 0)
         SnowmanIO.redis.set("checks@#{name}@fail_count", 0)
+        # initialize times
+        SnowmanIO.redis.set("checks@#{name}@positive_from", Time.now.utc.to_s)
+        SnowmanIO.redis.set("checks@#{name}@failed_at", Time.now.utc.to_s)
       end
     end
 
@@ -48,6 +58,8 @@ module SnowmanIO
     end
 
     def check(name)
+      positive_from = SnowmanIO.redis.get("checks@#{name}@positive_from")
+      failed_at = SnowmanIO.redis.get("checks@#{name}@failed_at")
       {
         id: name,
         positive_count: SnowmanIO.redis.get("checks@#{name}@positive_count"),
@@ -55,7 +67,11 @@ module SnowmanIO
         status: SnowmanIO.redis.get("checks@#{name}@fail_count").to_i > 0 ? 'failed' : 'success',
         raw_history: SnowmanIO.redis.lrange("checks@#{name}@history", 0, -1).map { |entry|
           JSON.load(entry)
-        }.to_json
+        }.to_json,
+        positive_from: positive_from,
+        positive_from_human: "for " + ActionViewHelpers.new.time_ago_in_words(Time.parse(positive_from)),
+        failed_at: failed_at,
+        failed_at_human: ActionViewHelpers.new.time_ago_in_words(Time.parse(failed_at)) + " ago"
       }
     end
 
@@ -79,10 +95,15 @@ module SnowmanIO
       end
     end
 
+    def mark_check_as_failed(name)
+      positive = SnowmanIO.redis.get("checks@#{name}@positive_count").to_i
+      add_check_history_entry(name, "failed after #{positive} positive check#{positive == 1 ? "" : "s"}")
+      SnowmanIO.redis.set("checks@#{name}@failed_at", Time.now.utc.to_s)
+    end
+
     def resolve_check(name)
-      positive = SnowmanIO.redis.get("checks@#{name}@positive_count")
-      failed = SnowmanIO.redis.get("checks@#{name}@fail_count")
-      add_check_history_entry(name, "manual resolve [#{positive}/#{failed}]")
+      add_check_history_entry(name, "resolved manual")
+      SnowmanIO.redis.set("checks@#{name}@positive_from", Time.now.utc.to_s)
       SnowmanIO.redis.set("checks@#{name}@positive_count", 0)
       SnowmanIO.redis.set("checks@#{name}@fail_count", 0)
     end
@@ -90,8 +111,8 @@ module SnowmanIO
     private
 
     def add_check_history_entry(name, reason)
-      SnowmanIO.redis.lpush("checks@#{name}@history", {at: Time.now.to_s, reason: reason}.to_json)
-      while SnowmanIO.redis.llen("checks@#{name}@history") > 10
+      SnowmanIO.redis.lpush("checks@#{name}@history", {at: Time.now.utc.to_s, reason: reason}.to_json)
+      while SnowmanIO.redis.llen("checks@#{name}@history") > 30
         SnowmanIO.redis.rpop("checks@#{name}@history")
       end
     end
