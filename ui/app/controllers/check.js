@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.ObjectController.extend({
   actions: {
     resolve: function() {
       this.set("resolveInProgress", true);

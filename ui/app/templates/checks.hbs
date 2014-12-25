@@ -12,7 +12,7 @@
     <th>Action</th>
   </tr>
 
-  {{#each check in model}}
+  {{#each check in model itemController="check"}}
     <tr {{bind-attr class="check.isFailed:danger"}}>
       <td>{{#link-to "check" check}}{{check.id}}{{/link-to}}</td>
       <td>{{check.positive_count}}/{{check.fail_count}}</td>
@@ -26,7 +26,11 @@
           <span {{bind-attr title=check.positive_from}}>{{check.positive_from_human}}</span>
         {{/if}}
       </td>
-      <td></td>
+      <td>
+        {{#if check.isFailed}}
+          <a href="#" {{bind-attr class=":btn :btn-xs :btn-primary resolveInProgress:disabled"}} {{action 'resolve'}}>Resolve</a>
+        {{/if}}
+      </td>
     </tr>
   {{/each}}
 </table>
