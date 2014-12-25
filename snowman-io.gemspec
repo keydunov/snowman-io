@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "capybara", "~> 2.4"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency 'rerun', '0.10.0'
+  spec.add_development_dependency 'timecop', "~> 0.7"
 end

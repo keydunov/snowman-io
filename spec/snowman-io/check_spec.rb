@@ -63,7 +63,7 @@ RSpec.describe SnowmanIO::Check do
       expect(SnowmanIO::Notifiers::Slack).to receive(:configured?).and_return(true)
       expect(SnowmanIO::Notifiers::Mail).to receive(:configured?).and_return(false)
       check = Class.new(SnowmanIO::Check).new
-      expect(check.class.notifiers).to eq([SnowmanIO::Notifiers::Slack])
+      expect(check.class.notifiers).to eq([SnowmanIO::Notifiers::Console, SnowmanIO::Notifiers::Slack])
     end
 
     it "performs success check" do

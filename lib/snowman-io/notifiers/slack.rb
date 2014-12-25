@@ -1,7 +1,6 @@
 module SnowmanIO
   module Notifiers
-    class Slack
-      include Celluloid
+    class Slack < Base
       class << self
         def webhook_url
           ENV["SLACK_WEBHOOK_URL"]
@@ -20,12 +19,7 @@ module SnowmanIO
         end
       end
 
-      def notify(result)
-        return unless self.class.configured?
-        post_data(result.message)
-      end
-
-      private
+      protected
 
       def configuration
         {
@@ -35,7 +29,7 @@ module SnowmanIO
         }
       end
 
-      def post_data(message)
+      def post_data(subject, message)
         uri = URI(configuration[:webhook_url])
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true

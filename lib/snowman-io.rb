@@ -2,6 +2,7 @@ require 'logger'
 require 'redis'
 require 'bcrypt'
 require 'celluloid/autostart'
+require 'active_support/core_ext/string/strip' # for strip_heredoc
 
 require "snowman-io/version"
 require "snowman-io/api"

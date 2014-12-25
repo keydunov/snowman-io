@@ -2,6 +2,7 @@ require 'snowman-io'
 require 'capybara/rspec'
 require 'celluloid/rspec'
 require 'coveralls'
+require 'timecop'
 Coveralls.wear!
 
 ENV["REDIS_URL"] = "redis://localhost:6379/db1"

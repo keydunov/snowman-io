@@ -1,8 +1,6 @@
 module SnowmanIO
   module Notifiers
-    class Mail
-      include Celluloid
-
+    class Mail < Base
       class << self
         def mail_from
           ENV["MAIL_FROM"] || "notify@snowman.io"
@@ -25,20 +23,15 @@ module SnowmanIO
         end
       end
 
-      def notify(result)
-        return unless self.class.configured?
-        post_data(result.message)
-      end
-
       private
 
-      def post_data(message)
+      def post_data(subject, body)
         `curl -s --user 'api:#{self.class.api_key}' \
           #{self.class.base_url}/messages \
           -F from='#{self.class.mail_from}' \
           -F to='#{self.class.mail_to}' \
-          -F subject='Check failed' \
-          -F text='#{message}'`
+          -F subject='#{subject}' \
+          -F text='#{body}'`
       end
     end
   end
