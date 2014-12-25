@@ -103,7 +103,8 @@ module SnowmanIO
 
     get "/api/status" do
       {
-        notifiers: SnowmanIO::Check.notifiers.map(&:name)
+        notifiers: SnowmanIO::Check.notifiers.map(&:name),
+        base_url: SnowmanIO.store.base_url
       }.to_json
     end
 

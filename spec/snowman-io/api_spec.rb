@@ -48,4 +48,13 @@ RSpec.describe SnowmanIO::API, type: :feature do
     click_button "Login"
     expect(page).to have_content("Wrong password")
   end
+
+  it "API: status" do
+    register_admin_and_login("secret")
+    visit "/api/status"
+    expect(JSON.load(page.body)).to eq({
+      "notifiers"=>["SnowmanIO::Notifiers::Console"],
+      "base_url"=>"http://www.example.com"
+    })
+  end
 end
