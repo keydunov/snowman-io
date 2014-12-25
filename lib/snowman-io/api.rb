@@ -65,6 +65,9 @@ module SnowmanIO
     end
 
     get "/unpacking" do
+      unless SnowmanIO.store.base_url.present?
+        SnowmanIO.store.set_base_url(request.base_url)
+      end
       erb :unpacking
     end
 

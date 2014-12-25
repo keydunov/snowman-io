@@ -2,6 +2,7 @@ module SnowmanIO
   # Class to work with models.
   class Store
     ADMIN_PASSWORD_KEY = "admin_password_hash"
+    BASE_URL_KEY = "base_url"
 
     ## Work with admin password
     def set_admin_password(password)
@@ -14,6 +15,15 @@ module SnowmanIO
 
     def auth_admin?(password)
       BCrypt::Password.new(SnowmanIO.redis.get(ADMIN_PASSWORD_KEY)) == password
+    end
+
+    ## Base url
+    def set_base_url(url)
+      SnowmanIO.redis.set(BASE_URL_KEY, url)
+    end
+
+    def base_url
+      SnowmanIO.redis.get(BASE_URL_KEY)
     end
 
     ## Work with checks
