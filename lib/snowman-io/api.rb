@@ -101,6 +101,12 @@ module SnowmanIO
       {hr: 'ok'}.to_json
     end
 
+    get "/api/status" do
+      {
+        notifiers: SnowmanIO::Check.notifiers.map(&:name)
+      }.to_json
+    end
+
     get '/*' do
       erb :index, layout: false
     end
