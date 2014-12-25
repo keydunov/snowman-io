@@ -29,7 +29,7 @@ RSpec.describe SnowmanIO::Check do
 
     it "sets custom interval for 2 checks independently" do
       expect(Test2Check.interval).to eq(300)
-      expect(Test3Check.interval).to eq(3600)
+      expect(CustomNamespace::Test3Check.interval).to eq(3600)
     end
 
     it "returns default human name" do
@@ -38,7 +38,7 @@ RSpec.describe SnowmanIO::Check do
 
     it "sets custom human names for 2 checks independently" do
       expect(Test2Check.human).to eq("Test2Check: check2")
-      expect(Test3Check.human).to eq("Test3Check: check3")
+      expect(CustomNamespace::Test3Check.human).to eq("CustomNamespace::Test3Check: check3")
     end
 
     it "set configured notifiers" do

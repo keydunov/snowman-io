@@ -1,8 +1,10 @@
-class Test3Check < SnowmanIO::Check
-  interval 1.hour
-  human "check3"
+module CustomNamespace
+  class Test3Check < SnowmanIO::Check
+    interval 1.hour
+    human "check3"
 
-  def ok?
-    true
+    def ok?
+      true
+    end
   end
 end
