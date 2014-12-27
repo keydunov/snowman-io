@@ -79,8 +79,8 @@ module SnowmanIO
         failed_at: failed_at,
         failed_at_human: ActionViewHelpers.new.time_ago_in_words(Time.parse(failed_at)) + " ago",
         last_check_at: last_check_at,
-        last_check_at_human: ActionViewHelpers.new.time_ago_in_words(Time.parse(last_check_at)) + " ago",
-        last_check_context: SnowmanIO.redis.get("checks@#{name}@last_check_context") || []
+        last_check_at_human: ((ActionViewHelpers.new.time_ago_in_words(Time.parse(last_check_at)) + " ago") if last_check_at),
+        last_check_context: (SnowmanIO.redis.get("checks@#{name}@last_check_context") || "[]")
       }
     end
 
