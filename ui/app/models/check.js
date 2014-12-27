@@ -10,6 +10,17 @@ export default DS.Model.extend({
   positive_from_human: DS.attr('string'),
   failed_at: DS.attr('string'),
   failed_at_human: DS.attr('string'),
+  last_check_at: DS.attr('string'),
+  last_check_at_human: DS.attr('string'),
+  last_check_context: DS.attr('string'),
+
+  lastCheckContext: function() {
+    return JSON.parse(this.get("last_check_context"));
+  }.property("last_check_context"),
+
+  lastCheckContextPresent: function() {
+    return this.get("lastCheckContext").length > 0;
+  }.property("lastCheckContext"),
 
   resolve: function() {
     return Ember.$.post(this._resolveUrl());

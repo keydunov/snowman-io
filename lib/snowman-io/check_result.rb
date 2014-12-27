@@ -1,5 +1,9 @@
 module SnowmanIO
-  class CheckResult < Struct.new(:check, :status, :message)
+  class CheckResult < Struct.new(:check, :status, :message, :context)
+    def initialize(check, status, message, context = [])
+      super
+    end
+
     def check_name
       check.name
     end

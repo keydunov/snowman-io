@@ -19,6 +19,18 @@
   <p><a href="#" {{bind-attr class=":btn :btn-sm :btn-primary resolveInProgress:disabled"}} {{action 'resolve'}}>Resolve</a></p>
 {{/if}}
 
+<p><b>Last Check:</b> 
+  <span {{bind-attr title=model.last_check_at}}>{{model.last_check_at_human}}</span>
+</p>
+
+{{#if model.lastCheckContextPresent}}
+  <p><b>Context:</b> 
+    {{#each kv in model.lastCheckContext}}
+      <div><em>{{kv.key}}:</em> {{kv.value}}</div>
+    {{/each}}
+  </p>
+{{/if}}
+
 <h3>History</h3>
 {{#each entry in model.history}}
   <div><b {{bind-attr title=entry.at}}>{{moment entry.at "MMMM Do YYYY, h:mm a"}}</b>: {{entry.reason}}</div>
