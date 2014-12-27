@@ -46,11 +46,17 @@ module SnowmanIO
         status = "failed"
         message = self.class.human + " - FAIL"
       end
-      CheckResult.new(self.class, status, message)
+      CheckResult.new(self.class, status, message, get_context)
     end
 
     def ok?
       raise "Implement ok? in check class"
+    end
+
+    private
+
+    def get_context
+      instance_variables.map { |v| {key: v.to_s.sub(/^@/, ''), value: instance_variable_get(v)} }
     end
   end
 end

@@ -8,7 +8,8 @@
     <th>Key</th>
     <th>Positive/Failed</th>
     <th>Status</th>
-    <th>At</th>
+    <th>Last Check</th>
+    <th>Context</th>
     <th>Action</th>
   </tr>
 
@@ -20,11 +21,12 @@
         <span {{bind-attr class=":label check.isFailed:label-danger:label-success"}}>{{check.status}}</span>
       </td>
       <td>
-        {{#if check.isFailed}}
-          <span {{bind-attr title=check.failed_at}}>{{check.failed_at_human}}</span>
-        {{else}}
-          <span {{bind-attr title=check.positive_from}}>{{check.positive_from_human}}</span>
-        {{/if}}
+        <span {{bind-attr title=check.last_check_at}}>{{check.last_check_at_human}}</span>
+      </td>
+      <td>
+        {{#each kv in check.lastCheckContext}}
+          <div><em>{{kv.key}}:</em> {{kv.value}}</div>
+        {{/each}}
       </td>
       <td>
         {{#if check.isFailed}}

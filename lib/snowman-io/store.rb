@@ -51,6 +51,11 @@ module SnowmanIO
       end
     end
 
+    def save_last_check(name, context)
+      SnowmanIO.redis.set("checks@#{name}@last_check_at", Time.now.utc.to_s)
+      SnowmanIO.redis.set("checks@#{name}@last_check_context", JSON.dump(context))
+    end
+
     def checks
       SnowmanIO.redis.keys("checks@*@sha1").map do |key|
         key.split("@", 3)[1]
@@ -60,6 +65,7 @@ module SnowmanIO
     def check(name)
       positive_from = SnowmanIO.redis.get("checks@#{name}@positive_from")
       failed_at = SnowmanIO.redis.get("checks@#{name}@failed_at")
+      last_check_at = SnowmanIO.redis.get("checks@#{name}@last_check_at")
       {
         id: name,
         positive_count: SnowmanIO.redis.get("checks@#{name}@positive_count"),
@@ -71,7 +77,10 @@ module SnowmanIO
         positive_from: positive_from,
         positive_from_human: "for " + ActionViewHelpers.new.time_ago_in_words(Time.parse(positive_from)),
         failed_at: failed_at,
-        failed_at_human: ActionViewHelpers.new.time_ago_in_words(Time.parse(failed_at)) + " ago"
+        failed_at_human: ActionViewHelpers.new.time_ago_in_words(Time.parse(failed_at)) + " ago",
+        last_check_at: last_check_at,
+        last_check_at_human: ActionViewHelpers.new.time_ago_in_words(Time.parse(last_check_at)) + " ago",
+        last_check_context: SnowmanIO.redis.get("checks@#{name}@last_check_context") || []
       }
     end
 

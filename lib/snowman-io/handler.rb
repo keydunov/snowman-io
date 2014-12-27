@@ -6,7 +6,7 @@ module SnowmanIO
 
     def handle(result)
       failed = (result.status == 'failed' || result.status == 'exception')
-
+      SnowmanIO.store.save_last_check(result.check_name, result.context)
       if SnowmanIO.store.check_on_handle(result.check_name, failed) == :failed
         SnowmanIO.store.mark_check_as_failed(result.check_name)
         notify_fail(result)
