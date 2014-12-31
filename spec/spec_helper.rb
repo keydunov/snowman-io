@@ -12,6 +12,6 @@ Capybara.save_and_open_page_path = Dir.tmpdir + "/snowman-io-capybara"
 
 RSpec.configure do |c|
   c.include AdminHelper
-  c.before(:each) { SnowmanIO.redis.select(5) }
-  c.after(:each) { SnowmanIO.redis.flushdb }
+  c.before(:each) { SnowmanIO.adapter.instance_variable_get(:@redis).select(5) }
+  c.after(:each) { SnowmanIO.adapter.instance_variable_get(:@redis).flushdb }
 end
