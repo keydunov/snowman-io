@@ -14,3 +14,7 @@ script:
   - cd ui && ember test
 services:
   - redis-server
+  - mongodb
+env:
+  - REDIS_URL=redis://localhost:6379
+  - MONGO_URL=mongodb://localhost:27017/db

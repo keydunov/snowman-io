@@ -17,7 +17,7 @@ module SnowmanIO
     end
 
     def start
-      @web_server_supervisor = WebServer.supervise_as(:web_server, API, @options)
+      @web_server_supervisor = WebServer.supervise_as(:web_server, API, @options.slice(:port, :host, :verbose))
       scheduler.async.schedule_checks
     end
 
