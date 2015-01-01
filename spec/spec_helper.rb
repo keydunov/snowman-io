@@ -12,6 +12,7 @@ unless ENV["MONGO_URL"] || ENV["REDIS_URL"]
   ENV["MONGO_URL"] = "mongodb://localhost:27017/test"
 end
 Capybara.save_and_open_page_path = Dir.tmpdir + "/snowman-io-capybara"
+puts "[DEBUG] SnowmanIO.adapter.kind = #{SnowmanIO.adapter.kind}"
 
 RSpec.configure do |c|
   c.include AdminHelper
