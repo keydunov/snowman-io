@@ -62,7 +62,7 @@ module SnowmanIO
 
       # Returns array
       def geta(key)
-        get(key)
+        get(key) || []
       end
 
 

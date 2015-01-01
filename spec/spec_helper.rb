@@ -8,8 +8,8 @@ Coveralls.wear!
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].each { |f| require f }
 
 unless ENV["MONGO_URL"] || ENV["REDIS_URL"]
-  # use redis by default
-  ENV["REDIS_URL"] = "redis://localhost:6379/db1"
+  # use mongo by default
+  ENV["MONGO_URL"] = "mongodb://localhost:27017/test"
 end
 Capybara.save_and_open_page_path = Dir.tmpdir + "/snowman-io-capybara"
 
