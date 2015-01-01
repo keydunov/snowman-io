@@ -73,7 +73,7 @@ module SnowmanIO
         status: SnowmanIO.adapter.geti("checks@#{name}@fail_count") > 0 ? 'failed' : 'success',
         raw_history: SnowmanIO.adapter.geta("checks@#{name}@history").map { |entry|
           JSON.load(entry)
-        }.to_json,
+        }.reverse.to_json,
         positive_from: positive_from,
         positive_from_human: "for " + ActionViewHelpers.new.time_ago_in_words(Time.parse(positive_from)),
         failed_at: failed_at,
