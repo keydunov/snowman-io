@@ -7,6 +7,10 @@ module SnowmanIO
         @redis = ::Redis.new(url: url)
       end
 
+      def kind
+        :redis
+      end
+
       # Sets string value
       def set(key, value)
         @redis.set(key, value)

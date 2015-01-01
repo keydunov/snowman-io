@@ -16,6 +16,7 @@ require "snowman-io/cli"
 
 require "snowman-io/adapter/base"
 require "snowman-io/adapter/redis"
+require "snowman-io/adapter/mongo"
 
 module SnowmanIO
   def self.adapter
@@ -28,7 +29,20 @@ module SnowmanIO
         ENV["REDISGREEN_URL"] ||
         ENV["REDIS_URL"]
 
-      Adapter::Redis.new(redis_url)
+      # Try all posible Heroku Mongo addons one after another
+      mongo_url =
+        ENV["MONGOHQ_URL"] ||
+        ENV["MONGOLAB_URI"] ||
+        ENV["MONGOSOUP_URL"] ||
+        ENV["MONGO_URL"]
+
+      if redis_url
+        Adapter::Redis.new(redis_url)
+      elsif mongo_url
+        Adapter::Mongo.new(mongo_url)
+      else
+        raise "coundn't find any storage url"
+      end
     end
   end
 

@@ -85,7 +85,7 @@ module SnowmanIO
     end
 
     def check_on_handle(name, is_failed)
-      fail_count = SnowmanIO.adapter.geti("checks@#{name}@fail_count")
+      fail_count = SnowmanIO.adapter.geti("checks@#{name}@fail_count").to_i
 
       if is_failed
         SnowmanIO.adapter.incr("checks@#{name}@fail_count")
@@ -93,7 +93,7 @@ module SnowmanIO
         SnowmanIO.adapter.incr("checks@#{name}@positive_count")
       end
 
-      failed = SnowmanIO.adapter.geti("checks@#{name}@fail_count")
+      failed = SnowmanIO.adapter.geti("checks@#{name}@fail_count").to_i
 
       if fail_count > 0 || failed > 1
         :failed_already

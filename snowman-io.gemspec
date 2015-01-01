@@ -24,6 +24,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "celluloid", "~> 0.16.0"
   spec.add_dependency "reel", ">= 0.5.0"
   spec.add_dependency "redis", "~> 3.1.0"
+  spec.add_dependency "mongo", "~> 1.11"
+  spec.add_dependency "bson_ext", "~> 1.11"
   spec.add_dependency "activesupport", "~> 4.2"
   spec.add_dependency "bcrypt", "~> 3.1"
   spec.add_dependency "actionview", "~> 4.2"

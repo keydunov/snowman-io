@@ -39,7 +39,12 @@ module SnowmanIO
         "REMOTE_ADDR" => request.remote_addr
       }.merge(convert_headers(request.headers))
 
-      status, headers, body = app.call ::Rack::MockRequest.env_for(request.url, options)
+      begin
+        status, headers, body = app.call ::Rack::MockRequest.env_for(request.url, options)
+      rescue => e
+        puts e.to_s
+        puts e.backtrace
+      end
 
       if body.respond_to? :each
         # If Content-Length was specified we can send the response all at once

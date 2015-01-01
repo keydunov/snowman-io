@@ -1,6 +1,10 @@
 module SnowmanIO
   module Adapter
     class Base
+      def kind
+        raise "implemenent this method in concrete adapter"
+      end
+
       # Sets string value
       def set(key, value)
         raise "implemenent this method in concrete adapter"
