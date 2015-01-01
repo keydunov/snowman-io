@@ -34,13 +34,13 @@ module SnowmanIO
 
       # Gets integer value
       def geti(key)
-        @redis.get(key).to_i
+        @redis.get(key).try(:to_i)
       end
 
 
       # Push value to array
       def push(key, value)
-        @redis.lpush(key, value)
+        @redis.rpush(key, value)
       end
 
       # Returns array length
@@ -50,7 +50,7 @@ module SnowmanIO
 
       # Shifts first array item
       def shift(key)
-        @redis.rpop(key)
+        @redis.lpop(key)
       end
 
       # Returns array

@@ -25,6 +25,8 @@ RSpec.describe SnowmanIO::Adapter do
   end
 
   it "supports arrays" do
+    expect(SnowmanIO.adapter.geta("array@key")).to eq([])
+
     SnowmanIO.adapter.push("array@key", "a")
     SnowmanIO.adapter.push("array@key", "b")
     SnowmanIO.adapter.push("array@key", "c")
