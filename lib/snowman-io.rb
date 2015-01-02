@@ -3,10 +3,10 @@ require 'bcrypt'
 require 'celluloid/autostart'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
+require 'active_support/core_ext/object/blank'
 
 require "snowman-io/version"
 require "snowman-io/api"
-require "snowman-io/store"
 require "snowman-io/options"
 require "snowman-io/launcher"
 require "snowman-io/cli"
@@ -41,10 +41,6 @@ module SnowmanIO
         raise "coundn't find any storage url"
       end
     end
-  end
-
-  def self.store
-    @store ||= Store.new
   end
 
   def self.logger

@@ -3,6 +3,9 @@ require 'sinatra/content_for'
 
 module SnowmanIO
   class API < Sinatra::Base
+    ADMIN_PASSWORD_KEY = "admin_password_hash"
+    BASE_URL_KEY = "base_url"
+
     enable :sessions
     helpers Sinatra::ContentFor
     set :public_folder, File.dirname(__FILE__) + "/api/public"
@@ -10,7 +13,7 @@ module SnowmanIO
     set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
     def admin_exists?
-      SnowmanIO.store.admin_password_setted?
+      SnowmanIO.adapter.get(ADMIN_PASSWORD_KEY).present?
     end
 
     def admin_authenticated?
@@ -50,7 +53,7 @@ module SnowmanIO
     end
 
     post "/login" do
-      if SnowmanIO.store.auth_admin?(params["password"])
+      if BCrypt::Password.new(SnowmanIO.adapter.get(ADMIN_PASSWORD_KEY)) == params["password"]
         session[:user] = "admin"
         redirect to('/')
       else
@@ -65,8 +68,8 @@ module SnowmanIO
     end
 
     get "/unpacking" do
-      unless SnowmanIO.store.base_url
-        SnowmanIO.store.set_base_url(request.base_url)
+      unless SnowmanIO.adapter.get(BASE_URL_KEY).present?
+        SnowmanIO.adapter.set(BASE_URL_KEY, request.base_url)
       end
       erb :unpacking
     end
@@ -77,14 +80,14 @@ module SnowmanIO
         erb :unpacking
       else
         session[:user] = "admin"
-        SnowmanIO.store.set_admin_password(params["password"])
+        SnowmanIO.adapter.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
     end
 
     get "/api/status" do
       {
-        base_url: SnowmanIO.store.base_url
+        base_url: SnowmanIO.adapter.get(BASE_URL_KEY)
       }.to_json
     end
 
