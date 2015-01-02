@@ -5,19 +5,13 @@ module SnowmanIO
         raise "implemenent this method in concrete adapter"
       end
 
-      # Sets string value
+      # Sets value
       def set(key, value)
         raise "implemenent this method in concrete adapter"
       end
 
-      # Gets string value
+      # Gets value
       def get(key)
-        raise "implemenent this method in concrete adapter"
-      end
-
-
-      # Sets integer value
-      def seti(key, value)
         raise "implemenent this method in concrete adapter"
       end
 
@@ -26,32 +20,10 @@ module SnowmanIO
         raise "implemenent this method in concrete adapter"
       end
 
-      # Gets integer value
-      def geti(key)
-        raise "implemenent this method in concrete adapter"
-      end
-
-
       # Push value to array
-      def push(key, value)
+      def push(key, max_size, value)
         raise "implemenent this method in concrete adapter"
       end
-
-      # Returns array length
-      def len(key)
-        raise "implemenent this method in concrete adapter"
-      end
-
-      # Shifts first array item
-      def shift(key)
-        raise "implemenent this method in concrete adapter"
-      end
-
-      # Returns array
-      def geta(key)
-        raise "implemenent this method in concrete adapter"
-      end
-
 
       # Returns all key by mask. The mask accepts '*' symbol for any amount of any symbols
       def keys(mask)

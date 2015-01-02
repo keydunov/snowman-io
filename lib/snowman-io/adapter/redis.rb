@@ -11,53 +11,34 @@ module SnowmanIO
         :redis
       end
 
-      # Sets string value
+      # Sets value
       def set(key, value)
-        @redis.set(key, value)
+        @redis.set(key, [value].to_json)
       end
 
-      # Gets string value
+      # Gets value
       def get(key)
-        @redis.get(key)
-      end
-
-
-      # Sets integer value
-      def seti(key, value)
-        @redis.set(key, value)
+        if raw = @redis.get(key)
+          JSON.parse(raw).first
+        end
       end
 
       # Increases integer value by 1
       def incr(key)
-        @redis.incr(key)
+        new_value = (get(key) || 0) + 1
+        set(key, new_value)
+        new_value
       end
-
-      # Gets integer value
-      def geti(key)
-        @redis.get(key).try(:to_i)
-      end
-
 
       # Push value to array
-      def push(key, value)
-        @redis.rpush(key, value)
+      # FIXME: this impl is very slow
+      def push(key, max_size, value)
+        new_value = ((get(key) || []) + [value])
+        if new_value.length > max_size
+          new_value = new_value[-max_size..-1]
+        end
+        set(key, new_value)
       end
-
-      # Returns array length
-      def len(key)
-        @redis.llen(key)
-      end
-
-      # Shifts first array item
-      def shift(key)
-        @redis.lpop(key)
-      end
-
-      # Returns array
-      def geta(key)
-        @redis.lrange(key, 0, -1)
-      end
-
 
       # Returns all key by mask. The mask accepts '*' symbol for any amount of any symbols
       def keys(mask)
