@@ -42,7 +42,6 @@ module SnowmanIO
     end
 
     get "/" do
-      raise 'x'
       erb :index, layout: false
     end
 
@@ -81,6 +80,12 @@ module SnowmanIO
         SnowmanIO.store.set_admin_password(params["password"])
         redirect to('/')
       end
+    end
+
+    get "/api/status" do
+      {
+        base_url: SnowmanIO.store.base_url
+      }.to_json
     end
 
     get '/*' do

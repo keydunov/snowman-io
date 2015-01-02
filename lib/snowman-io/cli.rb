@@ -16,7 +16,6 @@ module SnowmanIO
 
     def run
       setup_logger
-      options[:checks] = load_checks
 
       # Self-pipe for deferred signal-handling (http://cr.yp.to/docs/selfpipe.html)
       self_read, self_write = IO.pipe
@@ -64,17 +63,6 @@ module SnowmanIO
         SnowmanIO.logger.level = ::Logger::DEBUG
       else
         SnowmanIO.logger.level = ::Logger::INFO
-      end
-    end
-
-    def load_checks
-      Dir[Dir.pwd + '/checks/**/*_check.rb'].map do |path|
-        require path
-        klass = path.sub(Dir.pwd + '/checks/', '').sub(/\.rb$/, '').camelize
-        check = Kernel.const_get(klass)
-        SnowmanIO.store.register_check(klass, Digest::SHA1.hexdigest(File.read(path)))
-        SnowmanIO.logger.debug("Load check #{klass}")
-        check
       end
     end
   end
