@@ -7,7 +7,9 @@ Coveralls.wear!
 
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].each { |f| require f }
 
-unless ENV["MONGO_URL"] || ENV["REDIS_URL"]
+if ENV["REDIS"] == '1'
+  ENV["REDIS_URL"] = "redis://localhost:6379"
+else
   # use mongo by default
   ENV["MONGO_URL"] = "mongodb://localhost:27017/test"
 end
