@@ -5,15 +5,11 @@ require 'active_support/core_ext/string/strip' # for strip_heredoc
 
 require "snowman-io/version"
 require "snowman-io/api"
-require "snowman-io/options"
-require "snowman-io/checks/hosted_graphite"
-require "snowman-io/check"
-require "snowman-io/check_result"
 require "snowman-io/store"
-
+require "snowman-io/options"
 require "snowman-io/launcher"
 require "snowman-io/cli"
-
+require 'snowman-io/web_server'
 require "snowman-io/adapter/base"
 require "snowman-io/adapter/redis"
 require "snowman-io/adapter/mongo"

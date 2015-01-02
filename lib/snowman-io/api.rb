@@ -42,6 +42,7 @@ module SnowmanIO
     end
 
     get "/" do
+      raise 'x'
       erb :index, layout: false
     end
 
@@ -65,7 +66,7 @@ module SnowmanIO
     end
 
     get "/unpacking" do
-      unless SnowmanIO.store.base_url.present?
+      unless SnowmanIO.store.base_url
         SnowmanIO.store.set_base_url(request.base_url)
       end
       erb :unpacking
@@ -80,32 +81,6 @@ module SnowmanIO
         SnowmanIO.store.set_admin_password(params["password"])
         redirect to('/')
       end
-    end
-
-    get "/api/checks" do
-      {
-        checks: SnowmanIO.store.checks.map { |id|
-          SnowmanIO.store.check(id)
-        }
-      }.to_json
-    end
-
-    get "/api/checks/:id" do
-      {
-        check: SnowmanIO.store.check(params[:id])
-      }.to_json
-    end
-
-    post "/api/checks/:id/resolve" do
-      SnowmanIO.store.resolve_check(params[:id])
-      {hr: 'ok'}.to_json
-    end
-
-    get "/api/status" do
-      {
-        notifiers: SnowmanIO::Check.notifiers.map(&:name),
-        base_url: SnowmanIO.store.base_url
-      }.to_json
     end
 
     get '/*' do
