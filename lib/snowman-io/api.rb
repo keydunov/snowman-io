@@ -94,42 +94,22 @@ module SnowmanIO
     end
 
     get "/api/collectors" do
-      keys = SnowmanIO.adapter.keys("collectors@*")
-      {
-        collectors: keys.map{ |key|
-          SnowmanIO.adapter.get(key)
-        }
-      }.to_json
+      { collectors: Models::Collector.all }.to_json
     end
 
     post "/api/collectors" do
       payload = JSON.load(request.body.read)["collector"]
-
-      if payload["hgMetric"].present?
-        id = SnowmanIO.adapter.incr(GLOBAL_ID_KEY)
-        collector = {
-          id: id,
-          kind: payload["kind"],
-          hgMetric: payload["hgMetric"]
-        }
-        SnowmanIO.adapter.set("collectors@#{id}", collector)
-        {
-          collector: collector
-        }.to_json
+      hr = Models::Collector.create(payload)
+      if hr[:status] == :ok
+        { collector: hr[:collector] }.to_json
       else
         status 422
-        {
-          errors: {
-            "hgMetric" => ["HG Metric should not be empty"]
-          }
-        }.to_json
+        { errors: hr[:errors] }.to_json
       end
     end
 
     get "/api/collectors/:id" do
-      {
-        collector: SnowmanIO.adapter.get("collectors@#{params[:id]}")
-      }.to_json
+      {collector: Models::Collector.find(params[:id])}.to_json
     end
 
     get "/api/status" do

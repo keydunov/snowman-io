@@ -14,6 +14,7 @@ require 'snowman-io/web_server'
 require "snowman-io/adapter/base"
 require "snowman-io/adapter/redis"
 require "snowman-io/adapter/mongo"
+require "snowman-io/models/collector"
 
 module SnowmanIO
   def self.adapter
