@@ -9,12 +9,14 @@
     <th>ID</th>
     <th>Kind</th>
     <th>HG Metric</th>
+    <th>Actions</th>
   </tr>
   {{#each collector in persisted}}
     <tr>
       <td>{{collector.id}}</td>
       <td>{{collector.kind}}</td>
       <td>{{collector.hgMetric}}</td>
+      <td>{{#link-to "collectors/show" collector}}show{{/link-to}}</td>
     </tr>
   {{/each}}
 </table>
