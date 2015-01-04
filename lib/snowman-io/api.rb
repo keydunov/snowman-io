@@ -5,6 +5,7 @@ module SnowmanIO
   class API < Sinatra::Base
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
+    GLOBAL_ID_KEY = "global_id"
 
     enable :sessions
     helpers Sinatra::ContentFor
@@ -22,15 +23,22 @@ module SnowmanIO
 
     before do
       if request.path =~ /^\/api/
-        content_type :json
-
         if ENV["EMBER_DEV"].to_i == 1
           # Enable CORS in development mode
-          response.headers['Access-Control-Allow-Origin'] = '*'
+          response.headers['Access-Control-Allow-Origin'] = request.env['HTTP_ORIGIN']
+          response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS',
+          response.headers['Access-Control-Allow-Headers'] = "*, Content-Type, Accept, AUTHORIZATION, Cache-Control"
+          response.headers['Access-Control-Allow-Credentials'] = "true"
+          response.headers['Access-Control-Expose-Headers'] = "Cache-Control, Content-Language, Content-Type, Expires, Last-Modified, Pragma"
+          if request.request_method == 'OPTIONS'
+            halt 200
+          end
         end
 
+        content_type :json
+
         if !admin_authenticated?
-          # Ignore authorization only during app development
+          # Ignore authorization during app development
           unless ENV["EMBER_DEV"].to_i == 1
             halt 403, 'Access Denied'
           end
@@ -83,6 +91,45 @@ module SnowmanIO
         SnowmanIO.adapter.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
+    end
+
+    get "/api/collectors" do
+      keys = SnowmanIO.adapter.keys("collectors@*")
+      {
+        collectors: keys.map{ |key|
+          SnowmanIO.adapter.get(key)
+        }
+      }.to_json
+    end
+
+    post "/api/collectors" do
+      payload = JSON.load(request.body.read)["collector"]
+
+      if payload["hgMetric"].present?
+        id = SnowmanIO.adapter.incr(GLOBAL_ID_KEY)
+        collector = {
+          id: id,
+          kind: payload["kind"],
+          hgMetric: payload["hgMetric"]
+        }
+        SnowmanIO.adapter.set("collectors@#{id}", collector)
+        {
+          collector: collector
+        }.to_json
+      else
+        status 422
+        {
+          errors: {
+            "hgMetric" => ["HG Metric should not be empty"]
+          }
+        }.to_json
+      end
+    end
+
+    get "/api/collectors/:id" do
+      {
+        collector: SnowmanIO.adapter.get("collectors@#{params[:id]}")
+      }.to_json
     end
 
     get "/api/status" do

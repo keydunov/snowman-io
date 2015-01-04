@@ -17,6 +17,14 @@ RSpec.describe SnowmanIO::Adapter do
     expect(SnowmanIO.adapter.get("integer@key")).to eq(456)
   end
 
+  it "supports json-compatible setters and getters" do
+    expect(SnowmanIO.adapter.get("some@key")).to be_nil
+    SnowmanIO.adapter.set("some@key", {"id" => 1, "name" => "test"})
+    expect(SnowmanIO.adapter.get("some@key")).to eq({"id" => 1, "name" => "test"})
+    SnowmanIO.adapter.set("some@key", {"id" => 1, "name" => "other"})
+    expect(SnowmanIO.adapter.get("some@key")).to eq({"id" => 1, "name" => "other"})
+  end
+
   it "supports incr" do
     expect(SnowmanIO.adapter.incr("integer@key")).to eq(1)
     SnowmanIO.adapter.set("integer@key", 5)

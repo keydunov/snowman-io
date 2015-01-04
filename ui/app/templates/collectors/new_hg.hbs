@@ -1,0 +1,31 @@
+<ol class="breadcrumb">
+  <li>{{#link-to "collectors/index"}}Collectors{{/link-to}}</li>
+  <li>{{#link-to "collectors/new"}}New{{/link-to}}</li>
+  <li class="active">Hosted Graphite</li>
+</ol>
+
+{{#unless model.errors.isEmpty}}
+  <div class="alert alert-danger">
+    <p>There are several problems:</p>
+    <ul>
+      {{#each message in model.errors.messages}}
+        <li>{{message}}</li>
+      {{/each}}
+    </ul>
+  </div>
+{{/unless}}
+
+<form class="form-horizontal">
+  <div {{bind-attr class=":form-group model.errors.hgMetric:has-error"}}>
+    <label for="HGMetric" class="col-sm-2 control-label">HG Metric</label>
+    <div class="col-sm-6">
+      {{input type="text" value=model.hgMetric classNames="form-control" id="HGMetric" placeholder="Hosted Graphite metric, can be function like 'integral(some.value:sum)'"}}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-6">
+      <button type="submit" class="btn btn-primary" {{bind-attr disabled=model.isSaving}} {{action "create"}}>Create</button>
+    </div>
+  </div>
+</form>
