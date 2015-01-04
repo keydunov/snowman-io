@@ -2,8 +2,6 @@ module SnowmanIO
   class Launcher
     include Celluloid
 
-    attr_reader :scheduler, :handler
-
     def initialize(options)
       @options = options
     end
