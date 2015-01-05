@@ -23,7 +23,7 @@ module SnowmanIO
 
       def self.destroy(id)
         SnowmanIO.adapter.unset("collectors@#{id}")
-        ""
+        {collectors: {id: id}}
       end
     end
   end
