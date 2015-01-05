@@ -23,6 +23,11 @@ RSpec.describe SnowmanIO::Adapter do
     expect(SnowmanIO.adapter.get("some@key")).to eq({"id" => 1, "name" => "test"})
     SnowmanIO.adapter.set("some@key", {"id" => 1, "name" => "other"})
     expect(SnowmanIO.adapter.get("some@key")).to eq({"id" => 1, "name" => "other"})
+
+    expect(SnowmanIO.adapter.keys("some@key")).to eq(["some@key"])
+    SnowmanIO.adapter.unset("some@key")
+    expect(SnowmanIO.adapter.get("some@key")).to be_nil
+    expect(SnowmanIO.adapter.keys("some@key")).to eq([])
   end
 
   it "supports incr" do

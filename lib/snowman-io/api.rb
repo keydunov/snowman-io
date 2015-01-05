@@ -34,7 +34,7 @@ module SnowmanIO
         if ENV["EMBER_DEV"].to_i == 1
           # Enable CORS in development mode
           response.headers['Access-Control-Allow-Origin'] = request.env['HTTP_ORIGIN']
-          response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT',
+          response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE',
           response.headers['Access-Control-Allow-Headers'] = "*, Content-Type, Accept, AUTHORIZATION, Cache-Control"
           response.headers['Access-Control-Allow-Credentials'] = "true"
           response.headers['Access-Control-Expose-Headers'] = "Cache-Control, Content-Language, Content-Type, Expires, Last-Modified, Pragma"
@@ -117,6 +117,11 @@ module SnowmanIO
     put "/api/collectors/:id" do
       payload = JSON.load(request.body.read)["collector"]
       wrap_model_response Models::Collector.update(params[:id], payload)
+    end
+
+    delete "/api/collectors/:id" do
+      Models::Collector.destroy(params[:id])
+      { collector: {id: params[:id]} }.to_json
     end
 
     get "/api/status" do

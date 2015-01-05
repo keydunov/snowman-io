@@ -40,6 +40,11 @@ module SnowmanIO
         set(key, new_value)
       end
 
+      # Remove key
+      def unset(key)
+        @redis.del(key)
+      end
+
       # Returns all key by mask. The mask accepts '*' symbol for any amount of any symbols
       def keys(mask)
         @redis.keys(mask)

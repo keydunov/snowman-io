@@ -26,6 +26,10 @@ module SnowmanIO
         end
       end
 
+      def self.destroy(id)
+        SnowmanIO.adapter.unset("collectors@#{id}")
+      end
+
       private
 
       def self.craft(options, id)

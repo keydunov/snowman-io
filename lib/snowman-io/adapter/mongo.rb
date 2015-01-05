@@ -51,6 +51,11 @@ module SnowmanIO
         )
       end
 
+      # Remove key
+      def unset(key)
+        @coll.remove({key: key})
+      end
+
       # Returns all key by mask. The mask accepts '*' symbol for any amount of any symbols
       def keys(mask)
         regex = "^" + mask.gsub("*", ".*") + "$"

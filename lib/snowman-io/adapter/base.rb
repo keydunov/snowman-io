@@ -25,6 +25,11 @@ module SnowmanIO
         raise "implemenent this method in concrete adapter"
       end
 
+      # Remove key
+      def unset(key)
+        raise "implemenent this method in concrete adapter"
+      end
+
       # Returns all key by mask. The mask accepts '*' symbol for any amount of any symbols
       def keys(mask)
         raise "implemenent this method in concrete adapter"
