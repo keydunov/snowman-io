@@ -21,14 +21,6 @@ module SnowmanIO
       admin_exists? && !!session[:user]
     end
 
-    def wrap_model_response(resp)
-      if resp[:status] == :ok
-        resp.except(:status).to_json
-      else
-        [422, resp.except(:status).to_json]
-      end
-    end
-
     before do
       if request.path =~ /^\/api/
         if ENV["EMBER_DEV"].to_i == 1
@@ -105,18 +97,18 @@ module SnowmanIO
       { collectors: Models::Collector.all }.to_json
     end
 
-    post "/api/collectors" do
-      payload = JSON.load(request.body.read)["collector"]
-      wrap_model_response Models::Collector.create(payload)
-    end
-
     get "/api/collectors/:id" do
       { collector: Models::Collector.find(params[:id]) }.to_json
     end
 
+    post "/api/collectors" do
+      payload = JSON.load(request.body.read)["collector"]
+      Models::Collector.create(payload).to_json
+    end
+
     put "/api/collectors/:id" do
       payload = JSON.load(request.body.read)["collector"]
-      wrap_model_response Models::Collector.update(params[:id], payload)
+      Models::Collector.update(params[:id], payload).to_json
     end
 
     delete "/api/collectors/:id" do
