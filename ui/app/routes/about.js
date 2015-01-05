@@ -2,11 +2,11 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model: function() {
-    return Ember.$.get(this._statusUrl());
+    return Ember.$.get(this._infoUrl());
   },
 
-  _statusUrl: function() {
+  _infoUrl: function() {
     var adapter = this.container.lookup('adapter:application');
-    return adapter.buildURL("") + "/status";
+    return adapter.buildURL("") + "/info";
   }
 });

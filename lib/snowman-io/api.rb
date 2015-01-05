@@ -115,9 +115,10 @@ module SnowmanIO
       Models::Collector.destroy(params[:id]).to_json
     end
 
-    get "/api/status" do
+    get "/api/info" do
       {
-        base_url: SnowmanIO.adapter.get(BASE_URL_KEY)
+        base_url: SnowmanIO.adapter.get(BASE_URL_KEY),
+        version: SnowmanIO::VERSION
       }.to_json
     end
 
