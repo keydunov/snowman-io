@@ -2,9 +2,12 @@ module SnowmanIO
   module Models
     class Collector
       def self.all
-        SnowmanIO.adapter.keys("collectors@*").map do |key|
-          SnowmanIO.adapter.get(key)
-        end
+        {
+          status: :ok,
+          collectors: SnowmanIO.adapter.keys("collectors@*").map { |key|
+            SnowmanIO.adapter.get(key)
+          }
+        }
       end
 
       def self.find(id)

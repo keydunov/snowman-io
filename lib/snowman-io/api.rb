@@ -94,7 +94,7 @@ module SnowmanIO
     end
 
     get "/api/collectors" do
-      { collectors: Models::Collector.all }.to_json
+      Models::Collector.all.to_json
     end
 
     get "/api/collectors/:id" do
