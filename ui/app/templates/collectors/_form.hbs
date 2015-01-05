@@ -1,16 +1,16 @@
-{{#unless model.errors.isEmpty}}
+{{#if model.errorsMessages.length}}
   <div class="alert alert-danger">
     <p>There are several problems:</p>
     <ul>
-      {{#each message in model.errors.messges}}
+      {{#each message in model.errorsMessages}}
         <li>{{message}}</li>
       {{/each}}
     </ul>
   </div>
-{{/unless}}
+{{/if}}
 
 <form class="form-horizontal">
-  <div {{bind-attr class=":form-group model.errors.hgMetric:has-error"}}>
+  <div {{bind-attr class=":form-group model.errorHgMetric:has-error"}}>
     <label for="HGMetric" class="col-sm-2 control-label">HG Metric</label>
     <div class="col-sm-6">
       {{input type="text" value=model.hgMetric classNames="form-control" id="HGMetric" placeholder="Hosted Graphite metric, can be function like 'integral(some.value:sum)'"}}
@@ -19,7 +19,7 @@
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-6">
-      <button type="submit" class="btn btn-primary" {{bind-attr disabled=model.isSaving}} {{action "save"}}>Save</button>
+      <button type="submit" class="btn btn-primary" {{bind-attr disabled=isSaving}} {{action "save"}}>Save</button>
     </div>
   </div>
 </form>

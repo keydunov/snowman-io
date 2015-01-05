@@ -5,21 +5,29 @@ export default Ember.ObjectController.extend({
     save: function() {
       var me = this;
       this.set("isSaving", true);
-      this.set("xhr", Ember.$.post(this.buildUrl(), JSON.stringify(this.getData()), function(data) {
-        me.set("isSaving", false);
-        me.set("xhr", null);
-        if (data.status === "ok") {
-          me.transitionToRoute("collectors/index");
-        } else {
-          me.setErrors(data.errors);
+      this.set("xhr", Ember.$.ajax({
+        url: this.buildUrl(),
+        type: "POST",
+        data: JSON.stringify(this.getData()),
+        dataType: "json",
+        success: function(data) {
+          me.set("isSaving", false);
+          me.set("xhr", null);
+          if (data.status === "ok") {
+            me.transitionToRoute("collectors/show", data.collector.id);
+          } else {
+            me.setErrors(data.errors);
+          }
         }
-      }, "json"));
+      }));
     }
   },
 
   deactivate: function() {
     if (this.get("xhr")) {
       this.get("xhr").abort();
+      this.set("isSaving", false);
+      this.set("xhr", null);
     }
   },
 
