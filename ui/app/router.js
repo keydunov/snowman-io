@@ -15,6 +15,8 @@ Router.map(function() {
   this.route('collectors/edit', {path: '/collectors/:id/edit'});
   this.route('collectors/destroy', {path: '/collectors/:id/destroy'});
 
+  this.route('metrics/index', {path: '/metrics'});
+
   this.route('about');
 });
 

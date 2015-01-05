@@ -1,0 +1,18 @@
+<ol class="breadcrumb">
+  <li class="active">Metrics</li>
+</ol>
+
+<div class="table-responsive">
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+  </tr>
+  {{#each metric in model}}
+    <tr>
+      <td>{{metric.id}}</td>
+      <td>{{metric.value}}</td>
+    </tr>
+  {{/each}}
+</table>
+</div>

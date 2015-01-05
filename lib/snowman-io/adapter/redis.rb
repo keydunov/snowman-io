@@ -47,7 +47,7 @@ module SnowmanIO
 
       # Returns all key by mask. The mask accepts '*' symbol for any amount of any symbols
       def keys(mask)
-        @redis.keys(mask)
+        @redis.keys(mask).sort
       end
     end
   end

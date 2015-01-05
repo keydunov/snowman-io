@@ -115,6 +115,10 @@ module SnowmanIO
       Models::Collector.destroy(params[:id]).to_json
     end
 
+    get "/api/metrics" do
+      {metrics: Models::Metric.all}.to_json
+    end
+
     get "/api/info" do
       {
         base_url: SnowmanIO.adapter.get(BASE_URL_KEY),
