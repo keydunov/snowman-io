@@ -5,7 +5,6 @@ export default Ember.Route.extend({
     if (this.controller.get("model.isDirty")) {
       this.controller.get("model").rollback();
     }
-    this.controller.clear();
   },
 
   model: function (params) {

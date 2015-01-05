@@ -1,16 +1,16 @@
-{{#if hasErrors}}
+{{#unless model.errors.isEmpty}}
   <div class="alert alert-danger">
     <p>There are several problems:</p>
     <ul>
-      {{#each message in modelErrors}}
+      {{#each message in model.errors.messges}}
         <li>{{message}}</li>
       {{/each}}
     </ul>
   </div>
-{{/if}}
+{{/unless}}
 
 <form class="form-horizontal">
-  <div {{bind-attr class=":form-group modelAttributesWithErrors.hgMetric:has-error"}}>
+  <div {{bind-attr class=":form-group model.errors.hgMetric:has-error"}}>
     <label for="HGMetric" class="col-sm-2 control-label">HG Metric</label>
     <div class="col-sm-6">
       {{input type="text" value=model.hgMetric classNames="form-control" id="HGMetric" placeholder="Hosted Graphite metric, can be function like 'integral(some.value:sum)'"}}
