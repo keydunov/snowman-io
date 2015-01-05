@@ -2,16 +2,12 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   model: function() {
-    return Ember.Object.create({
-      kind: "HG",
-      hgMetric: "",
-
-      errorsMessages: Ember.A(),
-      errorHgMetric: false
-    });
+    return this.store.createRecord('collector', {kind: "HG", hgMetric: ""});
   },
 
   deactivate: function() {
-    this.controller.deactivate();
+    if (this.controller.get("model.isNew")) {
+      this.controller.get("model").rollback();
+    }
   }
 });

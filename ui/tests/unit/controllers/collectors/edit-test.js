@@ -3,13 +3,13 @@ import {
   test
 } from 'ember-qunit';
 
-moduleFor('service:storage', 'StorageService', {
+moduleFor('controller:collectors/edit', 'CollectorsEditController', {
   // Specify the other units that are required for this test.
-  // needs: ['service:foo']
+  // needs: ['controller:foo']
 });
 
 // Replace this with your real tests.
 test('it exists', function() {
-  var service = this.subject();
-  ok(service);
+  var controller = this.subject();
+  ok(controller);
 });

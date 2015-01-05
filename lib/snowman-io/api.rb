@@ -94,7 +94,7 @@ module SnowmanIO
     end
 
     get "/api/collectors" do
-      Models::Collector.all.to_json
+      {collectors: Models::Collector.all}.to_json
     end
 
     get "/api/collectors/:id" do
@@ -112,8 +112,7 @@ module SnowmanIO
     end
 
     delete "/api/collectors/:id" do
-      Models::Collector.destroy(params[:id])
-      { collector: {id: params[:id]} }.to_json
+      Models::Collector.destroy(params[:id]).to_json
     end
 
     get "/api/status" do

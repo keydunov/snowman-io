@@ -1,19 +1,8 @@
-{{#if model.errorsMessages.length}}
-  <div class="alert alert-danger">
-    <p>There are several problems:</p>
-    <ul>
-      {{#each message in model.errorsMessages}}
-        <li>{{message}}</li>
-      {{/each}}
-    </ul>
-  </div>
-{{/if}}
-
 <form class="form-horizontal">
-  <div {{bind-attr class=":form-group model.errorHgMetric:has-error"}}>
+  <div class="form-group"}}>
     <label for="HGMetric" class="col-sm-2 control-label">HG Metric</label>
     <div class="col-sm-6">
-      {{input type="text" value=model.hgMetric classNames="form-control" id="HGMetric" placeholder="Hosted Graphite metric, can be function like 'integral(some.value:sum)'"}}
+      {{input type="text" value=hgMetric classNames="form-control" id="HGMetric" placeholder="Hosted Graphite metric, can be function like 'integral(some.value:sum)'"}}
     </div>
   </div>
 
