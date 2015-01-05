@@ -4,14 +4,14 @@ export default Ember.ObjectController.extend({
   actions: {
     save: function() {
       var me = this;
-      this.set("isSaving", true);
+      this.set("inProgress", true);
       this.set("xhr", Ember.$.ajax({
         url: this.buildUrl(),
         type: "PUT",
         data: JSON.stringify(this.getData()),
         dataType: "json",
         success: function(data) {
-          me.set("isSaving", false);
+          me.set("inProgress", false);
           me.set("xhr", null);
           if (data.status === "ok") {
             me.transitionToRoute("collectors/show", data.collector.id);
@@ -26,7 +26,7 @@ export default Ember.ObjectController.extend({
   deactivate: function() {
     if (this.get("xhr")) {
       this.get("xhr").abort();
-      this.set("isSaving", false);
+      this.set("inProgress", false);
       this.set("xhr", null);
     }
   },
