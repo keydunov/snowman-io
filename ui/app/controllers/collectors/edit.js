@@ -3,6 +3,11 @@ import Ember from 'ember';
 export default Ember.ObjectController.extend({
   hasErrors: Ember.computed.notEmpty("modelErrors"),
 
+  clear: function() {
+    this.set("modelErrors", []);
+    this.set("modelAttributesWithErrors", []);
+  },
+
   actions: {
     save: function() {
       var me = this;

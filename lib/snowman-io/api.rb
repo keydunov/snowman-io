@@ -21,12 +21,20 @@ module SnowmanIO
       admin_exists? && !!session[:user]
     end
 
+    def wrap_model_response(resp)
+      if resp[:status] == :ok
+        resp.except(:status).to_json
+      else
+        [422, resp.except(:status).to_json]
+      end
+    end
+
     before do
       if request.path =~ /^\/api/
         if ENV["EMBER_DEV"].to_i == 1
           # Enable CORS in development mode
           response.headers['Access-Control-Allow-Origin'] = request.env['HTTP_ORIGIN']
-          response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS',
+          response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT',
           response.headers['Access-Control-Allow-Headers'] = "*, Content-Type, Accept, AUTHORIZATION, Cache-Control"
           response.headers['Access-Control-Allow-Credentials'] = "true"
           response.headers['Access-Control-Expose-Headers'] = "Cache-Control, Content-Language, Content-Type, Expires, Last-Modified, Pragma"
@@ -99,17 +107,16 @@ module SnowmanIO
 
     post "/api/collectors" do
       payload = JSON.load(request.body.read)["collector"]
-      hr = Models::Collector.create(payload)
-      if hr[:status] == :ok
-        { collector: hr[:collector] }.to_json
-      else
-        status 422
-        { errors: hr[:errors] }.to_json
-      end
+      wrap_model_response Models::Collector.create(payload)
     end
 
     get "/api/collectors/:id" do
-      {collector: Models::Collector.find(params[:id])}.to_json
+      { collector: Models::Collector.find(params[:id]) }.to_json
+    end
+
+    put "/api/collectors/:id" do
+      payload = JSON.load(request.body.read)["collector"]
+      wrap_model_response Models::Collector.update(params[:id], payload)
     end
 
     get "/api/status" do

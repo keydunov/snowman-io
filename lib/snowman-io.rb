@@ -1,9 +1,10 @@
 require 'logger'
 require 'bcrypt'
 require 'celluloid/autostart'
+require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
-require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/hash/except'
 
 require "snowman-io/version"
 require "snowman-io/api"

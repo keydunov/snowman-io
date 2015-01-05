@@ -1,7 +1,7 @@
 <ol class="breadcrumb">
   <li>{{#link-to "collectors/index"}}Collectors{{/link-to}}</li>
-  <li>{{#link-to "collectors/new"}}New{{/link-to}}</li>
-  <li class="active">Hosted Graphite</li>
+  <li>{{#link-to "collectors/show" model}}#{{model.id}}{{/link-to}}</li>
+  <li class="active">edit</li>
 </ol>
 
 {{partial "collectors/form"}}

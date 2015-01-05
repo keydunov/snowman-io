@@ -12,28 +12,37 @@ module SnowmanIO
       end
 
       def self.create(options)
-        hr = {}
+        update(SnowmanIO.adapter.incr(API::GLOBAL_ID_KEY), options)
+      end
+
+      def self.update(id, options)
+        errors = errors_for(options)
+        if errors.empty?
+          collector = craft(options, id)
+          SnowmanIO.adapter.set("collectors@#{id}", collector)
+          {status: :ok, collector: collector}
+        else
+          {status: :failed, errors: errors}
+        end
+      end
+
+      private
+
+      def self.craft(options, id)
+        options.slice("kind", "hgMetric").merge("id" => id)
+      end
+
+      def self.errors_for(options)
+        errors = {}
         if options["kind"] == "HG"
-          if options["hgMetric"].present?
-            id = SnowmanIO.adapter.incr(API::GLOBAL_ID_KEY)
-            collector = {
-              id: id,
-              kind: options["kind"],
-              hgMetric: options["hgMetric"]
-            }
-            SnowmanIO.adapter.set("collectors@#{id}", collector)
-            hr[:status] = :ok
-            hr[:collector] = collector
-          else
-            hr[:status] = :failed
-            hr[:errors] = {
-              "hgMetric" => ["HG Metric should not be empty"]
-            }
+          unless options["hgMetric"].present?
+            errors["hgMetric"] ||= []
+            errors["hgMetric"].push("HG Metric should not be empty")
           end
         else
-          raise "I dont know how to create collector with #{options.inspect}"
+          raise "I dont know how to work with collector kind #{options["kind"]}"
         end
-        hr
+        errors
       end
     end
   end
