@@ -17,7 +17,11 @@
       <td>{{collector.id}}</td>
       <td>{{collector.kind}}</td>
       <td>{{collector.hgMetric}}</td>
-      <td>{{#link-to "collectors/show" collector}}show{{/link-to}}</td>
+      <td>
+        {{#link-to "collectors/show" collector}}show{{/link-to}}
+        {{#link-to "collectors/edit" collector}}edit{{/link-to}}
+        {{#link-to "collectors/destroy" collector}}destroy{{/link-to}}
+      </td>
     </tr>
   {{/each}}
 </table>

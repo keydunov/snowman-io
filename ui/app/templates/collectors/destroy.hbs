@@ -1,0 +1,10 @@
+<ol class="breadcrumb">
+  <li>{{#link-to "collectors/index"}}Collectors{{/link-to}}</li>
+  <li>{{#link-to "collectors/show" model}}#{{model.id}}{{/link-to}}</li>
+  <li class="active">destroy</li>
+</ol>
+
+<h3>Are you sure?</h3>
+<p>
+  <button {{action "destroy"}} class="btn btn-danger">yes</button>
+</p>

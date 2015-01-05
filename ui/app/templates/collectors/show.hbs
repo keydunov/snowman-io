@@ -5,9 +5,7 @@
 
 <p>
   {{#link-to "collectors/edit" model classNames="btn btn-primary"}}edit{{/link-to}}
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#destroyModal">
-    destroy
-  </button>
+  {{#link-to "collectors/destroy" model classNames="btn btn-danger"}}destroy{{/link-to}}
 </p>
 
 <div class="table-responsive">
@@ -27,22 +25,4 @@
     <td>{{model.hgMetric}}</td>
   </tr>
 </table>
-</div>
-
-<div class="modal fade" id="destroyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Destroy Confirmation</h4>
-      </div>
-      <div class="modal-body">
-        Are you sure?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" {{action "destroy"}}>Destroy</button>
-      </div>
-    </div>
-  </div>
 </div>

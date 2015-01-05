@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('collectors/new_hg', {path: '/collectors/new/hg'});
   this.route('collectors/show', {path: '/collectors/:id'});
   this.route('collectors/edit', {path: '/collectors/:id/edit'});
+  this.route('collectors/destroy', {path: '/collectors/:id/destroy'});
 
   this.route('about');
 });
