@@ -13,9 +13,6 @@ RSpec.configure do |c|
   c.include AdminHelper
 
   c.before(:each) {
-    # do nothing
-  }
-  c.after(:each) {
-    SnowmanIO.mongo.instance_variable_get("@client").drop_database("test")
+    SnowmanIO.mongo.client.drop_database("test")
   }
 end

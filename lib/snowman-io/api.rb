@@ -5,7 +5,6 @@ module SnowmanIO
   class API < Sinatra::Base
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
-    GLOBAL_ID_KEY = "global_id"
 
     enable :sessions
     helpers Sinatra::ContentFor
@@ -14,7 +13,7 @@ module SnowmanIO
     set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
     def admin_exists?
-      SnowmanIO.mongo.get(ADMIN_PASSWORD_KEY).present?
+      SnowmanIO.storage.get(ADMIN_PASSWORD_KEY).present?
     end
 
     def admin_authenticated?
@@ -61,7 +60,7 @@ module SnowmanIO
     end
 
     post "/login" do
-      if BCrypt::Password.new(SnowmanIO.mongo.get(ADMIN_PASSWORD_KEY)) == params["password"]
+      if BCrypt::Password.new(SnowmanIO.storage.get(ADMIN_PASSWORD_KEY)) == params["password"]
         session[:user] = "admin"
         redirect to('/')
       else
@@ -76,8 +75,8 @@ module SnowmanIO
     end
 
     get "/unpacking" do
-      unless SnowmanIO.mongo.get(BASE_URL_KEY).present?
-        SnowmanIO.mongo.set(BASE_URL_KEY, request.base_url)
+      unless SnowmanIO.storage.get(BASE_URL_KEY).present?
+        SnowmanIO.storage.set(BASE_URL_KEY, request.base_url)
       end
       erb :unpacking
     end
@@ -88,40 +87,40 @@ module SnowmanIO
         erb :unpacking
       else
         session[:user] = "admin"
-        SnowmanIO.mongo.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
+        SnowmanIO.storage.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
     end
 
     get "/api/collectors" do
-      {collectors: Models::Collector.all}.to_json
+      { collectors: SnowmanIO.storage.collectors_all }.to_json
     end
 
     get "/api/collectors/:id" do
-      { collector: Models::Collector.find(params[:id]) }.to_json
+      { collector: SnowmanIO.storage.collectors_find(params[:id]) }.to_json
     end
 
     post "/api/collectors" do
       payload = JSON.load(request.body.read)["collector"]
-      Models::Collector.create(payload).to_json
+      { collector: SnowmanIO.storage.collectors_create(payload) }.to_json
     end
 
     put "/api/collectors/:id" do
       payload = JSON.load(request.body.read)["collector"]
-      Models::Collector.update(params[:id], payload).to_json
+      { collector: SnowmanIO.storage.collectors_update(params[:id], payload) }.to_json
     end
 
     delete "/api/collectors/:id" do
-      Models::Collector.destroy(params[:id]).to_json
+      { collector: SnowmanIO.storage.collectors_delete(params[:id]) }.to_json
     end
 
     get "/api/metrics" do
-      {metrics: Models::Metric.all}.to_json
+      { metrics: SnowmanIO.storage.metrics_all(with_last_value: true) }.to_json
     end
 
     get "/api/info" do
       {
-        base_url: SnowmanIO.mongo.get(BASE_URL_KEY),
+        base_url: SnowmanIO.storage.get(BASE_URL_KEY),
         version: SnowmanIO::VERSION
       }.to_json
     end

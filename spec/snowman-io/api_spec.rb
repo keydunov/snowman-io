@@ -16,7 +16,7 @@ RSpec.describe SnowmanIO::API, type: :feature do
     expect(current_path).to eq("/unpacking")
 
     # check base url setting
-    expect(SnowmanIO.mongo.get("base_url")).to eq("http://www.example.com")
+    expect(SnowmanIO.storage.get("base_url")).to eq("http://www.example.com")
 
     # 2. create admin password
     fill_in "password", with: "secret"

@@ -4,14 +4,14 @@ module SnowmanIO
     include Collectors::HostedGraphite
 
     def initialize
-      @run_collectors_at = ceil_time(Time.now)
+      @run_collectors_at = Time.now
     end
 
     def tick
       if Time.now >= @run_collectors_at
         SnowmanIO.logger.info "Start collectors processing ..."
         run_collectors(@run_collectors_at)
-        @run_collectors_at = ceil_time(Time.now)
+        @run_collectors_at = Utils.ceil_time(Time.now)
         SnowmanIO.logger.info "Start collectors processing ... DONE"
       end
 
@@ -21,22 +21,17 @@ module SnowmanIO
     private
 
     def run_collectors(at)
-      Models::Collector.all.each do |collector|
+      SnowmanIO.storage.collectors_all.each do |collector|
         run_collector(collector, at)
       end
     end
 
     def run_collector(collector, at)
       if collector["kind"] == "HG"
-        Models::Metric.create(collector["hgMetric"], get_hg_value(collector["hgMetric"]), at)
+        SnowmanIO.storage.metrics_register_value(collector["hgMetric"], get_hg_value(collector["hgMetric"]), at)
       else
         raise "I dont know how collect #{collector.inspect}"
       end
-    end
-
-    def ceil_time(time)
-      seconds = 5*60
-      Time.at((time.to_f/seconds).ceil*seconds)
     end
   end
 end
