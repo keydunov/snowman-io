@@ -4,8 +4,9 @@ module SnowmanIO
       include Celluloid
 
       def initialize
-        @run_at = Utils.floor_time(Time.now)
+        @run_at = Utils.ceil_time(Time.now)
         @pool = CollectWorker.pool(size: 10)
+        async.tick
       end
 
       def tick

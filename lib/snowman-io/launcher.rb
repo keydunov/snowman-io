@@ -8,8 +8,7 @@ module SnowmanIO
 
     def start
       @web_server_supervisor = WebServer.supervise_as(:web_server, API, @options.slice(:port, :host, :verbose))
-      @collect = Loop::Collect.new_link
-      @collect.async.tick
+      @collect = Loop::Collect.supervise_as(:collect_loop)
     end
 
     def stop
