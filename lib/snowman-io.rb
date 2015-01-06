@@ -23,6 +23,7 @@ require "snowman-io/loop/collect"
 require "snowman-io/loop/collect_worker"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/aggregate"
+require "snowman-io/loop/report"
 
 module SnowmanIO
   def self.mongo

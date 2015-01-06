@@ -17,6 +17,9 @@ Router.map(function() {
 
   this.route('metrics/index', {path: '/metrics'});
 
+  this.route('reports/index', {path: '/reports'});
+  this.route('reports/show', {path: '/reports/:id'});
+
   this.route('about');
 });
 

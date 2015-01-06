@@ -115,6 +115,14 @@ module SnowmanIO
       { metrics: SnowmanIO.storage.metrics_all(with_last_value: true) }.to_json
     end
 
+    get "/api/reports" do
+      { reports: SnowmanIO.storage.reports_all }.to_json
+    end
+
+    get "/api/reports/:id" do
+      { report: SnowmanIO.storage.reports_find(params[:id]) }.to_json
+    end
+
     get "/api/info" do
       {
         base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),

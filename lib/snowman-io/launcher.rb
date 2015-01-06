@@ -11,9 +11,11 @@ module SnowmanIO
       @collect = Loop::Collect.supervise_as(:collect_loop)
       @ping = Loop::Ping.supervise_as(:ping_loop)
       @aggregate = Loop::Aggregate.supervise_as(:aggregate_loop)
+      @report = Loop::Report.supervise_as(:report_loop)
     end
 
     def stop
+      @report.terminate
       @aggregate.terminate
       @ping.terminate
       @collect.terminate

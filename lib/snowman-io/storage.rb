@@ -121,5 +121,30 @@ module SnowmanIO
       # TODO: keep only 1 year of daily metrics
       SnowmanIO.mongo.db["5mins"].remove({key: {"$lt" => Utils.date_to_key(before)}})
     end
+
+    def metrics_daily(at)
+      SnowmanIO.mongo.db["daily"].find({key: Utils.date_to_key(at)}).first
+    end
+
+    def reports_create(key, options)
+      SnowmanIO.mongo.db["reports"].insert(options.merge(key: key))
+      # keep last 7 reports
+      keys = SnowmanIO.mongo.db["reports"].find({}, fields: ["key"]).sort(key: :desc).map { |x| x["key"] }
+      if keys.length > 7
+        SnowmanIO.mongo.db["reports"].remove({key: {"$in" => [keys[7..-1]]}})
+      end
+    end
+
+    def reports_all()
+      SnowmanIO.mongo.db["reports"].find().sort(key: :asc).to_a.map do |doc|
+        doc.except("_id").merge("id" => doc["key"])
+      end
+    end
+
+    def reports_find(key)
+      if doc = SnowmanIO.mongo.db["reports"].find(key: key.to_i).first
+        doc.except("_id").merge("id" => doc["key"])
+      end
+    end
   end
 end
