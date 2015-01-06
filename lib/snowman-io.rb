@@ -18,6 +18,7 @@ require "snowman-io/web_server"
 require "snowman-io/storage"
 require "snowman-io/loop/collect"
 require "snowman-io/loop/collect_worker"
+require "snowman-io/loop/ping"
 
 module SnowmanIO
   def self.mongo
