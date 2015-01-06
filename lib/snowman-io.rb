@@ -6,7 +6,10 @@ require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
 require 'active_support/core_ext/hash/except'
+require 'active_support/core_ext/date/calculations'
 require 'active_support/core_ext/time/calculations'
+require 'active_support/core_ext/numeric/time'
+require 'active_support/core_ext/enumerable'
 
 require "snowman-io/version"
 require "snowman-io/utils"
@@ -19,6 +22,7 @@ require "snowman-io/storage"
 require "snowman-io/loop/collect"
 require "snowman-io/loop/collect_worker"
 require "snowman-io/loop/ping"
+require "snowman-io/loop/aggregate"
 
 module SnowmanIO
   def self.mongo
@@ -28,15 +32,12 @@ module SnowmanIO
         ENV["MONGOHQ_URL"] ||
         ENV["MONGOLAB_URI"] ||
         ENV["MONGOSOUP_URL"] ||
-        ENV["MONGO_URL"]
+        ENV["MONGO_URL"] ||
+        "mongodb://localhost:27017/db"
 
-      if url
-        db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
-        client = ::Mongo::MongoClient.from_uri(url)
-        Struct.new(:client, :db).new(client, client.db(db_name))
-      else
-        raise "coundn't find any storage url"
-      end
+      db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
+      client = ::Mongo::MongoClient.from_uri(url)
+      Struct.new(:client, :db).new(client, client.db(db_name))
     end
   end
 

@@ -86,5 +86,40 @@ module SnowmanIO
         upsert: true
       )
     end
+
+    # Aggregate day metrics
+    def metrics_aggregate(name, at)
+      metric = SnowmanIO.mongo.db["metrics"].find(name: name).first
+      return unless metric
+      metric_id = metric["id"]
+      from = at
+      to = at + 1.day
+
+      values = SnowmanIO.mongo.db["5mins"].find({
+        key: {"$gte" => Utils.date_to_key(from), "$lt" => Utils.date_to_key(to)}
+      }, fields: ["key", metric_id.to_s]).sort(key: :asc).to_a.map{ |v| v[metric_id.to_s] }.compact
+
+      return if values.empty?
+      max = values.max
+      min = values.min
+      avg = values.sum/values.length
+
+      key = Utils.date_to_key(at)
+      SnowmanIO.mongo.db["daily"].update(
+        {key: key},
+        {"$set" => {
+          key: key,
+          "#{metric_id}.max" => max,
+          "#{metric_id}.min" => min,
+          "#{metric_id}.avg" => avg
+        }},
+        upsert: true
+      )
+    end
+
+    def metrics_clean(before)
+      # TODO: keep only 1 year of daily metrics
+      SnowmanIO.mongo.db["5mins"].remove({key: {"$lt" => Utils.date_to_key(before)}})
+    end
   end
 end
