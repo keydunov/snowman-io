@@ -1,10 +1,17 @@
-require 'open-uri' 
-
 module SnowmanIO
-  module Collectors
-    # Gets last value from Hosted Graphite metric (https://www.hostedgraphite.com/)
-    module HostedGraphite
-      protected
+  module Loop
+    class CollectWorker
+      include Celluloid
+
+      def collect(collector, at)
+        if collector["kind"] == "HG"
+          SnowmanIO.storage.metrics_register_value(collector["hgMetric"], get_hg_value(collector["hgMetric"]), at)
+        else
+          raise "I dont know how collect #{collector.inspect}"
+        end
+      end
+
+      private
 
       def get_hg_value(metric, options = {})
         access_key = ENV["HG_KEY"]

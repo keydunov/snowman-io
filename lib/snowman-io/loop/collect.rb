@@ -2,18 +2,16 @@ module SnowmanIO
   module Loop
     class Collect
       include Celluloid
-      include Collectors::HostedGraphite
 
       def initialize
-        @run_collectors_at = Utils.ceil_time(Time.now)
+        @run_at = Utils.floor_time(Time.now)
+        @pool = CollectWorker.pool(size: 10)
       end
 
       def tick
-        if Time.now >= @run_collectors_at
-          SnowmanIO.logger.info "Start collectors processing ..."
-          run_collectors(@run_collectors_at)
-          @run_collectors_at = Utils.ceil_time(Time.now)
-          SnowmanIO.logger.info "Start collectors processing ... DONE"
+        if Time.now >= @run_at
+          process
+          @run_at = Utils.ceil_time(Time.now)
         end
 
         after(1) { tick }
@@ -21,18 +19,14 @@ module SnowmanIO
 
       private
 
-      def run_collectors(at)
-        SnowmanIO.storage.collectors_all.each do |collector|
-          run_collector(collector, at)
-        end
-      end
+      def process
+        SnowmanIO.logger.info "Start collectors processing ..."
 
-      def run_collector(collector, at)
-        if collector["kind"] == "HG"
-          SnowmanIO.storage.metrics_register_value(collector["hgMetric"], get_hg_value(collector["hgMetric"]), at)
-        else
-          raise "I dont know how collect #{collector.inspect}"
-        end
+        SnowmanIO.storage.collectors_all.map { |collector|
+          @pool.future.collect(collector, @run_at)
+        }.map(&:value)
+
+        SnowmanIO.logger.info "Start collectors processing ... DONE"
       end
     end
   end

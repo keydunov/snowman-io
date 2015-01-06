@@ -61,7 +61,7 @@ module SnowmanIO
       SnowmanIO.mongo.db["metrics"].find().sort(name: 1).to_a.map do |json|
         metric = json.except("_id")
         if options[:with_last_value]
-          metric["lastValue"] = values[metric["id"].to_s]
+          metric["lastValue"] = values.try(:[], metric["id"].to_s)
         end
         metric
       end

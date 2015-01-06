@@ -15,9 +15,9 @@ require "snowman-io/options"
 require "snowman-io/launcher"
 require "snowman-io/cli"
 require "snowman-io/web_server"
-require "snowman-io/collectors/hosted_graphite"
 require "snowman-io/storage"
 require "snowman-io/loop/collect"
+require "snowman-io/loop/collect_worker"
 
 module SnowmanIO
   def self.mongo
