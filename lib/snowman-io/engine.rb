@@ -4,7 +4,7 @@ module SnowmanIO
     include Collectors::HostedGraphite
 
     def initialize
-      @run_collectors_at = Time.now
+      @run_collectors_at = Utils.ceil_time(Time.now)
     end
 
     def tick
