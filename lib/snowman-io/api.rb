@@ -14,7 +14,7 @@ module SnowmanIO
     set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
     def admin_exists?
-      SnowmanIO.adapter.get(ADMIN_PASSWORD_KEY).present?
+      SnowmanIO.mongo.get(ADMIN_PASSWORD_KEY).present?
     end
 
     def admin_authenticated?
@@ -61,7 +61,7 @@ module SnowmanIO
     end
 
     post "/login" do
-      if BCrypt::Password.new(SnowmanIO.adapter.get(ADMIN_PASSWORD_KEY)) == params["password"]
+      if BCrypt::Password.new(SnowmanIO.mongo.get(ADMIN_PASSWORD_KEY)) == params["password"]
         session[:user] = "admin"
         redirect to('/')
       else
@@ -76,8 +76,8 @@ module SnowmanIO
     end
 
     get "/unpacking" do
-      unless SnowmanIO.adapter.get(BASE_URL_KEY).present?
-        SnowmanIO.adapter.set(BASE_URL_KEY, request.base_url)
+      unless SnowmanIO.mongo.get(BASE_URL_KEY).present?
+        SnowmanIO.mongo.set(BASE_URL_KEY, request.base_url)
       end
       erb :unpacking
     end
@@ -88,7 +88,7 @@ module SnowmanIO
         erb :unpacking
       else
         session[:user] = "admin"
-        SnowmanIO.adapter.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
+        SnowmanIO.mongo.set(ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
     end
@@ -121,7 +121,7 @@ module SnowmanIO
 
     get "/api/info" do
       {
-        base_url: SnowmanIO.adapter.get(BASE_URL_KEY),
+        base_url: SnowmanIO.mongo.get(BASE_URL_KEY),
         version: SnowmanIO::VERSION
       }.to_json
     end

@@ -2,27 +2,27 @@ module SnowmanIO
   module Models
     class Collector
       def self.all
-        SnowmanIO.adapter.keys("collectors@*").map { |key|
-          SnowmanIO.adapter.get(key)
+        SnowmanIO.mongo.keys("collectors@*").map { |key|
+          SnowmanIO.mongo.get(key)
         }
       end
 
       def self.find(id)
-        SnowmanIO.adapter.get("collectors@#{id}")
+        SnowmanIO.mongo.get("collectors@#{id}")
       end
 
       def self.create(options)
-        update(SnowmanIO.adapter.incr(API::GLOBAL_ID_KEY), options)
+        update(SnowmanIO.mongo.incr(API::GLOBAL_ID_KEY), options)
       end
 
       def self.update(id, options)
         collector = options.slice("kind", "hgMetric").merge("id" => id)
-        SnowmanIO.adapter.set("collectors@#{id}", collector)
+        SnowmanIO.mongo.set("collectors@#{id}", collector)
         {collector: collector}
       end
 
       def self.destroy(id)
-        SnowmanIO.adapter.unset("collectors@#{id}")
+        SnowmanIO.mongo.unset("collectors@#{id}")
         {collectors: {id: id}}
       end
     end

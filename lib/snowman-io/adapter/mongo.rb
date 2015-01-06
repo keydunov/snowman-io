@@ -6,13 +6,9 @@ module SnowmanIO
       def initialize(url)
         mongo_uri = ENV['MONGOLAB_URI']
         db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
-        client = ::Mongo::MongoClient.from_uri(url)
-        db = client.db(db_name)
+        @client = ::Mongo::MongoClient.from_uri(url)
+        db = @client.db(db_name)
         @coll = db['SnowmanIO']
-      end
-
-      def kind
-        :mongo
       end
 
       # Sets value

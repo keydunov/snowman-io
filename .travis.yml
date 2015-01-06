@@ -15,6 +15,3 @@ script:
 services:
   - redis-server
   - mongodb
-env:
-  - REDIS=1
-  - MONGO=1
