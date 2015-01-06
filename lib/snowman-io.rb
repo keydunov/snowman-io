@@ -2,6 +2,7 @@ require 'logger'
 require 'bcrypt'
 require 'mongo'
 require 'celluloid/autostart'
+require 'action_mailer'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
@@ -24,6 +25,18 @@ require "snowman-io/loop/collect_worker"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/aggregate"
 require "snowman-io/loop/report"
+require "snowman-io/loop/report_mailer"
+
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :address   => ENV["MAILGUN_SMTP_SERVER"],
+  :port      => ENV["MAILGUN_SMTP_PORT"],
+  :authentication => :plain,
+  :user_name      => ENV["MAILGUN_SMTP_LOGIN"],
+  :password       => ENV["MAILGUN_SMTP_PASSWORD"],
+  :enable_starttls_auto => true
+}
 
 module SnowmanIO
   def self.mongo

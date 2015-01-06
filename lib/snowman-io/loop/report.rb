@@ -45,6 +45,7 @@ module SnowmanIO
           out += "</tr>\n"
         end
         out += "</table>"
+        ReportMailer.daily_report(at, out).deliver
         SnowmanIO.storage.reports_create(key, {body: out, at: Time.now})
       end
     end
