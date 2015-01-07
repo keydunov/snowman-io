@@ -1,53 +1,62 @@
 require 'logger'
 require 'bcrypt'
+require 'mongo'
 require 'celluloid/autostart'
-require 'active_support/core_ext/string/strip' # for strip_heredoc
+require 'action_mailer'
+require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext/hash/slice'
+require 'active_support/core_ext/hash/except'
+require 'active_support/core_ext/date/calculations'
+require 'active_support/core_ext/time/calculations'
+require 'active_support/core_ext/numeric/time'
+require 'active_support/core_ext/enumerable'
 
 require "snowman-io/version"
+require "snowman-io/utils"
 require "snowman-io/api"
 require "snowman-io/options"
-require "snowman-io/checks/hosted_graphite"
-require "snowman-io/check"
-require "snowman-io/check_result"
-require "snowman-io/store"
-
 require "snowman-io/launcher"
 require "snowman-io/cli"
+require "snowman-io/web_server"
+require "snowman-io/storage"
+require "snowman-io/loop/collect"
+require "snowman-io/loop/collect_worker"
+require "snowman-io/loop/ping"
+require "snowman-io/loop/aggregate"
+require "snowman-io/loop/report"
+require "snowman-io/loop/report_mailer"
 
-require "snowman-io/adapter/base"
-require "snowman-io/adapter/redis"
-require "snowman-io/adapter/mongo"
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :address   => ENV["MAILGUN_SMTP_SERVER"],
+  :port      => ENV["MAILGUN_SMTP_PORT"],
+  :authentication => :plain,
+  :user_name      => ENV["MAILGUN_SMTP_LOGIN"],
+  :password       => ENV["MAILGUN_SMTP_PASSWORD"],
+  :enable_starttls_auto => true
+}
 
 module SnowmanIO
-  def self.adapter
-    @adapter ||= begin
-      # Try all posible Heroku Redis addons one after another
-      redis_url =
-        ENV["REDISTOGO_URL"] ||
-        ENV["REDISCLOUD_URL"] ||
-        ENV["OPENREDIS_URL"] ||
-        ENV["REDISGREEN_URL"] ||
-        ENV["REDIS_URL"]
-
+  def self.mongo
+    @mongo ||= begin
       # Try all posible Heroku Mongo addons one after another
-      mongo_url =
+      url =
         ENV["MONGOHQ_URL"] ||
         ENV["MONGOLAB_URI"] ||
         ENV["MONGOSOUP_URL"] ||
-        ENV["MONGO_URL"]
+        ENV["MONGO_URL"] ||
+        "mongodb://localhost:27017/db"
 
-      if redis_url
-        Adapter::Redis.new(redis_url)
-      elsif mongo_url
-        Adapter::Mongo.new(mongo_url)
-      else
-        raise "coundn't find any storage url"
-      end
+      db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
+      client = ::Mongo::MongoClient.from_uri(url)
+      Struct.new(:client, :db).new(client, client.db(db_name))
     end
   end
 
-  def self.store
-    @store ||= Store.new
+  def self.storage
+    @storage ||= Storage.new
   end
 
   def self.logger

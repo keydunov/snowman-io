@@ -10,7 +10,7 @@ module SnowmanIO
     set :session_secret, ENV['SESSION_SECRET'] || 'super secret'
 
     def admin_exists?
-      SnowmanIO.store.admin_password_setted?
+      SnowmanIO.storage.get(Storage::ADMIN_PASSWORD_KEY).present?
     end
 
     def admin_authenticated?
@@ -19,15 +19,22 @@ module SnowmanIO
 
     before do
       if request.path =~ /^\/api/
-        content_type :json
-
         if ENV["EMBER_DEV"].to_i == 1
           # Enable CORS in development mode
-          response.headers['Access-Control-Allow-Origin'] = '*'
+          response.headers['Access-Control-Allow-Origin'] = request.env['HTTP_ORIGIN']
+          response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE',
+          response.headers['Access-Control-Allow-Headers'] = "*, Content-Type, Accept, AUTHORIZATION, Cache-Control"
+          response.headers['Access-Control-Allow-Credentials'] = "true"
+          response.headers['Access-Control-Expose-Headers'] = "Cache-Control, Content-Language, Content-Type, Expires, Last-Modified, Pragma"
+          if request.request_method == 'OPTIONS'
+            halt 200
+          end
         end
 
+        content_type :json
+
         if !admin_authenticated?
-          # Ignore authorization only during app development
+          # Ignore authorization during app development
           unless ENV["EMBER_DEV"].to_i == 1
             halt 403, 'Access Denied'
           end
@@ -50,7 +57,7 @@ module SnowmanIO
     end
 
     post "/login" do
-      if SnowmanIO.store.auth_admin?(params["password"])
+      if BCrypt::Password.new(SnowmanIO.storage.get(Storage::ADMIN_PASSWORD_KEY)) == params["password"]
         session[:user] = "admin"
         redirect to('/')
       else
@@ -65,8 +72,8 @@ module SnowmanIO
     end
 
     get "/unpacking" do
-      unless SnowmanIO.store.base_url.present?
-        SnowmanIO.store.set_base_url(request.base_url)
+      unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
+        SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
       end
       erb :unpacking
     end
@@ -77,34 +84,49 @@ module SnowmanIO
         erb :unpacking
       else
         session[:user] = "admin"
-        SnowmanIO.store.set_admin_password(params["password"])
+        SnowmanIO.storage.set(Storage::ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
     end
 
-    get "/api/checks" do
-      {
-        checks: SnowmanIO.store.checks.map { |id|
-          SnowmanIO.store.check(id)
-        }
-      }.to_json
+    get "/api/collectors" do
+      { collectors: SnowmanIO.storage.collectors_all }.to_json
     end
 
-    get "/api/checks/:id" do
-      {
-        check: SnowmanIO.store.check(params[:id])
-      }.to_json
+    get "/api/collectors/:id" do
+      { collector: SnowmanIO.storage.collectors_find(params[:id]) }.to_json
     end
 
-    post "/api/checks/:id/resolve" do
-      SnowmanIO.store.resolve_check(params[:id])
-      {hr: 'ok'}.to_json
+    post "/api/collectors" do
+      payload = JSON.load(request.body.read)["collector"]
+      { collector: SnowmanIO.storage.collectors_create(payload) }.to_json
     end
 
-    get "/api/status" do
+    put "/api/collectors/:id" do
+      payload = JSON.load(request.body.read)["collector"]
+      { collector: SnowmanIO.storage.collectors_update(params[:id], payload) }.to_json
+    end
+
+    delete "/api/collectors/:id" do
+      { collector: SnowmanIO.storage.collectors_delete(params[:id]) }.to_json
+    end
+
+    get "/api/metrics" do
+      { metrics: SnowmanIO.storage.metrics_all(with_last_value: true) }.to_json
+    end
+
+    get "/api/reports" do
+      { reports: SnowmanIO.storage.reports_all }.to_json
+    end
+
+    get "/api/reports/:id" do
+      { report: SnowmanIO.storage.reports_find(params[:id]) }.to_json
+    end
+
+    get "/api/info" do
       {
-        notifiers: SnowmanIO::Check.notifiers.map(&:name),
-        base_url: SnowmanIO.store.base_url
+        base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),
+        version: SnowmanIO::VERSION
       }.to_json
     end
 

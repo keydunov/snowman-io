@@ -9,8 +9,7 @@ rm -fr $dest
 ember build --environment=production --output-path=$dest
 
 # create index.erb
-cat $dest/index.html | sed 's/__SnowmanIO_VERSION__/<%= SnowmanIO::VERSION %>/g' > $dest/../views/index.erb
-rm -f $dest/index.html 
+mv $dest/index.html  $dest/../views/index.erb
 
 # copy bootstrap for Sinatra
 cp -r vendor/bootstrap-3.3.1 $dest/

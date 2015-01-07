@@ -1,0 +1,28 @@
+<ol class="breadcrumb">
+  <li>{{#link-to "collectors/index"}}Collectors{{/link-to}}</li>
+  <li class="active">#{{id}}</li>
+</ol>
+
+<p>
+  {{#link-to "collectors/edit" model classNames="btn btn-primary"}}edit{{/link-to}}
+  {{#link-to "collectors/destroy" model classNames="btn btn-danger"}}destroy{{/link-to}}
+</p>
+
+<div class="table-responsive">
+<table class="table" style="width:auto">
+  <tr>
+    <th>ID</th>
+    <td>{{id}}</td>
+  </tr>
+
+  <tr>
+    <th>Kind</th>
+    <td>{{kind}}</td>
+  </tr>
+
+  <tr>
+    <th>HG Metric</th>
+    <td>{{hgMetric}}</td>
+  </tr>
+</table>
+</div>
