@@ -9,6 +9,7 @@ module SnowmanIO
 
       def tick
         report_time = Time.now.beginning_of_day
+        SnowmanIO.logger.debug "report time: #{report_time}"
 
         if time_for_reporting?(report_time)
           report(report_time)

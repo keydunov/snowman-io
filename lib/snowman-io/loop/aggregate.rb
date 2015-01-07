@@ -22,6 +22,7 @@ module SnowmanIO
 
       def schedule
         @aggregate_at = Time.now.end_of_day + 1.second
+        SnowmanIO.logger.debug "Next aggregation sheduled at: #{@aggregate_at}"
       end
 
       def clean(before)

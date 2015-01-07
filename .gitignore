@@ -12,4 +12,4 @@
 *.o
 *.a
 mkmf.log
-with_env.sh
+dev.sh
