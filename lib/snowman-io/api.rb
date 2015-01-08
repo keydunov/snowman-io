@@ -39,7 +39,8 @@ module SnowmanIO
             halt 403, 'Access Denied'
           end
         end
-      else
+      # FIXME: temp workaround while we don't have token for agent
+      elsif request.path !~ /^\/agent/
         if !admin_exists?
           redirect to('/unpacking') if request.path_info != '/unpacking'
         elsif !admin_authenticated?
@@ -128,6 +129,13 @@ module SnowmanIO
         base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),
         version: SnowmanIO::VERSION
       }.to_json
+    end
+
+    post '/agent/metrics' do
+      JSON.load(request.body.read)["metrics"].each do |metric|
+        SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"], Time.at(metric["at"]))
+      end
+      "OK"
     end
 
     get '/*' do
