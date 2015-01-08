@@ -1,13 +1,13 @@
 <form class="form-horizontal">
   <div class="form-group"}}>
-    <label for="HGMetric" class="col-sm-2 control-label">HG Metric</label>
-    <div class="col-sm-6">
-      {{input type="text" value=hgMetric classNames="form-control" id="HGMetric" placeholder="Hosted Graphite metric, can be function like 'integral(some.value:sum)'"}}
+    <label for="hgMetric" class="col-sm-2 control-label">Source</label>
+    <div class="col-sm-7">
+      {{input type="text" value=hgMetric classNames="form-control" id="hgMetric" placeholder="Graphite metric: some.value, integral(some.value:sum) or any other graphite function"}}
     </div>
   </div>
 
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-6">
+    <div class="col-sm-offset-2 col-sm-7">
       <button type="submit" class="btn btn-primary" {{bind-attr disabled=inProgress}} {{action "save"}}>Save</button>
     </div>
   </div>
