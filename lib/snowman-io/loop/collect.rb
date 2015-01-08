@@ -11,7 +11,7 @@ module SnowmanIO
 
       def tick
         if Time.now >= @run_at
-          process
+          process(@run_at)
           @run_at = Utils.ceil_time(Time.now)
         end
 
@@ -20,11 +20,11 @@ module SnowmanIO
 
       private
 
-      def process
+      def process(at)
         SnowmanIO.logger.info "Start collectors processing ..."
 
         SnowmanIO.storage.collectors_all.map { |collector|
-          @pool.future.collect(collector, @run_at)
+          @pool.future.collect(collector, at)
         }.map(&:value)
 
         SnowmanIO.logger.info "Start collectors processing ... DONE"
