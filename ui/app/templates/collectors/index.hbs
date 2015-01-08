@@ -9,7 +9,8 @@
   <tr>
     <th>ID</th>
     <th>Kind</th>
-    <th>HG Metric</th>
+    <th>Source</th>
+    <th>Metric Name</th>
     <th>Actions</th>
   </tr>
   {{#each collector in model}}
@@ -17,6 +18,7 @@
       <td>{{collector.id}}</td>
       <td>{{collector.kind}}</td>
       <td>{{collector.hgMetric}}</td>
+      <td>{{collector.metricName}}</td>
       <td>
         {{#link-to "collectors/show" collector}}show{{/link-to}}
         {{#link-to "collectors/edit" collector}}edit{{/link-to}}

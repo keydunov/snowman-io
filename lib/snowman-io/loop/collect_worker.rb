@@ -5,7 +5,11 @@ module SnowmanIO
 
       def collect(collector, at)
         if collector["kind"] == "HG"
-          SnowmanIO.storage.metrics_register_value(collector["hgMetric"], get_hg_value(collector["hgMetric"]), at)
+          SnowmanIO.storage.metrics_register_value(
+            collector["metricName"],
+            get_hg_value(collector["hgMetric"]),
+            at
+          )
         else
           raise "I dont know how collect #{collector.inspect}"
         end

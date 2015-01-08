@@ -56,15 +56,17 @@ module SnowmanIO
 
     def metrics_all(options = {})
       if options[:with_last_value]
-        # get time period which exactly calculated
+        # get 2 last collections
         floor_key = Utils.date_to_key(Utils.floor_time(Time.now))
-        values = SnowmanIO.mongo.db["5mins"].find({key: {"$lt" => floor_key}}).sort(key: :desc).first
+        values = SnowmanIO.mongo.db["5mins"].find({key: {"$lte" => floor_key}}).sort(key: :desc).to_a[0..1]
       end
 
       SnowmanIO.mongo.db["metrics"].find().sort(name: 1).to_a.map do |json|
         metric = json.except("_id")
         if options[:with_last_value]
-          metric["lastValue"] = values.try(:[], metric["id"].to_s)
+          metric["lastValue"] =
+            values[0].try(:[], metric["id"].to_s) ||
+            values[1].try(:[], metric["id"].to_s)
         end
         metric
       end
