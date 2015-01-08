@@ -28,15 +28,23 @@ require "snowman-io/loop/report"
 require "snowman-io/loop/report_mailer"
 
 ActionMailer::Base.raise_delivery_errors = true
-ActionMailer::Base.delivery_method = :smtp
-ActionMailer::Base.smtp_settings = {
-  :address   => ENV["MAILGUN_SMTP_SERVER"],
-  :port      => ENV["MAILGUN_SMTP_PORT"],
-  :authentication => :plain,
-  :user_name      => ENV["MAILGUN_SMTP_LOGIN"],
-  :password       => ENV["MAILGUN_SMTP_PASSWORD"],
-  :enable_starttls_auto => true
-}
+if ENV["DEV_MODE"].to_i == 1
+  require "letter_opener"
+  ActionMailer::Base.add_delivery_method :letter_opener,
+    LetterOpener::DeliveryMethod,
+    :location => File.expand_path('../../tmp/letter_opener', __FILE__)
+  ActionMailer::Base.delivery_method = :letter_opener
+else
+  ActionMailer::Base.delivery_method = :smtp
+  ActionMailer::Base.smtp_settings = {
+    :address   => ENV["MAILGUN_SMTP_SERVER"],
+    :port      => ENV["MAILGUN_SMTP_PORT"],
+    :authentication => :plain,
+    :user_name      => ENV["MAILGUN_SMTP_LOGIN"],
+    :password       => ENV["MAILGUN_SMTP_PASSWORD"],
+    :enable_starttls_auto => true
+  }
+end
 
 module SnowmanIO
   def self.mongo

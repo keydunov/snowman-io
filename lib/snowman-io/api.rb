@@ -19,7 +19,7 @@ module SnowmanIO
 
     before do
       if request.path =~ /^\/api/
-        if ENV["EMBER_DEV"].to_i == 1
+        if ENV["DEV_MODE"].to_i == 1
           # Enable CORS in development mode
           response.headers['Access-Control-Allow-Origin'] = request.env['HTTP_ORIGIN']
           response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE',
@@ -35,7 +35,7 @@ module SnowmanIO
 
         if !admin_authenticated?
           # Ignore authorization during app development
-          unless ENV["EMBER_DEV"].to_i == 1
+          unless ENV["DEV_MODE"].to_i == 1
             halt 403, 'Access Denied'
           end
         end
