@@ -8,11 +8,12 @@ module SnowmanIO
       end
 
       def tick
-        report_time = Time.now.beginning_of_day
-        SnowmanIO.logger.debug "report time: #{report_time}"
+        report_at = Time.now.beginning_of_day
+        report_for = report_at - 1.day
+        SnowmanIO.logger.debug "report at: #{report_at} for #{report_for}"
 
-        if time_for_reporting?(report_time)
-          report(report_time)
+        if time_for_reporting?(report_at, report_for)
+          report(report_for)
         end
 
         after(600) { tick }
@@ -21,9 +22,9 @@ module SnowmanIO
       private
 
       # Send report at 7 o'clock every day
-      def time_for_reporting?(at)
-        key = Utils.date_to_key(at)
-        Time.now > at + 7.hours && !SnowmanIO.storage.reports_find(key)
+      def time_for_reporting?(report_at, report_for)
+        key = Utils.date_to_key(report_for)
+        Time.now > report_at + 7.hours && !SnowmanIO.storage.reports_find(key)
       end
 
       def report(at)
