@@ -3,7 +3,7 @@ module SnowmanIO
     class ReportMailer < ActionMailer::Base
       def daily_report(at, body)
         mail(
-          to: ENV["REPORT_RECIPIENTS"],
+          to: ENV["REPORT_RECIPIENTS"] || "test@example.com",
           from: "no-reply@example.com",
           subject: "SnowmanIO daily report at #{at.strftime("%Y-%m-%d")}"
         ) do |format|

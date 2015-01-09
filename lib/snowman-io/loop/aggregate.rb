@@ -12,7 +12,6 @@ module SnowmanIO
 
       def tick
         if Time.now > @aggregate_at
-          clean(@aggregate_at - 1.day)
           process(@aggregate_at - 1.day)
           schedule
         end
@@ -32,6 +31,7 @@ module SnowmanIO
       end
 
       def process(at)
+        clean(at)
         SnowmanIO.storage.metrics_all.each do |metric|
           SnowmanIO.storage.metrics_aggregate(metric["name"], at)
         end

@@ -1,4 +1,6 @@
 require "bundler/gem_tasks"
+
+ENV["DEV_MODE"] = "1"
 require "snowman-io"
 
 namespace :dev do
@@ -20,9 +22,9 @@ namespace :dev do
   end
 
   desc "Fill test metric with test values for last month"
-  task :test_metric do
-    at = Time.now.beginning_of_day
-    288.times {
+  task :random do
+    at = Time.now.beginning_of_day - 1.day
+    (288*2).times {
       SnowmanIO.storage.metrics_register_value("test", rand*100, at)
       at += 5.minutes
     }
@@ -44,6 +46,24 @@ namespace :dev do
       )
       at -= 1.day
     }
+  end
+
+  desc "Force gather metrics"
+  task :collect do
+    at = SnowmanIO::Utils.floor_time(Time.now)
+    SnowmanIO::Loop::Collect.new(false).send(:process, at)
+  end
+
+  desc "Aggregate metric for yesterday"
+  task :aggregate do
+    at = Time.now.beginning_of_day - 1.day
+    SnowmanIO::Loop::Aggregate.new(false).send(:process, at)
+  end
+
+  desc "Generate report for yesterday"
+  task :report do
+    at = Time.now.beginning_of_day - 1.day
+    SnowmanIO::Loop::Report.new(false).send(:process, at)
   end
 end
 

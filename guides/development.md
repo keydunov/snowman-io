@@ -20,4 +20,7 @@ snowman at `http://localhost:4567`.
 
 ## Rake tasks
 
-* `rake dev:test_metric` - fill 1 month of metric 'test'
+* `rake dev:random` - fill 1 month of test metric
+* `rake dev:collect` - force gather metrics
+* `rake dev:aggregate` - aggregate metric for yesterday
+* `rake dev:report` - generate report for yesterday

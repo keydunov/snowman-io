@@ -16,7 +16,7 @@ module SnowmanIO
 
       def tick
         if time_for_reporting?
-          report(report_for)
+          process(report_for)
           schedule_next_report
         end
 
@@ -38,7 +38,7 @@ module SnowmanIO
         Time.now > report_for + 1.day + 7.hours
       end
 
-      def report(at)
+      def process(at)
         day = SnowmanIO.storage.metrics_daily(at)
         key = Utils.date_to_key(at)
         # TODO: use erb
