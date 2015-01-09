@@ -19,10 +19,10 @@
     <th>At</th>
     <th>Value</th>
   </tr>
-  {{#each o in fiveMinPoints}}
+  {{#each point in fiveMinPoints}}
     <tr>
-      <td>{{o.at}}</td>
-      <td>{{o.value}}</td>
+      <td>{{point.at}}</td>
+      <td>{{point.value}}</td>
     </tr>
   {{/each}}
 </table>
@@ -35,10 +35,10 @@
     <th>At</th>
     <th>Value</th>
   </tr>
-  {{#each o in dailyPoints}}
+  {{#each point in dailyPoints}}
     <tr>
-      <td>{{o.at}}</td>
-      <td>{{o.value}}</td>
+      <td>{{point.at}}</td>
+      <td>{{point.value}}</td>
     </tr>
   {{/each}}
 </table>
