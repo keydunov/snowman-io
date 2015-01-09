@@ -7,11 +7,13 @@
   <tr>
     <th>Name</th>
     <th>Value</th>
+    <th>Actions</th>
   </tr>
   {{#each metric in model}}
     <tr>
       <td>{{metric.name}}</td>
       <td>{{metric.lastValue}}</td>
+      <td>{{#link-to "metrics/show" metric.id}}show{{/link-to}}</td>
     </tr>
   {{/each}}
 </table>

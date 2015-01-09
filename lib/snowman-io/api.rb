@@ -116,6 +116,18 @@ module SnowmanIO
       { metrics: SnowmanIO.storage.metrics_all(with_last_value: true) }.to_json
     end
 
+    get "/api/metrics/:id" do
+      { metric: SnowmanIO.storage.metrics_find(params[:id]) }.to_json
+    end
+
+    get "/api/points" do
+      if params[:kind] == "5mins"
+        { points: SnowmanIO.storage.metrics_find_5mins(params[:metricId]) }.to_json
+      else
+        { points: SnowmanIO.storage.metrics_find_dailies(params[:metricId]) }.to_json
+      end
+    end
+
     get "/api/reports" do
       { reports: SnowmanIO.storage.reports_all }.to_json
     end

@@ -58,7 +58,7 @@ module SnowmanIO
       if options[:with_last_value]
         # get 2 last collections
         floor_key = Utils.date_to_key(Utils.floor_time(Time.now))
-        values = SnowmanIO.mongo.db["5mins"].find({key: {"$lte" => floor_key}}).sort(key: :desc).to_a[0..1]
+        values = SnowmanIO.mongo.db["5mins"].find().sort(key: :desc).to_a[0..1]
       end
 
       SnowmanIO.mongo.db["metrics"].find().sort(name: 1).to_a.map do |json|
@@ -70,6 +70,32 @@ module SnowmanIO
         end
         metric
       end
+    end
+
+    def metrics_find(id)
+      if doc = SnowmanIO.mongo.db["metrics"].find(id: id.to_i).first
+        doc.except("_id")
+      end
+    end
+
+    def metrics_find_5mins(id)
+      SnowmanIO.mongo.db["5mins"].find({}, fields: ["key", id.to_s]).sort(key: :desc).to_a.map { |raw|
+        {
+          id: raw["_id"].to_s,
+          at: Utils.key_to_date(raw["key"]),
+          value: raw[id.to_s]
+        }
+      }
+    end
+
+    def metrics_find_dailies(id)
+      SnowmanIO.mongo.db["daily"].find({}, fields: ["key", id.to_s]).sort(key: :desc).to_a.map { |raw|
+        {
+          id: raw["_id"].to_s,
+          at: Utils.key_to_date(raw["key"]),
+          value: raw[id.to_s]
+        }
+      }
     end
 
     def metrics_register_value(name, value, at)
