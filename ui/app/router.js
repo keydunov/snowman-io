@@ -16,6 +16,7 @@ Router.map(function() {
   this.route('collectors/destroy', {path: '/collectors/:id/destroy'});
 
   this.route('metrics/index', {path: '/metrics'});
+  this.route('metrics/show', {path: '/metrics/:id'});
 
   this.route('reports/index', {path: '/reports'});
   this.route('reports/show', {path: '/reports/:id'});

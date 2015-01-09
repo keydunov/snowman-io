@@ -1,0 +1,45 @@
+<ol class="breadcrumb">
+  <li>{{#link-to "metrics/index"}}Metrics{{/link-to}}</li>
+  <li class="active">{{metric.name}}</li>
+</ol>
+
+<div class="table-responsive">
+<table class="table" style="width:auto">
+  <tr>
+    <th>Name</th>
+    <td>{{metric.name}}</td>
+  </tr>
+</table>
+</div>
+
+<h3>5 minutes points</h3>
+<div class="table-responsive">
+<table class="table" style="width:auto">
+  <tr>
+    <th>At</th>
+    <th>Value</th>
+  </tr>
+  {{#each o in fiveMinPoints}}
+    <tr>
+      <td>{{o.at}}</td>
+      <td>{{o.value}}</td>
+    </tr>
+  {{/each}}
+</table>
+</div>
+
+<h3>Daily points</h3>
+<div class="table-responsive">
+<table class="table" style="width:auto">
+  <tr>
+    <th>At</th>
+    <th>Value</th>
+  </tr>
+  {{#each o in dailyPoints}}
+    <tr>
+      <td>{{o.at}}</td>
+      <td>{{o.value}}</td>
+    </tr>
+  {{/each}}
+</table>
+</div>
