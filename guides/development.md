@@ -17,3 +17,7 @@ rake dev:run
 
 See your development version of Ember application on `http://localhost:4200` by default and
 snowman at `http://localhost:4567`.
+
+## Rake tasks
+
+* `rake dev:test_metric` - fill 1 month of metric 'test'

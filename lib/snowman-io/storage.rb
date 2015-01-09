@@ -93,7 +93,9 @@ module SnowmanIO
         {
           id: raw["_id"].to_s,
           at: Utils.key_to_date(raw["key"]),
-          value: raw[id.to_s]
+          min: raw[id.to_s].try(:[], "min"),
+          avg: raw[id.to_s].try(:[], "avg"),
+          max: raw[id.to_s].try(:[], "max")
         }
       }
     end

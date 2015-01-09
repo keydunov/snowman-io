@@ -33,12 +33,16 @@
 <table class="table" style="width:auto">
   <tr>
     <th>At</th>
-    <th>Value</th>
+    <th>Min</th>
+    <th>Avg</th>
+    <th>Max</th>
   </tr>
   {{#each point in dailyPoints}}
     <tr>
       <td>{{point.at}}</td>
-      <td>{{point.value}}</td>
+      <td>{{point.min}}</td>
+      <td>{{point.avg}}</td>
+      <td>{{point.max}}</td>
     </tr>
   {{/each}}
 </table>
