@@ -3,10 +3,13 @@ module SnowmanIO
     class Collect
       include Celluloid
 
-      def initialize
+      def initialize(start_immediately = true)
         @run_at = Utils.ceil_time(Time.now)
         @pool = CollectWorker.pool(size: 10)
-        async.tick
+
+        if start_immediately
+          async.tick
+        end
       end
 
       def tick
@@ -18,7 +21,7 @@ module SnowmanIO
         after(1) { tick }
       end
 
-      private
+      protected
 
       def process(at)
         SnowmanIO.logger.info "Start collectors processing ..."

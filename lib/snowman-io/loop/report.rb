@@ -3,8 +3,10 @@ module SnowmanIO
     class Report
       include Celluloid
 
-      def initialize
-        async.tick
+      def initialize(start_immediately = true)
+        if start_immediately
+          async.tick
+        end
       end
 
       def tick
@@ -21,7 +23,7 @@ module SnowmanIO
         after(600) { tick }
       end
 
-      private
+      protected
 
       # Send report at 7 o'clock every day
       def time_for_reporting?(report_at, report_for)

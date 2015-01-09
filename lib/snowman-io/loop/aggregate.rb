@@ -3,9 +3,11 @@ module SnowmanIO
     class Aggregate
       include Celluloid
 
-      def initialize
+      def initialize(start_immediately = true)
         schedule
-        async.tick
+        if start_immediately
+          async.tick
+        end
       end
 
       def tick
@@ -18,7 +20,7 @@ module SnowmanIO
         after(600) { tick }
       end
 
-      private
+      protected
 
       def schedule
         @aggregate_at = Time.now.end_of_day + 1.second
