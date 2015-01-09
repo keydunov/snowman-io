@@ -5,4 +5,21 @@
 
 <h3>{{at}}</h3>
 
-{{{body}}}
+<div class="table-responsive">
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Min</th>
+    <th>Avg</th>
+    <th>Max</th>
+  </tr>
+  {{#each record in report}}
+    <tr>
+      <td>{{record.name}}</td>
+      <td>{{record.min}}</td>
+      <td>{{record.avg}}</td>
+      <td>{{record.max}}</td>
+    </tr>
+  {{/each}}
+</table>
+</div>

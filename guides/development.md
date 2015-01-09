@@ -6,8 +6,7 @@ UI is Ember.js application backed with Sinatra. The UI was developed with help o
 ## Prepare
 
 ``` bash
-cd ui
-npm install && bower install
+cd ui && npm install && bower install
 ```
 
 ## Run
@@ -16,11 +15,12 @@ npm install && bower install
 rake dev:run
 ```
 
-See your development version of Eber application on `http://localhost:4200` by default and
+See your development version of Ember application on `http://localhost:4200` by default and
 snowman at `http://localhost:4567`.
 
-__NOTE:__ Complile app if you update any ember source:
+## Rake tasks
 
-``` bash
-./ui/release_new_ui
-```
+* `rake dev:random` - fill 1 month of test metric
+* `rake dev:collect` - force gather metrics
+* `rake dev:aggregate` - aggregate metric for yesterday
+* `rake dev:report` - generate report for yesterday

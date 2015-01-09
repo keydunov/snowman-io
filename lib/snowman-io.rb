@@ -28,6 +28,7 @@ require "snowman-io/loop/report"
 require "snowman-io/loop/report_mailer"
 
 ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"
 if ENV["DEV_MODE"].to_i == 1
   require "letter_opener"
   ActionMailer::Base.add_delivery_method :letter_opener,

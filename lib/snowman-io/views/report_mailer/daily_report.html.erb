@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Min</th>
+        <th>Avg</th>
+        <th>Max</th>
+      </tr>
+      <% @report.each do |metric| %>
+        <tr>
+          <td><%= metric["name"] %></td>
+          <td><%= metric["min"] %></td>
+          <td><%= metric["avg"] %></td>
+          <td><%= metric["max"] %></td>
+        </tr>
+      <% end %>
+    </table>
+  </body>
+</html>

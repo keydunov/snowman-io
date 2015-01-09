@@ -3,14 +3,15 @@ module SnowmanIO
     class Aggregate
       include Celluloid
 
-      def initialize
+      def initialize(start_immediately = true)
         schedule
-        async.tick
+        if start_immediately
+          async.tick
+        end
       end
 
       def tick
         if Time.now > @aggregate_at
-          clean(@aggregate_at - 1.day)
           process(@aggregate_at - 1.day)
           schedule
         end
@@ -18,7 +19,7 @@ module SnowmanIO
         after(600) { tick }
       end
 
-      private
+      protected
 
       def schedule
         @aggregate_at = Time.now.end_of_day + 1.second
@@ -30,6 +31,7 @@ module SnowmanIO
       end
 
       def process(at)
+        clean(at)
         SnowmanIO.storage.metrics_all.each do |metric|
           SnowmanIO.storage.metrics_aggregate(metric["name"], at)
         end

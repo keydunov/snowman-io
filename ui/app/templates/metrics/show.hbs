@@ -12,34 +12,6 @@
 </table>
 </div>
 
-<h3>5 minutes points</h3>
-<div class="table-responsive">
-<table class="table" style="width:auto">
-  <tr>
-    <th>At</th>
-    <th>Value</th>
-  </tr>
-  {{#each point in fiveMinPoints}}
-    <tr>
-      <td>{{point.at}}</td>
-      <td>{{point.value}}</td>
-    </tr>
-  {{/each}}
-</table>
-</div>
+{{line-chart points=fiveMinPoints y="value" title="5 minutes points"}}
 
-<h3>Daily points</h3>
-<div class="table-responsive">
-<table class="table" style="width:auto">
-  <tr>
-    <th>At</th>
-    <th>Value</th>
-  </tr>
-  {{#each point in dailyPoints}}
-    <tr>
-      <td>{{point.at}}</td>
-      <td>{{point.value}}</td>
-    </tr>
-  {{/each}}
-</table>
-</div>
+{{line-chart points=dailyPoints y="min,avg,max" title="Daily"}}
