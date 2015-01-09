@@ -41,25 +41,16 @@ module SnowmanIO
       def process(at)
         day = SnowmanIO.storage.metrics_daily(at)
         key = Utils.date_to_key(at)
-        # TODO: use erb
-        out = "<table class='table'>\n"
-        out += "<tr>"
-        out += "<th>Name</th>"
-        out += "<th>Min</th>"
-        out += "<th>Avg</th>"
-        out += "<th>Max</th>"
-        out += "</tr>\n"
-        SnowmanIO.storage.metrics_all.each do |metric|
-          out += "<tr>"
-          out += "<td>#{metric["name"]}</td>"
-          out += "<td>#{day.try(:[], metric["id"].to_s).try(:[], "min")}</td>"
-          out += "<td>#{day.try(:[], metric["id"].to_s).try(:[], "avg")}</td>"
-          out += "<td>#{day.try(:[], metric["id"].to_s).try(:[], "max")}</td>"
-          out += "</tr>\n"
+        report = SnowmanIO.storage.metrics_all.map do |metric|
+          {
+            "name" => metric["name"],
+            "min" => day.try(:[], metric["id"].to_s).try(:[], "min"),
+            "avg" => day.try(:[], metric["id"].to_s).try(:[], "avg"),
+            "max" => day.try(:[], metric["id"].to_s).try(:[], "max")
+          }
         end
-        out += "</table>"
-        ReportMailer.daily_report(at, out).deliver
-        SnowmanIO.storage.reports_create(key, {body: out, at: Time.now})
+        ReportMailer.daily_report(at, report).deliver
+        SnowmanIO.storage.reports_create(key, {report: report, at: Time.now})
       end
     end
   end

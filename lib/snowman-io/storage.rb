@@ -157,9 +157,13 @@ module SnowmanIO
     end
 
     def reports_create(key, options)
-      SnowmanIO.mongo.db["reports"].insert(options.merge(key: key))
+      SnowmanIO.mongo.db["reports"].update(
+        {key: key},
+        options.merge(key: key),
+        upsert: true
+      )
       # keep last 7 reports
-      keys = SnowmanIO.mongo.db["reports"].find({}, fields: ["key"]).sort(key: :desc).map { |x| x["key"] }
+      keys = SnowmanIO.mongo.db["reports"].find({}, fields: ["key"]).sort(key: :desc).map { |r| r["key"] }
       if keys.length > 7
         SnowmanIO.mongo.db["reports"].remove({key: {"$in" => [keys[7..-1]]}})
       end
@@ -167,13 +171,17 @@ module SnowmanIO
 
     def reports_all()
       SnowmanIO.mongo.db["reports"].find().sort(key: :asc).to_a.map do |doc|
-        doc.except("_id").merge("id" => doc["key"])
+        doc.except("_id").merge("id" => doc["key"]).tap { |doc|
+          doc["rawReport"] = JSON.dump(doc.delete("report"))
+        }
       end
     end
 
     def reports_find(key)
       if doc = SnowmanIO.mongo.db["reports"].find(key: key.to_i).first
-        doc.except("_id").merge("id" => doc["key"])
+        doc.except("_id").merge("id" => doc["key"]).tap { |doc|
+          doc["rawReport"] = JSON.dump(doc.delete("report"))
+        }
       end
     end
   end
