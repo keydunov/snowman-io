@@ -4,20 +4,20 @@ module SnowmanIO
       include Celluloid
 
       def initialize(start_immediately = true)
+        unless SnowmanIO.storage.get(Storage::NEXT_REPORT_FOR)
+          schedule_next_report
+        end
+        SnowmanIO.logger.debug "report for: #{report_for}"
+
         if start_immediately
           async.tick
         end
       end
 
       def tick
-        # Report at 7 o'clock about previous day
-        beginning_of_day = Time.now.beginning_of_day
-        report_at = beginning_of_day + 7.hours
-        report_for = beginning_of_day - 1.day
-        SnowmanIO.logger.debug "report at: #{report_at} for #{report_for}"
-
-        if time_for_reporting?(report_at, report_for)
+        if time_for_reporting?
           report(report_for)
+          schedule_next_report
         end
 
         after(600) { tick }
@@ -25,10 +25,17 @@ module SnowmanIO
 
       protected
 
-      # Send report at 7 o'clock every day
-      def time_for_reporting?(report_at, report_for)
-        key = Utils.date_to_key(report_for)
-        Time.now > report_at && !SnowmanIO.storage.reports_find(key)
+      def schedule_next_report
+        SnowmanIO.storage.set(Storage::NEXT_REPORT_FOR, Time.now.beginning_of_day.strftime("%Y-%m-%d"))
+      end
+
+      def report_for
+        Time.parse(SnowmanIO.storage.get(Storage::NEXT_REPORT_FOR))
+      end
+
+      def time_for_reporting?
+        # Send report at 7 o'clock next day
+        Time.now > report_for + 1.day + 7.hours
       end
 
       def report(at)

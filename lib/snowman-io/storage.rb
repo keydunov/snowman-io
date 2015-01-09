@@ -3,7 +3,7 @@ module SnowmanIO
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
     GLOBAL_ID_KEY = "global_id"
-
+    NEXT_REPORT_FOR = "next_report_for"
 
     def set(key, value)
       SnowmanIO.mongo.db["system"].update({key: key}, {key: key, value: value}, upsert: true)
