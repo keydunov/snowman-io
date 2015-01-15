@@ -24,36 +24,6 @@ module SnowmanIO
       )["value"]
     end
 
-    def collectors_all()
-      SnowmanIO.mongo.db["collectors"].find().sort(name: 1).to_a.map do |doc|
-        doc.except("_id")
-      end
-    end
-
-    def collectors_find(id)
-      if doc = SnowmanIO.mongo.db["collectors"].find(id: id.to_i).first
-        doc.except("_id")
-      end
-    end
-
-    def collectors_create(attributes)
-      collectors_update(incr(GLOBAL_ID_KEY), attributes)
-    end
-
-    def collectors_update(id, attributes)
-      SnowmanIO.mongo.db["collectors"].find_and_modify({
-        query: {id: id.to_i},
-        upsert: true,
-        update: attributes.merge(id: id.to_i),
-        new: true
-      }).except("_id")
-    end
-
-    def collectors_delete(id)
-      SnowmanIO.mongo.db["collectors"].remove(id: id.to_i)
-      {id: id.to_i}
-    end
-
     def metrics_all(options = {})
       if options[:with_last_value]
         # get 2 last collections

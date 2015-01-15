@@ -90,28 +90,6 @@ module SnowmanIO
       end
     end
 
-    get "/api/collectors" do
-      { collectors: SnowmanIO.storage.collectors_all }.to_json
-    end
-
-    get "/api/collectors/:id" do
-      { collector: SnowmanIO.storage.collectors_find(params[:id]) }.to_json
-    end
-
-    post "/api/collectors" do
-      payload = JSON.load(request.body.read)["collector"]
-      { collector: SnowmanIO.storage.collectors_create(payload) }.to_json
-    end
-
-    put "/api/collectors/:id" do
-      payload = JSON.load(request.body.read)["collector"]
-      { collector: SnowmanIO.storage.collectors_update(params[:id], payload) }.to_json
-    end
-
-    delete "/api/collectors/:id" do
-      { collector: SnowmanIO.storage.collectors_delete(params[:id]) }.to_json
-    end
-
     get "/api/metrics" do
       { metrics: SnowmanIO.storage.metrics_all(with_last_value: true) }.to_json
     end
