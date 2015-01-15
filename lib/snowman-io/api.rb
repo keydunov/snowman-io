@@ -91,19 +91,11 @@ module SnowmanIO
     end
 
     get "/api/metrics" do
-      { metrics: SnowmanIO.storage.metrics_all(with_last_value: true) }.to_json
+      { metrics: SnowmanIO.storage.metrics_all }.to_json
     end
 
     get "/api/metrics/:id" do
       { metric: SnowmanIO.storage.metrics_find(params[:id]) }.to_json
-    end
-
-    get "/api/points" do
-      if params[:kind] == "5mins"
-        { points: SnowmanIO.storage.metrics_find_5mins(params[:metricId]) }.to_json
-      else
-        { points: SnowmanIO.storage.metrics_find_dailies(params[:metricId]) }.to_json
-      end
     end
 
     get "/api/reports" do
@@ -123,7 +115,7 @@ module SnowmanIO
 
     post '/agent/metrics' do
       JSON.load(request.body.read)["metrics"].each do |metric|
-        SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"], Time.at(metric["at"]))
+        SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"])
       end
       "OK"
     end

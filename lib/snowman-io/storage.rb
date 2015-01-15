@@ -25,101 +25,107 @@ module SnowmanIO
     end
 
     def metrics_all(options = {})
-      if options[:with_last_value]
-        # get 2 last collections
-        floor_key = Utils.date_to_key(Utils.floor_time(Time.now))
-        values = SnowmanIO.mongo.db["5mins"].find().sort(key: :desc).to_a[0..1]
-      end
-
-      SnowmanIO.mongo.db["metrics"].find().sort(name: 1).to_a.map do |json|
-        metric = json.except("_id")
-        if options[:with_last_value]
-          metric["lastValue"] =
-            values[0].try(:[], metric["id"].to_s) ||
-            values[1].try(:[], metric["id"].to_s)
-        end
-        metric
-      end
+      SnowmanIO.mongo.db["metrics"].find({}, fields: ["id", "name", "last_value"]).sort(name: 1).to_a
     end
 
     def metrics_find(id)
-      if doc = SnowmanIO.mongo.db["metrics"].find(id: id.to_i).first
-        doc.except("_id")
-      end
+      SnowmanIO.mongo.db["metrics"].find({id: id.to_i}, fields: ["id", "name", "last_value"]).first
     end
 
-    def metrics_find_5mins(id)
-      SnowmanIO.mongo.db["5mins"].find({}, fields: ["key", id.to_s]).sort(key: :desc).to_a.map { |raw|
-        {
-          id: raw["_id"].to_s,
-          at: Utils.key_to_date(raw["key"]),
-          value: raw[id.to_s]
-        }
-      }
-    end
-
-    def metrics_find_dailies(id)
-      SnowmanIO.mongo.db["daily"].find({}, fields: ["key", id.to_s]).sort(key: :desc).to_a.map { |raw|
-        {
-          id: raw["_id"].to_s,
-          at: Utils.key_to_date(raw["key"]),
-          min: raw[id.to_s].try(:[], "min"),
-          avg: raw[id.to_s].try(:[], "avg"),
-          max: raw[id.to_s].try(:[], "max")
-        }
-      }
-    end
-
-    def metrics_register_value(name, value, at)
-      key = Utils.date_to_key(at)
-
+    def metrics_find_or_create(name)
       if metric = SnowmanIO.mongo.db["metrics"].find(name: name).first
-        metric_id = metric["id"]
+        metric
       else
-        metric_id = incr("GLOBAL_ID_KEY")
-        SnowmanIO.mongo.db["metrics"].insert(id: metric_id, name: name)
+        metric_id = incr(GLOBAL_ID_KEY)
+        SnowmanIO.mongo.db["metrics"].find_and_modify(
+          query: {id: metric_id},
+          upsert: true,
+          new: true,
+          update: {id: metric_id, name: name}
+        )
       end
+    end
 
-      SnowmanIO.mongo.db["5mins"].update(
-        {key: key},
-        {"$set" => {key: key, metric_id.to_s => value}},
-        upsert: true
+    def metrics_register_value(name, value, at = Time.now)
+      key = Utils.date_to_key(at)
+      metric = Celluloid::Actor[:metric_registry].get_metric(name)
+
+      SnowmanIO.mongo.db["metrics"].update(
+        {id: metric["id"]},
+        {
+          "$set" => {"last_value" => value},
+          "$push" => {"rt.#{key}" => {"$each" => [value]}}
+        }
       )
+    end
+
+    # Aggregate 5mins metrics
+    def metrics_aggregate_5mins(at)
+      key = Utils.key_to_date(at)
+      SnowmanIO.mongo.db["metrics"].find().each do |metric|
+        metric["rt"].each do |k, values|
+          if k.to_i < key && values.present?
+            max = values.max
+            min = values.min
+            avg = values.sum/values.length
+            count = values.length
+
+            SnowmanIO.mongo.db["5mins"].update(
+              {key: k.to_i},
+              {"$set" => {
+                key: k.to_i,
+                "#{metric["id"]}.max" => max,
+                "#{metric["id"]}.min" => min,
+                "#{metric["id"]}.avg" => avg,
+                "#{metric["id"]}.count" => count
+              }},
+              upsert: true
+            )
+
+            SnowmanIO.mongo.db["metrics"].update(
+              {id: metric["id"]},
+              {"$unset" => {"rt.#{k}" => ""}}
+            )
+          end
+        end
+      end
     end
 
     # Aggregate day metrics
-    def metrics_aggregate(name, at)
-      metric = SnowmanIO.mongo.db["metrics"].find(name: name).first
-      return unless metric
-      metric_id = metric["id"]
-      from = at
-      to = at + 1.day
+    def metrics_aggregate(at)
+      from = at - 1.day
+      to = at
 
-      values = SnowmanIO.mongo.db["5mins"].find({
+      SnowmanIO.mongo.db["metrics"].find({}, fields: ["id"]).each do |metric|
+        values = SnowmanIO.mongo.db["5mins"].find({
+            key: {"$gte" => Utils.date_to_key(from), "$lt" => Utils.date_to_key(to)}
+          }, fields: ["key", metric["id"].to_s]
+        ).sort(key: :asc).to_a.map{ |v| v[metric["id"].to_s] }.compact
+
+        next if values.empty?
+
+        key = Utils.date_to_key(from)
+        max = values.map{ |v| v["max"] }.max
+        min = values.map{ |v| v["min"] }.min
+        count = values.map{ |v| v["count"] }.inject(&:+)
+        avg = values.map{ |v| v["avg"]*v["count"]/count }.inject(&:+)
+
+        SnowmanIO.mongo.db["daily"].update(
+          {key: key},
+          {"$set" => {
+            key: key,
+            "#{metric["id"]}.max" => max,
+            "#{metric["id"]}.min" => min,
+            "#{metric["id"]}.avg" => avg,
+            "#{metric["id"]}.count" => count
+          }},
+          upsert: true
+        )
+      end
+
+      SnowmanIO.mongo.db["5mins"].remove({
         key: {"$gte" => Utils.date_to_key(from), "$lt" => Utils.date_to_key(to)}
-      }, fields: ["key", metric_id.to_s]).sort(key: :asc).to_a.map{ |v| v[metric_id.to_s] }.compact
-
-      return if values.empty?
-      max = values.max
-      min = values.min
-      avg = values.sum/values.length
-
-      key = Utils.date_to_key(at)
-      SnowmanIO.mongo.db["daily"].update(
-        {key: key},
-        {"$set" => {
-          key: key,
-          "#{metric_id}.max" => max,
-          "#{metric_id}.min" => min,
-          "#{metric_id}.avg" => avg
-        }},
-        upsert: true
-      )
-    end
-
-    def metrics_clean(before)
-      # TODO: keep only 1 year of daily metrics
-      SnowmanIO.mongo.db["5mins"].remove({key: {"$lt" => Utils.date_to_key(before)}})
+      })
     end
 
     def metrics_daily(at)

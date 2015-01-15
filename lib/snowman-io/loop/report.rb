@@ -46,7 +46,8 @@ module SnowmanIO
             "name" => metric["name"],
             "min" => day.try(:[], metric["id"].to_s).try(:[], "min"),
             "avg" => day.try(:[], metric["id"].to_s).try(:[], "avg"),
-            "max" => day.try(:[], metric["id"].to_s).try(:[], "max")
+            "max" => day.try(:[], metric["id"].to_s).try(:[], "max"),
+            "count" => day.try(:[], metric["id"].to_s).try(:[], "count")
           }
         end
         ReportMailer.daily_report(at, report).deliver

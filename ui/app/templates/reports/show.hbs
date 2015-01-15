@@ -12,6 +12,7 @@
     <th>Min</th>
     <th>Avg</th>
     <th>Max</th>
+    <th>Count</th>
   </tr>
   {{#each record in report}}
     <tr>
@@ -19,6 +20,7 @@
       <td>{{record.min}}</td>
       <td>{{record.avg}}</td>
       <td>{{record.max}}</td>
+      <td>{{record.count}}</td>
     </tr>
   {{/each}}
 </table>

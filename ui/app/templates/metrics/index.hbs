@@ -12,7 +12,7 @@
   {{#each metric in model}}
     <tr>
       <td>{{metric.name}}</td>
-      <td>{{metric.lastValue}}</td>
+      <td>{{metric.last_value}}</td>
       <td>{{#link-to "metrics/show" metric.id}}show{{/link-to}}</td>
     </tr>
   {{/each}}
