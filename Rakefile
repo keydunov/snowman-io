@@ -48,15 +48,15 @@ namespace :dev do
     }
   end
 
-  desc "Force gather metrics"
-  task :collect do
+  desc "Aggregate 5min metrics"
+  task :aggregate_5min do
     at = SnowmanIO::Utils.floor_time(Time.now)
-    SnowmanIO::Loop::Collect.new(false).send(:process, at)
+    SnowmanIO::Loop::Aggregate5Min.new(false).send(:process, at)
   end
 
   desc "Aggregate metric for yesterday"
   task :aggregate do
-    at = Time.now.beginning_of_day - 1.day
+    at = Time.now.beginning_of_day
     SnowmanIO::Loop::Aggregate.new(false).send(:process, at)
   end
 

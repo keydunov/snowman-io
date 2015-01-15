@@ -10,6 +10,7 @@
         <th>Min</th>
         <th>Avg</th>
         <th>Max</th>
+        <th>Count</th>
       </tr>
       <% @report.each do |metric| %>
         <tr>
@@ -17,6 +18,7 @@
           <td><%= metric["min"] %></td>
           <td><%= metric["avg"] %></td>
           <td><%= metric["max"] %></td>
+          <td><%= metric["count"] %></td>
         </tr>
       <% end %>
     </table>

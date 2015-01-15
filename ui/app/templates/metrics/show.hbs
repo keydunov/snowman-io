@@ -1,17 +1,18 @@
 <ol class="breadcrumb">
   <li>{{#link-to "metrics/index"}}Metrics{{/link-to}}</li>
-  <li class="active">{{metric.name}}</li>
+  <li class="active">{{name}}</li>
 </ol>
 
 <div class="table-responsive">
 <table class="table" style="width:auto">
   <tr>
     <th>Name</th>
-    <td>{{metric.name}}</td>
+    <td>{{name}}</td>
+  </tr>
+
+  <tr>
+    <th>Last Value</th>
+    <td>{{last_value}}</td>
   </tr>
 </table>
 </div>
-
-{{line-chart points=fiveMinPoints y="value" title="5 minutes points"}}
-
-{{line-chart points=dailyPoints y="min,avg,max" title="Daily"}}
