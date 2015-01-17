@@ -1,6 +1,7 @@
 require 'logger'
 require 'bcrypt'
 require 'mongo'
+require 'pp'
 require 'celluloid/autostart'
 require 'action_mailer'
 require 'active_support/core_ext/object/blank'
@@ -16,16 +17,12 @@ require "snowman-io/version"
 require "snowman-io/utils"
 require "snowman-io/api"
 require "snowman-io/options"
-require "snowman-io/metric_registry"
 require "snowman-io/launcher"
 require "snowman-io/cli"
 require "snowman-io/web_server"
 require "snowman-io/storage"
-require "snowman-io/loop/ping"
-require "snowman-io/loop/aggregate"
-require "snowman-io/loop/aggregate_5min"
-require "snowman-io/loop/report"
-require "snowman-io/loop/report_mailer"
+require "snowman-io/loop"
+require "snowman-io/report_mailer"
 
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"

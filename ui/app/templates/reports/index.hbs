@@ -6,12 +6,10 @@
 <table class="table">
   <tr>
     <th>Key</th>
-    <th>At</th>
   </tr>
   {{#each report in model}}
     <tr>
       <td>{{#link-to "reports/show" report}}{{report.key}}{{/link-to}}</td>
-      <td>{{report.at}}</td>
     </tr>
   {{/each}}
 </table>
