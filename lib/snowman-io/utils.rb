@@ -1,7 +1,7 @@
 module SnowmanIO
   module Utils
     def self.date_to_key(at)
-      day = at.beginning_of_day.strftime("%y%m%d")
+      day = at.strftime("%y%m%d")
       off = "%03d" % (at.hour*12 + at.min/5)
       (day + off).to_i
     end
@@ -23,6 +23,18 @@ module SnowmanIO
     def self.floor_time(time)
       seconds = 5*60
       Time.at((time.to_f/seconds).floor*seconds)
+    end
+
+    def self.avg(arr)
+      arr.inject(:+).to_f/arr.length
+    end
+
+    def self.med(arr)
+      perc(arr, 0.5)
+    end
+
+    def self.perc(arr, t)
+      arr.sort[(t*(arr.length - 1)).round]
     end
   end
 end

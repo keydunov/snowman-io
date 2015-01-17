@@ -21,49 +21,29 @@ namespace :dev do
     end
   end
 
-  desc "Fill test metric with test values for last month"
+  desc "Generate random value for test metric"
   task :random do
-    at = Time.now.beginning_of_day - 1.day
-    (288*2).times {
-      SnowmanIO.storage.metrics_register_value("test", rand*100, at)
-      at += 5.minutes
-    }
-    at = Time.now.beginning_of_day - 1.day
-    30.times {
-      # TODO: move this code into storage
-      metric = SnowmanIO.mongo.db["metrics"].find(name: "test").first
-      key = SnowmanIO::Utils.date_to_key(at)
-      avg = rand*100
-      SnowmanIO.mongo.db["daily"].update(
-        {key: key},
-        {"$set" => {
-          key: key,
-          "#{metric["id"]}.max" => avg*(1 + rand*0.3),
-          "#{metric["id"]}.min" => avg*(1 - rand*0.3),
-          "#{metric["id"]}.avg" => avg
-        }},
-        upsert: true
-      )
-      at -= 1.day
-    }
+    SnowmanIO.storage.metrics_register_value("Test", rand)
   end
 
   desc "Aggregate 5min metrics"
   task :aggregate_5min do
-    at = SnowmanIO::Utils.floor_time(Time.now)
-    SnowmanIO::Loop::Aggregate5Min.new(false).send(:process, at)
+    SnowmanIO.storage.metrics_aggregate_5min
   end
 
-  desc "Aggregate metric for yesterday"
-  task :aggregate do
-    at = Time.now.beginning_of_day
-    SnowmanIO::Loop::Aggregate.new(false).send(:process, at)
+  desc "Aggregate daily metrics"
+  task :aggregate_daily do
+    SnowmanIO.storage.metrics_aggregate_daily
   end
 
-  desc "Generate report for yesterday"
-  task :report do
-    at = Time.now.beginning_of_day - 1.day
-    SnowmanIO::Loop::Report.new(false).send(:process, at)
+  desc "Generate report"
+  task :report_gen do
+    SnowmanIO.storage.reports_generate_once((Time.now - 1.day).beginning_of_day)
+  end
+
+  desc "Send report"
+  task :report_send do
+    SnowmanIO.storage.reports_send_once((Time.now - 1.day).beginning_of_day)
   end
 end
 

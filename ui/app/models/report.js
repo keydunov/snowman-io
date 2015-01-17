@@ -1,11 +1,10 @@
 import DS from 'ember-data';
 
 export default DS.Model.extend({
-  key: DS.attr('number'),
-  rawReport: DS.attr('string'),
-  at: DS.attr('date'),
+  key: DS.attr('string'),
+  report: DS.attr('string'),
 
-  report: function() {
-    return JSON.parse(this.get("rawReport"));
-  }.property("rawReport")
+  parsedReport: function() {
+    return JSON.parse(this.get("report"));
+  }.property("report")
 });
