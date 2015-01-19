@@ -14,9 +14,7 @@ fonts.forEach(function(font) {
   app.import(font, {destDir: "fonts"});
 });
 
-// MetricsGraphics.js
+// D3.js
 app.import("vendor/d3/d3.js");
-app.import("vendor/metrics-graphics-2.0.0/dist/metricsgraphics.js");
-app.import("vendor/metrics-graphics-2.0.0/dist/metricsgraphics.css");
 
 module.exports = app.toTree();

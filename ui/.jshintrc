@@ -3,7 +3,7 @@
     "document",
     "window",
     "-Promise",
-    "MG"
+    "d3"
   ],
   "browser": true,
   "boss": true,
