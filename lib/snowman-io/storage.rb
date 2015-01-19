@@ -73,6 +73,8 @@ module SnowmanIO
       key_to_keep = (Utils.date_to_key(Utils.floor_time(Time.now - 1.hour))/1000)*1000
 
       SnowmanIO.mongo.db["metrics"].find({}, fields: ["5min"]).each do |metric|
+        next if metric["5min"].empty?
+
         out = {}
 
         # accumulate
