@@ -14,13 +14,38 @@ module SnowmanIO
     end
 
     def metrics_all
-      idfy SnowmanIO.mongo.db["metrics"].find({}, fields: ["name", "last_value"]).sort(name: 1).to_a
+      now = Time.now
+      idfy(SnowmanIO.mongo.db["metrics"].find(
+        {}, fields: ["name", "last_value", "5min"]
+      ).sort(name: 1).to_a).tap { |metrics|
+        metrics.each { |metric| _metric_wrap(metric, now) }
+      }
     end
 
     def metrics_find(id)
+      now = Time.now
       idfy SnowmanIO.mongo.db["metrics"].find(
-        {_id: BSON::ObjectId(id)}, fields: ["name", "last_value"]
-      ).first
+        {_id: BSON::ObjectId(id)}, fields: ["name", "last_value", "5min"]
+      ).first.tap { |metric| _metric_wrap(metric, now) }
+    end
+
+    def _metric_wrap(metric, now)
+      from = Utils.floor_time(now) - 1.day + 5.minutes
+      to = Utils.floor_time(now)
+      from_key = Utils.date_to_key(from)
+      to_key = Utils.date_to_key(to)
+
+      points = 288.times.map { |i|
+        {"at" => i, "value" => 0}
+      }
+
+      metric.delete("5min").each { |key, hash|
+        if from_key <= key.to_i && key.to_i <= to_key
+          points[(Utils.key_to_date(key.to_i).to_i - from.to_i)/300]["value"] = hash["med"]
+        end
+      }
+
+      metric["points_5min_json"] = points.to_json
     end
 
     def metrics_register_value(name, value, at = Time.now)
