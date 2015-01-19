@@ -26,6 +26,11 @@ namespace :dev do
     SnowmanIO.storage.metrics_register_value("Test", rand)
   end
 
+  desc "Aggregate 20sec metrics"
+  task :aggregate_20sec do
+    SnowmanIO.storage.metrics_aggregate_20sec
+  end
+
   desc "Aggregate 5min metrics"
   task :aggregate_5min do
     SnowmanIO.storage.metrics_aggregate_5min
@@ -34,6 +39,11 @@ namespace :dev do
   desc "Aggregate daily metrics"
   task :aggregate_daily do
     SnowmanIO.storage.metrics_aggregate_daily
+  end
+
+  desc "Clean old metrics"
+  task :clean_old do
+    SnowmanIO.storage.metrics_clean_old
   end
 
   desc "Generate report"

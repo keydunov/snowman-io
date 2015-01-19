@@ -7,13 +7,11 @@
   <tr>
     <th>Name</th>
     <th>Value</th>
-    <th>1 day</th>
   </tr>
   {{#each metric in model}}
     <tr>
       <td>{{#link-to "metrics/show" metric.id}}{{metric.name}}{{/link-to}}</td>
       <td>{{metric.last_value}}</td>
-      <td>{{small-trend data=metric.points_5min}}</td>
     </tr>
   {{/each}}
 </table>
