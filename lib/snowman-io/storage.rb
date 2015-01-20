@@ -281,7 +281,7 @@ module SnowmanIO
       # current
       at = Utils.floor_20sec(now - 10.minutes) + 20.seconds
       while at < now
-        trend["current"].push(metric["20sec"][at.to_i.to_s].try(:[], "avg") || 0)
+        trend["current"].push(metric["20sec"][at.to_i.to_s].try(:[], "90pct") || 0)
         at += 20.seconds
       end
 
@@ -295,7 +295,7 @@ module SnowmanIO
       day = []
       while at < now
         day.push(
-          value: (metric["5min"][at.to_i.to_s].try(:[], "avg") || 0),
+          value: (metric["5min"][at.to_i.to_s].try(:[], "90pct") || 0),
           count: (metric["5min"][at.to_i.to_s].try(:[], "count") || 0)
         )
         at += 5.minutes
@@ -313,7 +313,7 @@ module SnowmanIO
       # month
       at = (now - 30.days).beginning_of_day
       while at < now
-        trend["month"].push(metric["daily"][at.to_i.to_s].try(:[], "avg") || 0)
+        trend["month"].push(metric["daily"][at.to_i.to_s].try(:[], "90pct") || 0)
         at += 1.day
       end
 
