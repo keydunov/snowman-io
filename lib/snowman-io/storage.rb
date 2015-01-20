@@ -278,8 +278,6 @@ module SnowmanIO
         "generated_at" => Time.now.to_i
       }
 
-      metric["lastValueHuman"] = Utils.human_value(metric["last_value"])
-
       # current
       at = Utils.floor_20sec(now - 10.minutes) + 20.seconds
       while at < now
@@ -318,6 +316,9 @@ module SnowmanIO
         trend["month"].push(metric["daily"][at.to_i.to_s].try(:[], "avg") || 0)
         at += 1.day
       end
+
+      metric["lastValueHuman"] = Utils.human_value(metric["last_value"])
+      metric["todayCount"] = metric["daily"][now.beginning_of_day.to_i.to_s].try(:[], "count")
 
       metric.delete("20sec")
       metric.delete("5min")
