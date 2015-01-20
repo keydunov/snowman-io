@@ -18,17 +18,17 @@ module SnowmanIO
         end
       }
 
-      @main = Loop.supervise_as(:main, 10) {
+      @main = Loop.supervise_as(:main, 3) {
         now = Time.now
         report_for = (now - 1.day).beginning_of_day
 
         # aggregate
         start = Time.now.to_f
+        SnowmanIO.storage.metrics_aggregate_20sec
         SnowmanIO.storage.metrics_aggregate_5min
         SnowmanIO.storage.metrics_aggregate_daily
-        SnowmanIO.storage.metrics_clean_old_daily
+        SnowmanIO.storage.metrics_clean_old
         SnowmanIO.storage.metrics_register_value("[SYS] Aggregation Time", Time.now.to_f - start)
-
 
         # generate report (from 1:00 till 6:00) to be sure all daily metrics aggregated
         if 1 < now.hour && now.hour < 6
