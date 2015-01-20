@@ -23,7 +23,7 @@ namespace :dev do
 
   desc "Generate random value for test metric"
   task :random do
-    SnowmanIO.storage.metrics_register_value("Test", rand)
+    SnowmanIO.storage.metrics_register_value("Test", 150)
   end
 
   desc "Aggregate 20sec metrics"

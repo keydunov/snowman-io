@@ -16,7 +16,7 @@ module SnowmanIO
     def metrics_all
       now = Time.now
       idfy(SnowmanIO.mongo.db["metrics"].find(
-        {}, fields: ["name", "last_value", "5min"]
+        {}, fields: ["name", "last_value", "20sec", "5min", "daily"]
       ).sort(name: 1).to_a).tap { |metrics|
         metrics.each { |metric| _metric_wrap(metric, now) }
       }
@@ -25,7 +25,7 @@ module SnowmanIO
     def metrics_find(id)
       now = Time.now
       idfy SnowmanIO.mongo.db["metrics"].find(
-        {_id: BSON::ObjectId(id)}, fields: ["name", "last_value", "5min"]
+        {_id: BSON::ObjectId(id)}, fields: ["name", "last_value", "20sec", "5min", "daily"]
       ).first.tap { |metric| _metric_wrap(metric, now) }
     end
 
@@ -163,7 +163,7 @@ module SnowmanIO
       end
 
       # clear 20 sec
-      key_to_keep = Utils.floor_20sec(now - 14.minutes).to_i
+      key_to_keep = Utils.floor_20sec(now - 11.minutes).to_i
       SnowmanIO.mongo.db["metrics"].find({}, fields: ["20sec"]).each do |metric|
         unset = {}
         metric["20sec"].each do |key, __|
@@ -180,7 +180,7 @@ module SnowmanIO
       end
 
       # clear 5 min
-      key_to_keep = (now - 1.hour).beginning_of_day.to_i
+      key_to_keep = (now - 25.hours).beginning_of_day.to_i
       SnowmanIO.mongo.db["metrics"].find({}, fields: ["5min"]).each do |metric|
         unset = {}
         metric["5min"].each do |key, __|
@@ -246,7 +246,7 @@ module SnowmanIO
     end
 
     def reports_send_once(report_for)
-      key = Utils.date_to_key(report_for)
+      key = report_for.strftime("%Y-%m-%d")
       report = reports_find_by_key(key)
       return if !report || report["sended"]
       ReportMailer.daily_report(report_for, JSON.load(report["report"])).deliver
@@ -271,22 +271,58 @@ module SnowmanIO
     private
 
     def _metric_wrap(metric, now)
-      # from = Utils.floor_time(now) - 1.day + 5.minutes
-      # to = Utils.floor_time(now)
-      # from_key = Utils.date_to_key(from)
-      # to_key = Utils.date_to_key(to)
-      #
-      # points = 288.times.map { |i|
-      #   {"at" => i, "value" => 0}
-      # }
-      #
-      # metric.delete("5min").each { |key, hash|
-      #   if from_key <= key.to_i && key.to_i <= to_key
-      #     points[(Utils.key_to_date(key.to_i).to_i - from.to_i)/300]["value"] = hash["med"]
-      #   end
-      # }
-      #
-      # metric["points_5min_json"] = points.to_json
+      trend = {
+        "current" => [],
+        "day" => [],
+        "month" => [],
+        "generated_at" => Time.now.to_i
+      }
+
+      metric["lastValueHuman"] = Utils.human_value(metric["last_value"])
+
+      # current
+      at = Utils.floor_20sec(now - 10.minutes) + 20.seconds
+      while at < now
+        trend["current"].push(metric["20sec"][at.to_i.to_s].try(:[], "avg") || 0)
+        at += 20.seconds
+      end
+
+      # fix for beauty
+      if trend["current"][-1] == 0
+        trend["current"][-1] = trend["current"][-2]
+      end
+
+      # day
+      at = Utils.floor_5min(now - 1.day) + 5.minutes
+      day = []
+      while at < now
+        day.push(
+          value: (metric["5min"][at.to_i.to_s].try(:[], "avg") || 0),
+          count: (metric["5min"][at.to_i.to_s].try(:[], "count") || 0)
+        )
+        at += 5.minutes
+      end
+      day.each_slice(8) do |slices|
+        count = slices.map{ |s| s[:count] }.inject(&:+)
+        sum = slices.map{ |s| s[:count]*s[:value] }.inject(&:+)
+        if count > 0
+          trend["day"].push sum/count
+        else
+          trend["day"].push 0
+        end
+      end
+
+      # month
+      at = (now - 30.days).beginning_of_day
+      while at < now
+        trend["month"].push(metric["daily"][at.to_i.to_s].try(:[], "avg") || 0)
+        at += 1.day
+      end
+
+      metric.delete("20sec")
+      metric.delete("5min")
+      metric.delete("daily")
+      metric["trendJSON"] = trend.to_json
     end
 
 

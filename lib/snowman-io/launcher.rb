@@ -18,7 +18,7 @@ module SnowmanIO
         end
       }
 
-      @main = Loop.supervise_as(:main, 10) {
+      @main = Loop.supervise_as(:main, 3) {
         now = Time.now
         report_for = (now - 1.day).beginning_of_day
 
