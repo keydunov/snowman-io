@@ -151,9 +151,10 @@ module SnowmanIO
         unset = {}
         metric["realtime"].each do |key, __|
           if key.to_i < key_to_keep
-            unset = {"realtime.#{key}" => ""}
+            unset["realtime.#{key}"] = ""
           end
         end
+        p unset
         if unset.present?
           SnowmanIO.mongo.db["metrics"].update(
             {"_id" => metric["_id"]},
@@ -168,7 +169,7 @@ module SnowmanIO
         unset = {}
         metric["20sec"].each do |key, __|
           if key.to_i < key_to_keep
-            unset = {"20sec.#{key}" => ""}
+            unset["20sec.#{key}"] = ""
           end
         end
         if unset.present?
@@ -185,7 +186,7 @@ module SnowmanIO
         unset = {}
         metric["5min"].each do |key, __|
           if key.to_i < key_to_keep
-            unset = {"5min.#{key}" => ""}
+            unset["5min.#{key}"] = ""
           end
         end
         if unset.present?
@@ -202,7 +203,7 @@ module SnowmanIO
         unset = {}
         metric["daily"].each do |key, __|
           if key.to_i < key_to_keep
-            unset = {"daily.#{key}" => ""}
+            unset["daily.#{key}"] = ""
           end
         end
         if unset.present?
