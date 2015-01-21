@@ -2,8 +2,8 @@ module SnowmanIO
   class Storage
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
-    GLOBAL_ID_KEY = "global_id"
     NEXT_REPORT_FOR = "next_report_for"
+    METRICS_COUNT = "metrics_count"
 
     def set(key, value)
       SnowmanIO.mongo.db["system"].update({key: key}, {key: key, value: value}, upsert: true)
@@ -13,11 +13,32 @@ module SnowmanIO
       SnowmanIO.mongo.db["system"].find({key: key}).first.try(:[], "value")
     end
 
-    def metrics_all
+    def incr(key)
+      SnowmanIO.mongo.db["system"].find_and_modify(
+        query: {key: key},
+        upsert: true,
+        new: true,
+        update: {"$inc" => {value: 1}}
+      )["value"]
+    end
+
+    def metrics_all(options = {})
       now = Time.now
+      query = {}
+
+      if options[:only_new]
+        query["system"] = false
+      end
+
       idfy(SnowmanIO.mongo.db["metrics"].find(
-        {}, fields: ["name", "last_value", "20sec", "5min", "daily"]
-      ).sort(name: 1).to_a).tap { |metrics|
+        query, fields: ["name", "last_value", "20sec", "5min", "daily"]
+      ).sort(name: 1).to_a.select { |metric|
+        if options[:only_new]
+          metric["_id"].generation_time > 24.hours.ago
+        else
+          true
+        end
+      }).tap { |metrics|
         metrics.each { |metric| _metric_wrap(metric, now) }
       }
     end
@@ -29,15 +50,20 @@ module SnowmanIO
       ).first.tap { |metric| _metric_wrap(metric, now) }
     end
 
-    def metrics_register_value(name, value, at = Time.now)
+    def metrics_register_value(name, value, options = {})
+      at = options[:at] || Time.now
       SnowmanIO.mongo.db["metrics"].update(
         {name: name},
         {
-          "$set" => {"name" => name, "last_value" => value.to_f},
+          "$set" => {"name" => name, "last_value" => value.to_f, system: !!options[:system]},
           "$push" => {"realtime.#{at.to_i}" => value}
         },
         upsert: true
       )
+
+      unless options[:system]
+        incr(METRICS_COUNT)
+      end
     end
 
     def metrics_aggregate_20sec
@@ -154,7 +180,6 @@ module SnowmanIO
             unset["realtime.#{key}"] = ""
           end
         end
-        p unset
         if unset.present?
           SnowmanIO.mongo.db["metrics"].update(
             {"_id" => metric["_id"]},
@@ -269,6 +294,12 @@ module SnowmanIO
       idfy SnowmanIO.mongo.db["reports"].find({key: key}).first
     end
 
+    def dashboard
+      {
+        metrics: Utils.human_value(get(METRICS_COUNT))
+      }
+    end
+
     private
 
     def _metric_wrap(metric, now)
@@ -326,7 +357,6 @@ module SnowmanIO
       metric.delete("daily")
       metric["trendJSON"] = trend.to_json
     end
-
 
     # Mongo ObjectId => String ID
     def idfy(obj)

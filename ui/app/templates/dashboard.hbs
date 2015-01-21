@@ -1,1 +1,26 @@
-<h2>SnowmanIO Dashboard</h2>
+<div class="row dashboard">
+  <div class="col-md-3 metrics">
+    <h3>Metrics</h3>
+    <div>{{dashboard.metrics}}</div>
+  </div>
+
+  <div class="col-md-9 new_metrics">
+    <h3>New Metrics</h3>
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th style="width:120px">Today</th>
+        <th style="width:120px">Last Value</th>
+        <th style="width:200px">Month / Day / Now</th>
+      </tr>
+      {{#each metric in newMetrics}}
+        <tr>
+          <td>{{#link-to "metrics/show" metric.id}}{{metric.name}}{{/link-to}}</td>
+          <td>{{metric.todayCount}}</td>
+          <td>{{metric.lastValueHuman}}</td>
+          <td>{{small-trend trend=metric.trend}}</td>
+        </tr>
+      {{/each}}
+    </table>
+  </div>
+</div>
