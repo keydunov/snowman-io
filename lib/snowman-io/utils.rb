@@ -17,6 +17,8 @@ module SnowmanIO
     end
 
     def self.human_value(value)
+      return unless value
+
       if value > 1_000_000
         (value/1000000).round(1).to_s + "M"
       elsif value > 1_000
