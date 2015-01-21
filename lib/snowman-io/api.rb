@@ -91,7 +91,7 @@ module SnowmanIO
     end
 
     get "/api/metrics" do
-      { metrics: SnowmanIO.storage.metrics_all }.to_json
+      { metrics: SnowmanIO.storage.metrics_all(only_new: !!params[:new]) }.to_json
     end
 
     get "/api/metrics/:id" do
@@ -111,6 +111,10 @@ module SnowmanIO
         base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),
         version: SnowmanIO::VERSION
       }.to_json
+    end
+
+    get "/api/dashboard" do
+      SnowmanIO.storage.dashboard.to_json
     end
 
     post '/agent/metrics' do

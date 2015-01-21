@@ -18,3 +18,15 @@ body {
 .nav-sidebar > li > a {
   border-radius: 0 !important;
 }
+
+
+.dashboard .metrics {
+  text-align: center;
+}
+.dashboard .new_metrics h3 {
+  text-align: center;
+}
+.dashboard .metrics div {
+  font-size: 500%;
+  font-weight: bold;
+}
