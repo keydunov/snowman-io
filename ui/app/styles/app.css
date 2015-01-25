@@ -26,7 +26,7 @@ body {
 .dashboard .new_metrics h3 {
   text-align: center;
 }
-.dashboard .metrics div {
+.dashboard .metrics .big {
   font-size: 500%;
   font-weight: bold;
 }
