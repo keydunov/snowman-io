@@ -3,7 +3,9 @@ module SnowmanIO
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
     NEXT_REPORT_FOR = "next_report_for"
+    METRICS_TODAY = "metrics_today"
     METRICS_COUNT = "metrics_count"
+    METRICS_TODAY_COUNT = "metrics_today_count"
 
     def set(key, value)
       SnowmanIO.mongo.db["system"].update({key: key}, {key: key, value: value}, upsert: true)
@@ -62,7 +64,13 @@ module SnowmanIO
       )
 
       unless options[:system]
+        now = Time.now
+        if get(METRICS_TODAY) != now.beginning_of_day.to_i
+          set(METRICS_TODAY, now.beginning_of_day.to_i)
+          set(METRICS_TODAY_COUNT, 0)
+        end
         incr(METRICS_COUNT)
+        incr(METRICS_TODAY_COUNT)
       end
     end
 
@@ -300,7 +308,10 @@ module SnowmanIO
 
     def dashboard
       {
-        metrics: Utils.human_value(get(METRICS_COUNT))
+        metrics: {
+          today: Utils.human_value(get(METRICS_TODAY_COUNT)),
+          total: Utils.human_value(get(METRICS_COUNT))
+        }
       }
     end
 
