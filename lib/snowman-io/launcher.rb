@@ -37,8 +37,8 @@ module SnowmanIO
           SnowmanIO.storage.metrics_register_value("[SYS] Report Generate Time", Time.now.to_f - start, system: true)
         end
 
-        # Send report after 7:00
-        if now.hour > 7
+        # Send report after 7:00 but before 11:00
+        if 7 < now.hour && now.hour < 11
           start = Time.now.to_f
           SnowmanIO.storage.reports_send_once(report_for)
           SnowmanIO.storage.metrics_register_value("[SYS] Report Sending Time", Time.now.to_f - start, system: true)

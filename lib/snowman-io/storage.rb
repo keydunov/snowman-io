@@ -272,7 +272,7 @@ module SnowmanIO
     end
 
     def reports_send_once(report_for)
-      key = report_for.strftime("%Y-%m-%d")
+      key = report_for.to_i
       report = reports_find_by_key(key)
       return if !report || report["sended"]
       ReportMailer.daily_report(report_for, JSON.load(report["report"])).deliver
@@ -283,11 +283,15 @@ module SnowmanIO
     end
 
     def reports_all
-      idfy SnowmanIO.mongo.db["reports"].find().sort(key: 1).to_a
+      idfy SnowmanIO.mongo.db["reports"].find().sort(key: 1).to_a.tap { |reports|
+        reports.each { |report| _report_wrap(report) }
+      }
     end
 
     def reports_find(id)
-      idfy SnowmanIO.mongo.db["reports"].find({_id: BSON::ObjectId(id)}).first
+      idfy SnowmanIO.mongo.db["reports"].find({_id: BSON::ObjectId(id)}).first.tap { |report|
+        _report_wrap(report)
+      }
     end
 
     def reports_find_by_key(key)
@@ -301,6 +305,10 @@ module SnowmanIO
     end
 
     private
+
+    def _report_wrap(report)
+      report["at"] = Time.at(report["key"]).strftime("%Y-%m-%d")
+    end
 
     def _metric_wrap(metric, now)
       trend = {
