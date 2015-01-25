@@ -291,7 +291,7 @@ module SnowmanIO
     end
 
     def reports_all
-      idfy SnowmanIO.mongo.db["reports"].find().sort(key: 1).to_a.tap { |reports|
+      idfy SnowmanIO.mongo.db["reports"].find().sort(key: -1).to_a.tap { |reports|
         reports.each { |report| _report_wrap(report) }
       }
     end
