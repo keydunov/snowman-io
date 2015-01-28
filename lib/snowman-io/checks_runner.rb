@@ -72,8 +72,12 @@ module SnowmanIO
       @metric['daily'].values.first['avg']
     end
 
+    def first_date
+      DateTime.strptime(@metric['daily'].keys.first,'%s').strftime('%B %d, %y')
+    end
+
     def message
-      "Today's #{@metric['name']} (#{human(today_avg)}) has increased compared to the (date of first collected metric) (#{human(first_avg)}) "
+      "Today's #{@metric['name']} (#{human(today_avg)}) has increased compared to the #{first_date} (#{human(first_avg)}) "
     end
 
     def human(val)
