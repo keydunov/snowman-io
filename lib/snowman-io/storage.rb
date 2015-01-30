@@ -57,7 +57,7 @@ module SnowmanIO
       SnowmanIO.mongo.db["metrics"].update(
         {name: name},
         {
-          "$set" => {"name" => name, "last_value" => value.to_f, system: !!options[:system]},
+          "$set" => {"name" => name, "last_value" => value.to_f, system: !!options[:system], kind: options[:kind]},
           "$push" => {"realtime.#{at.to_i}" => value}
         },
         upsert: true

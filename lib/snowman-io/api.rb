@@ -119,7 +119,8 @@ module SnowmanIO
 
     post '/agent/metrics' do
       JSON.load(request.body.read)["metrics"].each do |metric|
-        SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"].to_f)
+        options = { at: metric['at'], kind: metric['kind'] }
+        SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"].to_f, options)
       end
       "OK"
     end
