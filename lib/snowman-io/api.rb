@@ -106,6 +106,22 @@ module SnowmanIO
       { report: SnowmanIO.storage.reports_find(params[:id]) }.to_json
     end
 
+    get "/api/apps" do
+      { "apps" => SnowmanIO.storage.find("apps") }.to_json
+    end
+
+    get "/api/apps/:id" do
+      { "app" => SnowmanIO.storage.find("apps", params[:id]) }.to_json
+    end
+
+    post "/api/apps" do
+      { "app" => SnowmanIO.storage.create("apps", JSON.load(request.body.read)["app"]) }.to_json
+    end
+
+    put "/api/apps/:id" do
+      { "app" => SnowmanIO.storage.update("apps", params[:id], JSON.load(request.body.read)["app"]) }.to_json
+    end
+
     get "/api/info" do
       {
         base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),

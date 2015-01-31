@@ -2,6 +2,10 @@
   {{#link-to "dashboard"}}Dashboard{{/link-to}}
 {{/link-to}}
 
+{{#link-to "apps/index" tagName="li" href=false current-when="apps/index apps/new apps/show"}}
+  {{#link-to "apps/index"}}Apps{{/link-to}}
+{{/link-to}}
+
 {{#link-to "metrics/index" tagName="li" href=false current-when="metrics/index metrics/show"}}
   {{#link-to "metrics/index"}}Metrics{{/link-to}}
 {{/link-to}}

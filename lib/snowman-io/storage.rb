@@ -24,6 +24,42 @@ module SnowmanIO
       )["value"]
     end
 
+    def create(collection_name, options = {})
+      SnowmanIO.mongo.db[collection_name].find_and_modify(
+        query: options,
+        upsert: true,
+        new: true,
+        update: options
+      ).tap { |out|
+        out["id"] = out.delete("_id").to_s
+      }
+    end
+
+    def find(collection_name, id = nil)
+      if id
+        SnowmanIO.mongo.db[collection_name].find({_id: BSON::ObjectId(id)}).to_a[0].tap { |out|
+          out["id"] = out.delete("_id").to_s
+        }
+      else
+        SnowmanIO.mongo.db[collection_name].find().to_a.tap { |out|
+          out.each do |rec|
+            rec["id"] = rec.delete("_id").to_s
+          end
+        }
+      end
+    end
+
+    def update(collection_name, id, options = {})
+      SnowmanIO.mongo.db[collection_name].find_and_modify(
+        query: {_id: BSON::ObjectId(id)},
+        upsert: true,
+        new: true,
+        update: {"$set" => options}
+      ).tap { |out|
+        out["id"] = out.delete("_id").to_s
+      }
+    end
+
     def metrics_all(options = {})
       now = Time.now
       query = {}

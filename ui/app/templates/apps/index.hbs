@@ -1,0 +1,24 @@
+<ol class="breadcrumb">
+  <li class="active">Apps</li>
+</ol>
+
+<p>
+  {{#link-to "apps/new" class="btn btn-primary btn-lg"}}Register New Application{{/link-to}}
+</p>
+
+<div class="table-responsive">
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  {{#each app in model}}
+    <tr>
+      <td>{{app.name}}</td>
+      <td>
+        {{#link-to "apps/show" app}}show{{/link-to}}
+        {{#link-to "apps/edit" app}}edit{{/link-to}}
+      </td>
+    </tr>
+  {{/each}}
+</table>
