@@ -107,19 +107,19 @@ module SnowmanIO
     end
 
     get "/api/apps" do
-      { "apps" => SnowmanIO.storage.find("apps") }.to_json
+      { "apps" => SnowmanIO.storage.apps_all }.to_json
     end
 
     get "/api/apps/:id" do
-      { "app" => SnowmanIO.storage.find("apps", params[:id]) }.to_json
+      { "app" => SnowmanIO.storage.apps_find(params[:id]) }.to_json
     end
 
     post "/api/apps" do
-      { "app" => SnowmanIO.storage.create("apps", JSON.load(request.body.read)["app"]) }.to_json
+      { "app" => SnowmanIO.storage.apps_create(JSON.load(request.body.read)["app"]) }.to_json
     end
 
     put "/api/apps/:id" do
-      { "app" => SnowmanIO.storage.update("apps", params[:id], JSON.load(request.body.read)["app"]) }.to_json
+      { "app" => SnowmanIO.storage.apps_update(params[:id], JSON.load(request.body.read)["app"]) }.to_json
     end
 
     get "/api/info" do
