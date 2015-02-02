@@ -5,23 +5,32 @@
     <div>total: {{dashboard.metrics.total}}</div>
   </div>
 
-  <div class="col-md-9 new_metrics">
-    <h3>New Metrics</h3>
-    <table class="table">
-      <tr>
-        <th>Name</th>
-        <th style="width:120px">Today</th>
-        <th style="width:120px">Last Value</th>
-        <th style="width:200px">Month / Day / Now</th>
-      </tr>
-      {{#each metric in newMetrics}}
+  {{#each app in apps}}
+    <div class="col-md-3 app-slot">
+      <h4>{{app.name}}</h4>
+      <div>Controllers: {{app.controllers}}</div>
+      <div>Models: {{app.models}}</div>
+      <table class="table">
         <tr>
-          <td>{{#link-to "metrics/show" metric.id}}{{metric.name}}{{/link-to}}</td>
-          <td>{{metric.todayCount}}</td>
-          <td>{{metric.lastValueHuman}}</td>
-          <td>{{small-trend trend=metric.trend}}</td>
+          <th colspan="2">Requests</th>
         </tr>
-      {{/each}}
-    </table>
-  </div>
+        <tr>
+          <td>
+            <b>Yesterday</b><br>
+            {{#if app.requests.yesterday}}
+              {{app.requests.yesterday.count}}<br>
+              {{app.requests.yesterday.duration}} secs
+            {{/if}}
+          </td>
+          <td>
+            <b>Today</b><br>
+            {{#if app.requests.today}}
+              {{app.requests.today.count}}<br>
+              {{app.requests.today.duration}} secs
+            {{/if}}
+          </td>
+        </tr>
+      <table>
+    </div>
+  {{/each}}
 </div>

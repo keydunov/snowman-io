@@ -8,12 +8,10 @@ var Router = Ember.Router.extend({
 Router.map(function() {
   this.route('dashboard', {path: '/'});
 
-  this.route('collectors/index', {path: '/collectors'});
-  this.route('collectors/new', {path: '/collectors/new'});
-  this.route('collectors/new_hg', {path: '/collectors/new/hg'});
-  this.route('collectors/show', {path: '/collectors/:id'});
-  this.route('collectors/edit', {path: '/collectors/:id/edit'});
-  this.route('collectors/destroy', {path: '/collectors/:id/destroy'});
+  this.route('apps/index', {path: '/apps'});
+  this.route('apps/new', {path: '/apps/new'});
+  this.route('apps/show', {path: '/apps/:id'});
+  this.route('apps/edit', {path: '/apps/:id/edit'});
 
   this.route('metrics/index', {path: '/metrics'});
   this.route('metrics/show', {path: '/metrics/:id'});
