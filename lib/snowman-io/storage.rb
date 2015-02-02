@@ -77,7 +77,7 @@ module SnowmanIO
       SnowmanIO.mongo.db["metrics"].update(
         attributes,
         {
-          "$set" => attributes.merget(last_value: value.to_f),
+          "$set" => attributes.merge(last_value: value.to_f),
           "$push" => {"realtime.#{at.to_i}" => value}
         },
         upsert: true
