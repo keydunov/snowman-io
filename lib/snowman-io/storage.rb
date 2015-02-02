@@ -66,7 +66,7 @@ module SnowmanIO
       app = options[:app]
       at = options[:at] || Time.now
 
-      attributes = {}
+      attributes = {name: name}
       if app
         attributes[:app_id] = BSON::ObjectId(app["id"])
       end
@@ -75,9 +75,9 @@ module SnowmanIO
       end
 
       SnowmanIO.mongo.db["metrics"].update(
-        {name: name},
+        attributes,
         {
-          "$set" => {"name" => name, "last_value" => value.to_f}.merge(attributes),
+          "$set" => attributes.merget(last_value: value.to_f),
           "$push" => {"realtime.#{at.to_i}" => value}
         },
         upsert: true
