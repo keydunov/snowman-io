@@ -33,7 +33,7 @@ module SnowmanIO
       end
 
       idfy(SnowmanIO.mongo.db["metrics"].find(
-        query, fields: ["name", "last_value", "20sec", "5min", "daily"]
+        query, fields: ["name", "app_id", "last_value", "20sec", "5min", "daily"]
       ).sort(name: 1).to_a.select { |metric|
         if options[:only_new]
           metric["_id"].generation_time > 24.hours.ago
@@ -48,22 +48,42 @@ module SnowmanIO
     def metrics_find(id)
       now = Time.now
       idfy SnowmanIO.mongo.db["metrics"].find(
-        {_id: BSON::ObjectId(id)}, fields: ["name", "last_value", "20sec", "5min", "daily"]
+        {_id: BSON::ObjectId(id)}, fields: ["name", "app_id", "last_value", "20sec", "5min", "daily"]
       ).first.tap { |metric| _metric_wrap(metric, now) }
     end
 
+    def metrics_find_raw_by_app_id_and_kind(app_id, kind, fields = [])
+      SnowmanIO.mongo.db["metrics"].find(
+        {
+          app_id: BSON::ObjectId(app_id),
+          kind: kind
+        },
+        fields: fields
+      ).first
+    end
+
     def metrics_register_value(name, value, options = {})
+      app = options[:app]
       at = options[:at] || Time.now
+
+      attributes = {}
+      if app
+        attributes[:app_id] = BSON::ObjectId(app["id"])
+      end
+      if options[:kind]
+        attributes[:kind] = options[:kind]
+      end
+
       SnowmanIO.mongo.db["metrics"].update(
         {name: name},
         {
-          "$set" => {"name" => name, "last_value" => value.to_f, system: !!options[:system], kind: options[:kind]},
+          "$set" => {"name" => name, "last_value" => value.to_f}.merge(attributes),
           "$push" => {"realtime.#{at.to_i}" => value}
         },
         upsert: true
       )
 
-      unless options[:system]
+      if app
         now = Time.now
         if get(METRICS_TODAY) != now.beginning_of_day.to_i
           set(METRICS_TODAY, now.beginning_of_day.to_i)
@@ -307,11 +327,23 @@ module SnowmanIO
     end
 
     def apps_all
-      idfy SnowmanIO.mongo.db["apps"].find().to_a
+      idfy SnowmanIO.mongo.db["apps"].find().to_a.tap { |apps|
+        apps.each do |app|
+          _app_wrap(app)
+        end
+      }
     end
 
     def apps_find(id)
-      idfy SnowmanIO.mongo.db["apps"].find({_id: BSON::ObjectId(id)}).first
+      idfy SnowmanIO.mongo.db["apps"].find({_id: BSON::ObjectId(id)}).first.tap { |app|
+        _app_wrap(app)
+      }
+    end
+
+    def apps_find_by_token(token)
+      idfy SnowmanIO.mongo.db["apps"].find({token: token}).first.tap { |app|
+        _app_wrap(app)
+      }
     end
 
     def apps_create(options = {})
@@ -319,7 +351,7 @@ module SnowmanIO
         query: options,
         upsert: true,
         new: true,
-        update: options
+        update: options.merge("token" => SecureRandom.hex(20))
       )
     end
 
@@ -332,10 +364,16 @@ module SnowmanIO
       )
     end
 
+    def apps_delete(id)
+      SnowmanIO.mongo.db["apps"].remove({_id: BSON::ObjectId(id)})
+      SnowmanIO.mongo.db["metrics"].remove({app_id: BSON::ObjectId(id)})
+      {}
+    end
+
     def dashboard
       {
         metrics: {
-          today: Utils.human_value(get(METRICS_TODAY_COUNT)),
+          today: get(METRICS_TODAY_COUNT),
           total: Utils.human_value(get(METRICS_COUNT))
         }
       }
@@ -401,6 +439,41 @@ module SnowmanIO
       metric.delete("5min")
       metric.delete("daily")
       metric["trendJSON"] = trend.to_json
+
+      # app id
+      metric["appJSON"] = "{}"
+      if metric["app_id"]
+        app = apps_find(metric.delete("app_id").to_s)
+        if app
+          metric["appJSON"] = {"id" => app["id"], "name" => app["name"]}.to_json
+        end
+      end
+    end
+
+    def _app_wrap(app)
+      if m = metrics_find_raw_by_app_id_and_kind(app["_id"].to_s, "controllers", ["last_value"])
+        app["controllers"] = m["last_value"].to_i
+      end
+
+      if m = metrics_find_raw_by_app_id_and_kind(app["_id"].to_s, "models", ["last_value"])
+        app["models"] = m["last_value"].to_i
+      end
+
+      now = Time.now
+      today_key = now.beginning_of_day.to_i.to_s
+      yesterday_key = (now - 1.day).beginning_of_day.to_i.to_s
+      json = {}
+      if m = metrics_find_raw_by_app_id_and_kind(app["_id"].to_s, "request", ["daily"])
+        today =  m["daily"].try(:[], today_key)
+        yesterday =  m["daily"].try(:[], yesterday_key)
+        if today
+          json["today"] = {"count" => today["count"], "duration" => Utils.human_value(today["90pct"])}
+        end
+        if yesterday
+          json["yesterday"] = {"count" => yesterday["count"], "duration" => Utils.human_value(yesterday["90pct"])}
+        end
+      end
+      app["requestsJSON"] = json.to_json
     end
 
     # Mongo ObjectId => String ID

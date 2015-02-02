@@ -6,8 +6,13 @@ export default DS.Model.extend({
   todayCount: DS.attr('number'),
   lastValueHuman: DS.attr('string'),
   trendJSON: DS.attr('string'),
+  appJSON: DS.attr('string'),
 
   trend: function () {
     return JSON.parse(this.get("trendJSON"));
-  }.property("trendJSON")
+  }.property("trendJSON"),
+
+  app: function () {
+    return JSON.parse(this.get("appJSON"));
+  }.property("appJSON")
 });

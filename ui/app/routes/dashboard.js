@@ -5,7 +5,7 @@ export default Ember.Route.extend(LivePooling, {
   model: function() {
     return Ember.RSVP.hash({
       dashboard: Ember.$.get(this._url()),
-      newMetrics: this.store.find('metric', {new: true})
+      apps: this.store.find('app')
     });
   },
 

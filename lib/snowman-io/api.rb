@@ -122,6 +122,10 @@ module SnowmanIO
       { "app" => SnowmanIO.storage.apps_update(params[:id], JSON.load(request.body.read)["app"]) }.to_json
     end
 
+    delete "/api/apps/:id" do
+      { "app" => SnowmanIO.storage.apps_delete(params[:id]) }.to_json
+    end
+
     get "/api/info" do
       {
         base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),
@@ -134,11 +138,16 @@ module SnowmanIO
     end
 
     post '/agent/metrics' do
-      JSON.load(request.body.read)["metrics"].each do |metric|
-        options = { at: metric['at'], kind: metric['kind'] }
-        SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"].to_f, options)
+      payload = JSON.load(request.body.read)
+      if app = SnowmanIO.storage.apps_find_by_token(payload["token"])
+        payload["metrics"].each do |metric|
+          options = { at: metric['at'], kind: metric['kind'], app: app }
+          SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"].to_f, options)
+        end
+        "OK"
+      else
+        "WRONG APP"
       end
-      "OK"
     end
 
     get '/*' do
