@@ -42,7 +42,6 @@ module SnowmanIO
         end
 
         storage_size = SnowmanIO.mongo.db.stats["storageSize"]
-        SnowmanIO.storage.metrics_register_value("Storage Size", storage_size)
       }
     end
 
