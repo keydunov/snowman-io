@@ -1,11 +1,12 @@
 module SnowmanIO
   # Runs checks against daily metrics.
   class ChecksRunner
-    def initialize
+    def initialize(metrics)
+      @metrics = metrics
     end
 
     def start
-      metrics.each_with_object({}) do |metric, hash|
+      @metrics.each_with_object({}) do |metric, hash|
         hash[metric['name']] = run_checks_for(metric).compact
       end.reject { |k,v| v.empty? }
     end
@@ -21,12 +22,6 @@ module SnowmanIO
       end
       results
     end
-
-    # TODO: find({ system: true }, ...)
-    def metrics
-      SnowmanIO.mongo.db['metrics'].find({}, { fields: ["name", "daily", "kind"] })
-    end
-
   end
 
   class Check
