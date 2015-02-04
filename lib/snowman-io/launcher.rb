@@ -28,20 +28,17 @@ module SnowmanIO
         SnowmanIO.storage.metrics_aggregate_5min
         SnowmanIO.storage.metrics_aggregate_daily
         SnowmanIO.storage.metrics_clean_old
-        SnowmanIO.storage.metrics_register_value("Aggregation Time", Time.now.to_f - start)
 
         # generate report (from 1:00 till 6:00) to be sure all daily metrics aggregated
         if 1 < now.hour && now.hour < 6
           start = Time.now.to_f
           SnowmanIO.storage.reports_generate_once(report_for)
-          SnowmanIO.storage.metrics_register_value("Report Generate Time", Time.now.to_f - start)
         end
 
         # Send report after 7:00 but before 11:00
         if 7 < now.hour && now.hour < 11
           start = Time.now.to_f
           SnowmanIO.storage.reports_send_once(report_for)
-          SnowmanIO.storage.metrics_register_value("Report Sending Time", Time.now.to_f - start)
         end
 
         storage_size = SnowmanIO.mongo.db.stats["storageSize"]
