@@ -305,7 +305,7 @@ module SnowmanIO
       metrics = SnowmanIO.mongo.db['metrics'].find({}, { fields: ["name", "daily", "kind"] })
       alerts = ChecksRunner.new(metrics).start
       return if !report || report["sended"]
-      ReportMailer.daily_report(report_for, JSON.load(report["report"]), start).deliver
+      ReportMailer.daily_report(report_for, JSON.load(report["report"]), alerts).deliver
       SnowmanIO.mongo.db["reports"].update(
         {key: key},
         {"$set" => {"sended" => true}}

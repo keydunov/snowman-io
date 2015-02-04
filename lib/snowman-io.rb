@@ -23,6 +23,8 @@ require "snowman-io/web_server"
 require "snowman-io/storage"
 require "snowman-io/loop"
 require "snowman-io/report_mailer"
+
+require "snowman-io/check"
 require "snowman-io/checks_runner"
 
 ActionMailer::Base.raise_delivery_errors = true
