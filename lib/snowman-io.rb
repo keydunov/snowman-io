@@ -23,6 +23,7 @@ require "snowman-io/web_server"
 require "snowman-io/storage"
 require "snowman-io/loop"
 require "snowman-io/report_mailer"
+require "snowman-io/checks_runner"
 
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"

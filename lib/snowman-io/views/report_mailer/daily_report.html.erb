@@ -4,23 +4,50 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
   </head>
   <body>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>Min</th>
-        <th>Avg</th>
-        <th>Max</th>
-        <th>Count</th>
-      </tr>
-      <% @report.each do |metric| %>
+
+    <% if @alerts.any? %>
+      <h3>Hi there, It is snowbot. I found some alerts that you might be interesting about:</h3>
+      <table>
         <tr>
-          <td><%= metric["name"] %></td>
-          <td><%= metric["min"] %></td>
-          <td><%= metric["avg"] %></td>
-          <td><%= metric["max"] %></td>
-          <td><%= metric["count"] %></td>
+          <th></th>
         </tr>
-      <% end %>
-    </table>
+        <% @alerts.values.flatten.each do |alert| %>
+          <tr>
+            <td>
+              <%= alert.message %>
+            </td>
+            <td><br><br></td>
+          </tr>
+        <% end %>
+          <tr>
+            <td>
+              You can go to <a href="#">dashboard</a> and get more details about alerts or disable them.
+            </td>
+            <td><br><br></td>
+          </tr>
+      </table>
+    <% end %>
+
+    <% # show some metrics %>
+    <% if @report.any? %>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Min</th>
+          <th>Avg</th>
+          <th>Max</th>
+          <th>Count</th>
+        </tr>
+        <% @report.each do |metric| %>
+          <tr>
+            <td><%= metric["name"] %></td>
+            <td><%= metric["min"] %></td>
+            <td><%= metric["avg"] %></td>
+            <td><%= metric["max"] %></td>
+            <td><%= metric["count"] %></td>
+          </tr>
+        <% end %>
+      </table>
+    <% end %>
   </body>
 </html>
