@@ -36,3 +36,6 @@ body {
 .app-slot table th {
   text-align: center;
 }
+.app-slot .yesterday {
+  color: #999;
+}

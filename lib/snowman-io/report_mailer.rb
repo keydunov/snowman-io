@@ -6,10 +6,11 @@ module SnowmanIO
       template_path: "report_mailer",
       from: "no-reply@example.com"
     )
-
+    
     def daily_report(at, report)
       @report = report
       @alerts = {}
+      @at = at
       mail(
         to: ENV["REPORT_RECIPIENTS"] || "test@example.com",
         subject: "SnowmanIO daily report at #{at.strftime("%Y-%m-%d")}"

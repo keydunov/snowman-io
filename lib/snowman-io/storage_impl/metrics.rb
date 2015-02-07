@@ -34,13 +34,40 @@ module SnowmanIO
 
         if app
           now = Time.now
-          if get(TODAY) != now.beginning_of_day.to_i
-            set(TODAY, now.beginning_of_day.to_i)
-            set(METRICS_TODAY_COUNT, 0)
+          if get(Storage::TODAY) != now.beginning_of_day.to_i
+            set(Storage::TODAY, now.beginning_of_day.to_i)
+            set(Storage::METRICS_TODAY_COUNT, 0)
           end
-          incr(METRICS_TOTAL_COUNT)
-          incr(METRICS_TODAY_COUNT)
+          incr(Storage::METRICS_TOTAL_COUNT)
+          incr(Storage::METRICS_TODAY_COUNT)
         end
+      end
+
+      private
+
+      def _daily_metrics_for_app(app_id, at)
+        json = {}
+        today_key = at.beginning_of_day.to_i.to_s
+        yesterday_key = (at - 1.day).beginning_of_day.to_i.to_s
+
+        if m = metrics_raw_find_by_app_id_and_kind(app_id, "request", ["daily"])
+          today =  m["daily"].try(:[], today_key)
+          yesterday =  m["daily"].try(:[], yesterday_key)
+          if today
+            json["today"] = {
+              "count" => today["count"],
+              "duration" => Utils.human_value(today["90pct"])
+            }
+          end
+          if yesterday
+            json["yesterday"] = {
+              "count" => yesterday["count"],
+              "duration" => Utils.human_value(yesterday["90pct"])
+            }
+          end
+        end
+
+        json
       end
     end
   end

@@ -24,17 +24,17 @@
         </tr>
         <tr>
           <td>
-            <b>Yesterday</b><br>
-            {{#if app.requests.yesterday}}
-              {{app.requests.yesterday.count}}<br>
-              {{app.requests.yesterday.duration}}&nbsp;sec
-            {{/if}}
-          </td>
-          <td>
             <b>Today</b><br>
             {{#if app.requests.today}}
               {{app.requests.today.count}}<br>
               {{app.requests.today.duration}}&nbsp;sec
+            {{/if}}
+          </td>
+          <td class="yesterday">
+            <b>Yesterday</b><br>
+            {{#if app.requests.yesterday}}
+              {{app.requests.yesterday.count}}<br>
+              {{app.requests.yesterday.duration}}&nbsp;sec
             {{/if}}
           </td>
         </tr>

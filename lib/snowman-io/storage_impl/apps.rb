@@ -50,27 +50,7 @@ module SnowmanIO
       private
 
       def _app_wrap(app)
-        now = Time.now
-        today_key = now.beginning_of_day.to_i.to_s
-        yesterday_key = (now - 1.day).beginning_of_day.to_i.to_s
-        json = {}
-        if m = metrics_raw_find_by_app_id_and_kind(app["_id"].to_s, "request", ["daily"])
-          today =  m["daily"].try(:[], today_key)
-          yesterday =  m["daily"].try(:[], yesterday_key)
-          if today
-            json["today"] = {
-              "count" => today["count"],
-              "duration" => Utils.human_value(today["90pct"])
-            }
-          end
-          if yesterday
-            json["yesterday"] = {
-              "count" => yesterday["count"],
-              "duration" => Utils.human_value(yesterday["90pct"])
-            }
-          end
-        end
-        app["requestsJSON"] = json.to_json
+        app["requestsJSON"] = _daily_metrics_for_app(app["_id"].to_s, Time.now).to_json
       end
     end
   end
