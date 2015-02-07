@@ -4,9 +4,9 @@ export default DS.Model.extend({
   name: DS.attr('string'),
   token: DS.attr('string'),
 
+  isNameEmpty: Ember.computed.empty('name'),
+
   // Rails app
-  controllers: DS.attr('number'),
-  models: DS.attr('number'),
   requestsJSON: DS.attr('string'),
 
   requests: function () {

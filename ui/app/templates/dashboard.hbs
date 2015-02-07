@@ -1,13 +1,23 @@
-<div class="row dashboard">
+<div class="row-fluid text-right">
+  {{#link-to "apps/new" class="btn btn-link"}}Register App{{/link-to}}
+</div>
+
+<div class="row-fluid dashboard">
   <div class="col-md-3 metrics">
-    <h3>Today Metrics</h3>
+    <h4>Today Metrics</h4>
     <div class="big">{{dashboard.metrics.today}}</div>
     <div>total: {{dashboard.metrics.total}}</div>
   </div>
 
   {{#each app in apps}}
     <div class="col-md-3 app-slot">
-      <h4>{{app.name}}</h4>
+      <h4>
+        {{app.name}}
+        <small>
+          {{#link-to "apps/edit" app}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
+          <a href="#" {{action "destroy" app}}><span class="glyphicon glyphicon-trash"></span></a>
+        </small>
+      </h4>
       <div>Controllers: {{app.controllers}}</div>
       <div>Models: {{app.models}}</div>
       <table class="table">

@@ -369,7 +369,7 @@ module SnowmanIO
     def apps_delete(id)
       SnowmanIO.mongo.db["apps"].remove({_id: BSON::ObjectId(id)})
       SnowmanIO.mongo.db["metrics"].remove({app_id: BSON::ObjectId(id)})
-      {}
+      {id: id}
     end
 
     def dashboard

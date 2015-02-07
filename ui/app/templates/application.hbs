@@ -11,8 +11,14 @@
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav hidden-md hidden-lg">
-        {{partial "menu"}}
+      <ul class="nav navbar-nav">
+        {{#link-to "dashboard" tagName="li" href=false}}
+          {{#link-to "dashboard"}}Dashboard{{/link-to}}
+        {{/link-to}}
+
+        {{#link-to "settings" tagName="li" href=false}}
+          {{#link-to "settings"}}Settings{{/link-to}}
+        {{/link-to}}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/logout">logout</a></li>
@@ -22,12 +28,5 @@
 </nav>
 
 <div class="container-fluid container-main">
-  <div class="col-md-2 visible-md-block visible-lg-block">
-    <ul class="nav nav-pills nav-stacked nav-sidebar">
-      {{partial "menu"}}
-    <ul>
-  </div>
-  <div class="col-md-10 col-xs-12">
-    {{outlet}}
-  </div>
+  {{outlet}}
 </div>
