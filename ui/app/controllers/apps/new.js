@@ -1,12 +1,12 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+export default Ember.ObjectController.extend({
   actions: {
     save: function() {
       var me = this;
       var model = this.model;
       model.save().then(function() {
-        me.transitionToRoute("apps/show", model);
+        me.transitionToRoute("apps/show", model.id);
       });
     }
   }

@@ -1,12 +1,31 @@
-<ol class="breadcrumb">
-  <li>{{#link-to "apps/index"}}Apps{{/link-to}}</li>
-  <li class="active">{{app.name}}</li>
-</ol>
+<div class="page-header">
+  <h1>{{app.name}}</h1>
+</div>
 
-<p>
-  <a href="#" class="btn btn-danger" {{action "destroy"}}>Delete</a>
-</p>
-{{log model}}
+<div class="row-fluid app-slot">
+  <table class="table table-striped" style="width:30%">
+    <tr>
+      <th colspan="2">Requests</th>
+    </tr>
+    <tr>
+      <td>
+        <b>Yesterday</b><br>
+        {{#if app.requests.yesterday}}
+          {{app.requests.yesterday.count}}<br>
+          {{app.requests.yesterday.duration}}&nbsp;sec
+        {{/if}}
+      </td>
+      <td>
+        <b>Today</b><br>
+        {{#if app.requests.today}}
+          {{app.requests.today.count}}<br>
+          {{app.requests.today.duration}}&nbsp;sec
+        {{/if}}
+      </td>
+    </tr>
+  </table>
+</div>
+
 
 <h2>Installation</h2>
 
@@ -22,3 +41,10 @@ heroku config:set \
   SNOWMANIO_SERVER={{info.base_url}} \
   SNOWMANIO_SECRET_TOKEN={{app.token}}
 </pre>
+
+{{#if isDevelopment}}
+  <h2>Send Test Metric <small>In Development Only</small></h2>
+<pre>
+curl {{info.base_url}}/agent/metrics -d '{"token":"{{app.token}}","metrics":[{"name":"request","value":0.35,"kind":"request"}]}'
+</pre>
+{{/if}}

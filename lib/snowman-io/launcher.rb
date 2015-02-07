@@ -20,28 +20,23 @@ module SnowmanIO
 
       @main = Loop.supervise_as(:main, 3) {
         now = Time.now
-        report_for = (now - 1.day).beginning_of_day
+        next_report_date = Time.now.beginning_of_day
 
         # aggregate
         start = Time.now.to_f
-        SnowmanIO.storage.metrics_aggregate_20sec
         SnowmanIO.storage.metrics_aggregate_5min
         SnowmanIO.storage.metrics_aggregate_daily
         SnowmanIO.storage.metrics_clean_old
 
-        # generate report (from 1:00 till 6:00) to be sure all daily metrics aggregated
-        if 1 < now.hour && now.hour < 6
-          start = Time.now.to_f
-          SnowmanIO.storage.reports_generate_once(report_for)
+        unless SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)
+          SnowmanIO.storage.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)
         end
 
-        # Send report after 7:00 but before 11:00
-        if 7 < now.hour && now.hour < 11
-          start = Time.now.to_f
-          SnowmanIO.storage.reports_send_once(report_for)
+        # send report at 7:00
+        if now.to_i > SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE) + 1.day + 7.hours
+          SnowmanIO.storage.report_send(Time.at(SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)))
+          SnowmanIO.storage.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)
         end
-
-        storage_size = SnowmanIO.mongo.db.stats["storageSize"]
       }
     end
 

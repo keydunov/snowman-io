@@ -1,53 +1,74 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
+<% content_for :header do %>
+  <tr>
+    <td class="alert alert-good">
+      SnowmanIO: <%= @at.strftime("%Y-%m-%d") %>
+    </td>
+  </tr>
+<% end %>
 
-    <% if @alerts.any? %>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <% if @alerts.present? %>
+    <tr><td class="content-block">
       <h3>Hi there, It is snowbot. I found some alerts that you might be interesting about:</h3>
-      <table>
-        <tr>
-          <th></th>
-        </tr>
-        <% @alerts.values.flatten.each do |alert| %>
-          <tr>
-            <td>
-              <%= alert.message %>
-            </td>
-            <td><br><br></td>
-          </tr>
-        <% end %>
-          <tr>
-            <td>
-              You can go to <a href="#">dashboard</a> and get more details about alerts or disable them.
-            </td>
-            <td><br><br></td>
-          </tr>
-      </table>
+    </td></tr>
+
+    <% @alerts.values.flatten.each do |alert| %>
+      <tr><td class="content-block">
+        <%= alert.message %>
+      </td></tr>
     <% end %>
 
-    <% # show some metrics %>
-    <% if @report.any? %>
-      <table>
+    <tr><td class="content-block">
+      You can go to <a href="#">dashboard</a> and get more details about alerts or disable them.
+    </td></tr>
+  <% end %>
+
+  <% @report[:apps].each do |app| %>
+    <tr><td class="content-block header"><%= app[:name] %></td></tr>
+    <tr><td class="content-block">
+      <table width="100%" cellpadding="0" cellspacing="0" class="app-stats">
         <tr>
-          <th>Name</th>
-          <th>Min</th>
-          <th>Avg</th>
-          <th>Max</th>
-          <th>Count</th>
+          <th class="first"></th>
+          <th>Today</th>
+          <th>Yesterday</th>
         </tr>
-        <% @report.each do |metric| %>
-          <tr>
-            <td><%= metric["name"] %></td>
-            <td><%= metric["min"] %></td>
-            <td><%= metric["avg"] %></td>
-            <td><%= metric["max"] %></td>
-            <td><%= metric["count"] %></td>
-          </tr>
-        <% end %>
+        <tr>
+          <td>Requests</td>
+          <td class="value">
+            <%= app["today"].try(:[], "count") || "-" %>
+            <% if app.key?("today") && app.key?("yesterday") %>
+              <% if app["today"]["count"] > app["yesterday"]["count"] %>
+                <span class="neutral">&#x25B2;</span>
+              <% elsif app["today"]["count"] == app["yesterday"]["count"] %>
+                <span class="white">&#x25BC;</span>
+              <% else %>
+                <span class="neutral">&#x25BC;</span>
+              <% end %>
+            <% else %>
+              <span class="white">&#x25B2;</span>
+            <% end %>
+          </td>
+          <td class="value"><%= app["yesterday"].try(:[], "count") || "-" %></td>
+        </tr>
+        <tr>
+          <td>Duration, sec</td>
+          <td class="value">
+            <%= app["today"].try(:[], "duration") || "-" %>
+            <% if app.key?("today") && app.key?("yesterday") %>
+              <% if app["today"]["duration"] > app["yesterday"]["duration"] %>
+                <span class="negative">&#x25B2;</span>
+              <% elsif app["today"]["duration"] == app["yesterday"]["duration"] %>
+                <span class="white">&#x25B2;</span>
+              <% else %>
+                <span class="positive">&#x25BC;</span>
+              <% end %>
+            <% else %>
+              <span class="white">&#x25B2;</span>
+            <% end %>
+          </td>
+          <td class="value"><%= app["yesterday"].try(:[], "duration") || "-" %></td>
+        </tr>
       </table>
-    <% end %>
-  </body>
-</html>
+    </td></tr>
+  <% end %>
+</table>

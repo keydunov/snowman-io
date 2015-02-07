@@ -4,6 +4,7 @@ require 'mongo'
 require 'pp'
 require 'celluloid/autostart'
 require 'action_mailer'
+require 'premailer'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
@@ -20,6 +21,11 @@ require "snowman-io/options"
 require "snowman-io/launcher"
 require "snowman-io/cli"
 require "snowman-io/web_server"
+require "snowman-io/storage_impl/system"
+require "snowman-io/storage_impl/metrics"
+require "snowman-io/storage_impl/aggregation"
+require "snowman-io/storage_impl/reports"
+require "snowman-io/storage_impl/apps"
 require "snowman-io/storage"
 require "snowman-io/loop"
 require "snowman-io/report_mailer"

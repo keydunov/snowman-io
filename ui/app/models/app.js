@@ -1,3 +1,4 @@
+import Ember from 'ember';
 import DS from 'ember-data';
 
 export default DS.Model.extend({
@@ -5,10 +6,10 @@ export default DS.Model.extend({
   token: DS.attr('string'),
 
   // Rails app
-  controllers: DS.attr('number'),
-  models: DS.attr('number'),
   requestsJSON: DS.attr('string'),
 
+  // Computed
+  isNameEmpty: Ember.computed.empty('name'),
   requests: function () {
     return JSON.parse(this.get("requestsJSON"));
   }.property("requestsJSON")

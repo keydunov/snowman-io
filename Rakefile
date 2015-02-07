@@ -21,16 +21,6 @@ namespace :dev do
     end
   end
 
-  desc "Generate random value for test metric"
-  task :random do
-    SnowmanIO.storage.metrics_register_value("Test", 150)
-  end
-
-  desc "Aggregate 20sec metrics"
-  task :aggregate_20sec do
-    SnowmanIO.storage.metrics_aggregate_20sec
-  end
-
   desc "Aggregate 5min metrics"
   task :aggregate_5min do
     SnowmanIO.storage.metrics_aggregate_5min
@@ -46,14 +36,9 @@ namespace :dev do
     SnowmanIO.storage.metrics_clean_old
   end
 
-  desc "Generate report"
-  task :report_gen do
-    SnowmanIO.storage.reports_generate_once((Time.now - 1.day).beginning_of_day)
-  end
-
   desc "Send report"
   task :report_send do
-    SnowmanIO.storage.reports_send_once((Time.now - 1.day).beginning_of_day)
+    SnowmanIO.storage.report_send(Time.now.beginning_of_day)
   end
 
   desc "Run checks on metrics"

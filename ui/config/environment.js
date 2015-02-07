@@ -25,7 +25,12 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
+
     ENV.baseHost = 'http://localhost:4567';
+    ENV.contentSecurityPolicy = {
+      'connect-src': "'self' http://localhost:4567",
+      'style-src': "'self' 'unsafe-inline'"
+    };
   }
 
   if (environment === 'test') {

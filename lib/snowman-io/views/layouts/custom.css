@@ -1,0 +1,34 @@
+/* Custom styles */
+td.header {
+  background-color: #eee;
+  vertical-align: middle;
+  font-size: 120%;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
+
+table.app-stats th.first {
+  width: 20%;
+}
+table.app-stats th {
+  width: 40%;
+  font-weight: bold;
+}
+
+table.app-stats td.value {
+  text-align: right;
+}
+
+span.positive {
+  color: green;
+}
+span.negative {
+  color: red;
+}
+span.neutral {
+  color: #9370DB;
+}
+span.white {
+  color: white;
+}

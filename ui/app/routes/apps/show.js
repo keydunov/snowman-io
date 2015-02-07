@@ -8,7 +8,6 @@ export default Ember.Route.extend({
     });
   },
 
-  // TODO: organize code better (see routes/about.js)
   _infoUrl: function() {
     var adapter = this.container.lookup('adapter:application');
     return adapter.buildURL("") + "/info";
