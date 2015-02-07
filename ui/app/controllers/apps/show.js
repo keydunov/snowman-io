@@ -1,6 +1,11 @@
 import Ember from 'ember';
+import config from '../../config/environment';
 
 export default Ember.ObjectController.extend({
+  isDevelopment: function() {
+    return true;
+  }.property(),
+
   actions: {
     destroy: function() {
       if (confirm("Are you sure?")) {

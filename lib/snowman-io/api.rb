@@ -39,8 +39,9 @@ module SnowmanIO
             halt 403, 'Access Denied'
           end
         end
-      # FIXME: temp workaround while we don't have token for agent
-      elsif request.path !~ /^\/agent/
+      elsif request.path =~ /^\/agent/
+        # do nonthing
+      else
         if !admin_exists?
           redirect to('/unpacking') if request.path_info != '/unpacking'
         elsif !admin_authenticated?
@@ -88,22 +89,6 @@ module SnowmanIO
         SnowmanIO.storage.set(Storage::ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
       end
-    end
-
-    get "/api/metrics" do
-      { metrics: SnowmanIO.storage.metrics_all(only_new: !!params[:new]) }.to_json
-    end
-
-    get "/api/metrics/:id" do
-      { metric: SnowmanIO.storage.metrics_find(params[:id]) }.to_json
-    end
-
-    get "/api/reports" do
-      { reports: SnowmanIO.storage.reports_all }.to_json
-    end
-
-    get "/api/reports/:id" do
-      { report: SnowmanIO.storage.reports_find(params[:id]) }.to_json
     end
 
     get "/api/apps" do

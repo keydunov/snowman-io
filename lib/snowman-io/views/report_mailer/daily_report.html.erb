@@ -1,53 +1,26 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-
-    <% if @alerts.any? %>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <% if @alerts.present? %>
+    <tr><td class="content-block">
       <h3>Hi there, It is snowbot. I found some alerts that you might be interesting about:</h3>
-      <table>
-        <tr>
-          <th></th>
-        </tr>
-        <% @alerts.values.flatten.each do |alert| %>
-          <tr>
-            <td>
-              <%= alert.message %>
-            </td>
-            <td><br><br></td>
-          </tr>
-        <% end %>
-          <tr>
-            <td>
-              You can go to <a href="#">dashboard</a> and get more details about alerts or disable them.
-            </td>
-            <td><br><br></td>
-          </tr>
-      </table>
+    </td></tr>
+
+    <% @alerts.values.flatten.each do |alert| %>
+      <tr><td class="content-block">
+        <%= alert.message %>
+      </td></tr>
     <% end %>
 
-    <% # show some metrics %>
-    <% if @report.any? %>
-      <table>
-        <tr>
-          <th>Name</th>
-          <th>Min</th>
-          <th>Avg</th>
-          <th>Max</th>
-          <th>Count</th>
-        </tr>
-        <% @report.each do |metric| %>
-          <tr>
-            <td><%= metric["name"] %></td>
-            <td><%= metric["min"] %></td>
-            <td><%= metric["avg"] %></td>
-            <td><%= metric["max"] %></td>
-            <td><%= metric["count"] %></td>
-          </tr>
-        <% end %>
-      </table>
-    <% end %>
-  </body>
-</html>
+    <tr><td class="content-block">
+      You can go to <a href="#">dashboard</a> and get more details about alerts or disable them.
+    </td></tr>
+  <% end %>
+
+  <tr><td class="content-block">
+    <%= @report.inspect %>
+  </td></tr>
+
+  <% @report[:apps].each do |app| %>
+    <tr><td class="content-block header"><%= app[:name] %></td></tr>
+    <tr><td class="content-block">Desc</td></tr>
+  <% end %>
+</table>

@@ -10,6 +10,7 @@ Router.map(function() {
   this.route('settings');
 
   this.route('apps/new', {path: '/apps/new'});
+  this.route('apps/show', {path: '/apps/:id'});
   this.route('apps/edit', {path: '/apps/:id/edit'});
 });
 

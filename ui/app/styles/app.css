@@ -32,7 +32,7 @@ body {
 }
 
 
-.dashboard .app-slot table td,
-.dashboard .app-slot table th {
+.app-slot table td,
+.app-slot table th {
   text-align: center;
 }

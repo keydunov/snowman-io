@@ -6,7 +6,7 @@ export default Ember.ObjectController.extend({
       var me = this;
       var model = this.model;
       model.save().then(function() {
-        me.transitionToRoute("dashboard");
+        me.transitionToRoute("apps/show", model.id);
       });
     }
   }

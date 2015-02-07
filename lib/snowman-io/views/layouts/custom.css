@@ -1,0 +1,9 @@
+/* Custom styles */
+td.header {
+  background-color: #eee;
+  vertical-align: middle;
+  font-size: 120%;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
