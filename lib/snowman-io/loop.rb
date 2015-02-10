@@ -1,3 +1,5 @@
+require "open-uri"
+
 module SnowmanIO
   # Execute block after `timeout` seconds periodic
   class Loop
@@ -10,8 +12,6 @@ module SnowmanIO
     end
 
     def tick
-      @block.call
-      after(@timeout) { tick }
     end
   end
 end
