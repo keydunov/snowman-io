@@ -9,18 +9,12 @@
     </tr>
     <tr>
       <td>
-        <b>Yesterday</b><br>
-        {{#if app.requests.yesterday}}
-          {{app.requests.yesterday.count}}<br>
-          {{app.requests.yesterday.duration}}&nbsp;sec
-        {{/if}}
+        <b>Today</b><br>
+        {{#if app.requests.today}}{{app.requests.today.count}}{{else}}-{{/if}}
       </td>
       <td>
-        <b>Today</b><br>
-        {{#if app.requests.today}}
-          {{app.requests.today.count}}<br>
-          {{app.requests.today.duration}}&nbsp;sec
-        {{/if}}
+        <b>Yesterday</b><br>
+        {{#if app.requests.yesterday}}{{app.requests.yesterday.count}}{{else}}-{{/if}}
       </td>
     </tr>
   </table>
@@ -42,9 +36,14 @@ heroku config:set \
   SNOWMANIO_SECRET_TOKEN={{app.token}}
 </pre>
 
-{{#if isDevelopment}}
-  <h2>Send Test Metric <small>In Development Only</small></h2>
+<b>Standalone:</b>
 <pre>
-curl {{info.base_url}}/agent/metrics -d '{"token":"{{app.token}}","metrics":[{"name":"request","value":0.35,"kind":"request"}]}'
+TODO: add description
+</pre>
+
+{{#if isDevelopment}}
+  <h2>Send Test Request</h2>
+<pre>
+curl {{info.base_url}}/agent/metrics -d '{"token":"{{app.token}}","metrics":[{"name":"request","value":0.15,"kind":"request"}]}'
 </pre>
 {{/if}}
