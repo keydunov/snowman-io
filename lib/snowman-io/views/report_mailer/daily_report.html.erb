@@ -50,24 +50,6 @@
           </td>
           <td class="value"><%= app["yesterday"].try(:[], "count") || "-" %></td>
         </tr>
-        <tr>
-          <td>Duration, sec</td>
-          <td class="value">
-            <%= app["today"].try(:[], "duration") || "-" %>
-            <% if app.key?("today") && app.key?("yesterday") %>
-              <% if app["today"]["duration"] > app["yesterday"]["duration"] %>
-                <span class="negative">&#x25B2;</span>
-              <% elsif app["today"]["duration"] == app["yesterday"]["duration"] %>
-                <span class="white">&#x25B2;</span>
-              <% else %>
-                <span class="positive">&#x25BC;</span>
-              <% end %>
-            <% else %>
-              <span class="white">&#x25B2;</span>
-            <% end %>
-          </td>
-          <td class="value"><%= app["yesterday"].try(:[], "duration") || "-" %></td>
-        </tr>
       </table>
     </td></tr>
   <% end %>
