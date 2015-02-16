@@ -1,5 +1,6 @@
 module SnowmanIO
   module StorageImpl
+    # Wrapper around MongoDB `apps` collection
     module Apps
       def apps_all
         idfy SnowmanIO.mongo.db["apps"].find().to_a.tap { |apps|

@@ -4,7 +4,7 @@
 
 <div class="row-fluid dashboard">
   <div class="col-md-3 metrics">
-    <h4>Metrics</h4>
+    <h4>Requests</h4>
     <div class="big">{{dashboard.metrics.today}}</div>
     <div>total: {{dashboard.metrics.total}}</div>
   </div>
@@ -25,17 +25,11 @@
         <tr>
           <td>
             <b>Today</b><br>
-            {{#if app.requests.today}}
-              {{app.requests.today.count}}<br>
-              {{app.requests.today.duration}}&nbsp;sec
-            {{/if}}
+            {{#if app.requests.today}}{{app.requests.today.count}}{{else}}-{{/if}}
           </td>
           <td class="yesterday">
             <b>Yesterday</b><br>
-            {{#if app.requests.yesterday}}
-              {{app.requests.yesterday.count}}<br>
-              {{app.requests.yesterday.duration}}&nbsp;sec
-            {{/if}}
+            {{#if app.requests.yesterday}}{{app.requests.yesterday.count}}{{else}}-{{/if}}
           </td>
         </tr>
       </table>

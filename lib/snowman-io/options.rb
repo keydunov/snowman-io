@@ -19,7 +19,7 @@ module SnowmanIO
           options[:verbose] = arg
         end
 
-        opts.on '-t', '--timeout NUM', "shutdown timeout" do |arg|
+        opts.on '-t', '--timeout NUM', "shutdown timeout (default 8 seconds)" do |arg|
           options[:timeout] = Integer(arg)
         end
 

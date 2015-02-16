@@ -1,5 +1,6 @@
 module SnowmanIO
   module Loop
+    # Ping itself every 5 minutes to be in fit
     class Ping
       include Celluloid
 
@@ -16,7 +17,7 @@ module SnowmanIO
 
       def perform
         if base_url = SnowmanIO.storage.get(Storage::BASE_URL_KEY)
-          open(base_url + "/login")
+          open(base_url + "/ping")
         end
       end
     end

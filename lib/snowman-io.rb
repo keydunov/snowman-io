@@ -31,9 +31,6 @@ require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
 require "snowman-io/report_mailer"
 
-require "snowman-io/check"
-require "snowman-io/checks_runner"
-
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"
 if ENV["DEV_MODE"].to_i == 1
