@@ -55,14 +55,12 @@ module SnowmanIO
           yesterday =  m["daily"].try(:[], yesterday_key)
           if today
             json["today"] = {
-              "count" => today["count"],
-              "duration" => Utils.human_value(today["90pct"])
+              "count" => today["count"]
             }
           end
           if yesterday
             json["yesterday"] = {
-              "count" => yesterday["count"],
-              "duration" => Utils.human_value(yesterday["90pct"])
+              "count" => yesterday["count"]
             }
           end
         end
