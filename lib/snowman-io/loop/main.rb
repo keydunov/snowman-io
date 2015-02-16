@@ -16,6 +16,7 @@ module SnowmanIO
 
       def perform
         now = Time.now
+        # next time let send report for today
         next_report_date = Time.now.beginning_of_day
 
         # aggregate
@@ -24,11 +25,12 @@ module SnowmanIO
         SnowmanIO.storage.metrics_aggregate_daily
         SnowmanIO.storage.metrics_clean_old
 
+        # init report time
         unless SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)
           SnowmanIO.storage.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)
         end
 
-        # send report at 7:00
+        # send report at 7:00 next day
         if now.to_i > SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE) + 1.day + 7.hours
           SnowmanIO.storage.report_send(Time.at(SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)))
           SnowmanIO.storage.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)

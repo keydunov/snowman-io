@@ -11,10 +11,6 @@ module SnowmanIO
 
         ReportMailer.daily_report(at, report).deliver
       end
-
-      # TODO: use this code
-      # metrics = SnowmanIO.mongo.db['metrics'].find({}, { fields: ["name", "daily", "kind"] })
-      # alerts = ChecksRunner.new(metrics).start
     end
   end
 end

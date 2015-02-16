@@ -50,8 +50,8 @@ module SnowmanIO
       end
     end
 
-    get "/" do
-      erb :index, layout: false
+    get "/ping" do
+      "PONG"
     end
 
     get "/login" do
@@ -135,6 +135,7 @@ module SnowmanIO
       end
     end
 
+    # Ember application
     get '/*' do
       erb :index, layout: false
     end

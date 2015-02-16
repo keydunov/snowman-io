@@ -43,7 +43,7 @@ module SnowmanIO
         end
       end
 
-      private
+      protected
 
       def _daily_metrics_for_app(app_id, at)
         json = {}
