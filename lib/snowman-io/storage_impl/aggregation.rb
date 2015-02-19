@@ -21,7 +21,7 @@ module SnowmanIO
                 "5min.#{key}.count" => values.length,
                 "5min.#{key}.min" => values.min,
                 "5min.#{key}.avg" => Utils.avg(values),
-                "5min.#{key}.90pct" => Utils.pct(values, 0.9),
+                "5min.#{key}.up" => Utils.up(values),
                 "5min.#{key}.max" => values.max,
                 "5min.#{key}.sum" => values.inject(&:+)
               }}
@@ -40,11 +40,11 @@ module SnowmanIO
           # accumulate
           metric["5min"].each do |at, chunk|
             key = Time.at(at.to_i).beginning_of_day.to_i
-            out[key] ||= {"count" => 0, "avg" => 0, "90pct" => 0, "sum" => 0}
+            out[key] ||= {"count" => 0, "avg" => 0, "up" => 0, "sum" => 0}
             out[key]["count"] += chunk["count"]
             out[key]["min"] = chunk["min"] if !out[key]["min"] || out[key]["min"] > chunk["min"]
             out[key]["avg"] += chunk["avg"]*chunk["count"]
-            out[key]["90pct"] += chunk["90pct"]*chunk["count"]
+            out[key]["up"] += chunk["up"]*chunk["count"]
             out[key]["max"] = chunk["max"] if !out[key]["max"] || out[key]["max"] < chunk["max"]
             out[key]["sum"] += chunk["sum"]
           end
@@ -52,7 +52,7 @@ module SnowmanIO
           # normalize
           out.each do |__, chunk|
             chunk["avg"] /= chunk["count"]
-            chunk["90pct"] /= chunk["count"]
+            chunk["up"] /= chunk["count"]
           end
 
           # transform
@@ -61,7 +61,7 @@ module SnowmanIO
             daily["daily.#{key}.count"] = chunk["count"]
             daily["daily.#{key}.min"] = chunk["min"]
             daily["daily.#{key}.avg"] = chunk["avg"]
-            daily["daily.#{key}.90pct"] = chunk["90pct"]
+            daily["daily.#{key}.up"] = chunk["up"]
             daily["daily.#{key}.max"] = chunk["max"]
             daily["daily.#{key}.sum"] = chunk["sum"]
           end
