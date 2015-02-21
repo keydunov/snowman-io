@@ -18,7 +18,10 @@ module SnowmanIO
     end
 
     before do
+      session[:user] = nil
       if request.path =~ /^\/api/
+
+        # TODO: make it as a middleware
         if ENV["DEV_MODE"].to_i == 1
           # Enable CORS in development mode
           response.headers['Access-Control-Allow-Origin'] = request.env['HTTP_ORIGIN']
@@ -88,6 +91,15 @@ module SnowmanIO
         session[:user] = "admin"
         SnowmanIO.storage.set(Storage::ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
         redirect to('/')
+      end
+    end
+
+    post "/api/users/login" do
+      puts params
+      if params["user"]["email"] == "admin" && params["user"]["password"] == "12345"
+        JSON.dump({ token: "token", email: "admin" })
+      else
+        halt 401, JSON.dump({ message: "Wrong email or password" })
       end
     end
 

@@ -49,6 +49,21 @@ module.exports = function(environment) {
 
   }
 
+  ENV['simple-auth-devise'] = {
+    serverTokenEndpoint: '/api/users/login',
+    identificationAttributeName: 'email'
+  }
+
+  ENV['simple-auth'] = {
+    authorizer: 'simple-auth-authorizer:devise',
+    routeAfterAuthentication: 'dashboard'
+  }
+
+  if (environment === 'development') {
+    ENV['simple-auth-devise']['serverTokenEndpoint'] = 'http://localhost:4567/api/users/login';
+    ENV['simple-auth']['crossOriginWhitelist'] = ['*']
+  }
+
   return ENV;
 };
 
