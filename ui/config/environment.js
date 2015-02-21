@@ -61,7 +61,7 @@ module.exports = function(environment) {
 
   if (environment === 'development') {
     ENV['simple-auth-devise']['serverTokenEndpoint'] = 'http://localhost:4567/api/users/login';
-    ENV['simple-auth']['crossOriginWhitelist'] = ['*']
+    ENV['simple-auth']['crossOriginWhitelist'] = ['http://localhost:4567'];
   }
 
   return ENV;

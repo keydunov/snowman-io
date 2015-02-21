@@ -17,8 +17,13 @@ module SnowmanIO
       admin_exists? && !!session[:user]
     end
 
+    helpers do
+      def request_headers
+        env.inject({}){|acc, (k,v)| acc[$1.downcase] = v if k =~ /^http_(.*)/i; acc}
+      end
+    end
+
     before do
-      session[:user] = nil
       if request.path =~ /^\/api/
 
         # TODO: make it as a middleware
@@ -36,9 +41,8 @@ module SnowmanIO
 
         content_type :json
 
-        if !admin_authenticated?
-          # Ignore authorization during app development
-          unless ENV["DEV_MODE"].to_i == 1
+        unless request.path.index("login")
+          unless request_headers['authorization'] == 'Token token="token", email="admin"'
             halt 403, 'Access Denied'
           end
         end
