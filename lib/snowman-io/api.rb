@@ -118,10 +118,6 @@ module SnowmanIO
       }.to_json
     end
 
-    get "/api/dashboard" do
-      SnowmanIO.storage.dashboard.to_json
-    end
-
     post '/agent/metrics' do
       payload = JSON.load(request.body.read)
       if app = SnowmanIO.storage.apps_find_by_token(payload["token"])

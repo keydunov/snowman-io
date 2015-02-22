@@ -20,18 +20,6 @@ body {
 }
 
 
-.dashboard .metrics {
-  text-align: center;
-}
-.dashboard .new_metrics h3 {
-  text-align: center;
-}
-.dashboard .metrics .big {
-  font-size: 500%;
-  font-weight: bold;
-}
-
-
 .app-slot table td,
 .app-slot table th {
   text-align: center;

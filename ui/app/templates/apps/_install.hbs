@@ -1,0 +1,22 @@
+<h4>1. Add snowagent to application Gemfile</h4>
+<code>
+gem 'snowagent'
+</code>
+
+<h4>2. Configure application</h4>
+<b>Heroku:</b>
+<pre>
+heroku config:set \
+  SNOWMANIO_SERVER={{info.base_url}} \
+  SNOWMANIO_SECRET_TOKEN={{app.token}}
+</pre>
+
+<b>Standalone:</b>
+<pre>
+TODO: add description
+</pre>
+
+<h2>Send Test Request</h2>
+<pre>
+curl {{info.base_url}}/agent/metrics -d '{"token":"{{app.token}}","metrics":[{"name":"request","value":0.15,"kind":"request"}]}'
+</pre>

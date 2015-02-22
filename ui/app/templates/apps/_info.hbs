@@ -1,0 +1,17 @@
+<div class="row-fluid app-slot">
+  <table class="table table-striped" style="width:30%">
+    <tr>
+      <th colspan="2">Requests</th>
+    </tr>
+    <tr>
+      <td>
+        <b>Today</b><br>
+        {{#if app.requests.today}}{{app.requests.today.count}}{{else}}-{{/if}}
+      </td>
+      <td>
+        <b>Yesterday</b><br>
+        {{#if app.requests.yesterday}}{{app.requests.yesterday.count}}{{else}}-{{/if}}
+      </td>
+    </tr>
+  </table>
+</div>

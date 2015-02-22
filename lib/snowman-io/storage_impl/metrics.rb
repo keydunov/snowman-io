@@ -31,16 +31,6 @@ module SnowmanIO
           },
           upsert: true
         )
-
-        if app
-          now = Time.now
-          if get(Storage::TODAY) != now.beginning_of_day.to_i
-            set(Storage::TODAY, now.beginning_of_day.to_i)
-            set(Storage::METRICS_TODAY_COUNT, 0)
-          end
-          incr(Storage::METRICS_TOTAL_COUNT)
-          incr(Storage::METRICS_TODAY_COUNT)
-        end
       end
 
       protected
@@ -63,6 +53,9 @@ module SnowmanIO
               "count" => yesterday["count"]
             }
           end
+          json["total"] = {
+            "count" => m["daily"].values.map { |a| a["count"] }.inject(:+)
+          }
         end
 
         json
