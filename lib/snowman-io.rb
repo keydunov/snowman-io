@@ -75,4 +75,8 @@ module SnowmanIO
   def self.logger
     @logger ||= Logger.new(STDERR)
   end
+
+  def self.report_recipients
+    ENV["REPORT_RECIPIENTS"] || "test@example.com"
+  end
 end

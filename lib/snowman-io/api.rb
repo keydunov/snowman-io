@@ -114,7 +114,8 @@ module SnowmanIO
     get "/api/info" do
       {
         base_url: SnowmanIO.storage.get(Storage::BASE_URL_KEY),
-        version: SnowmanIO::VERSION
+        version: SnowmanIO::VERSION,
+        report_recipients: SnowmanIO.report_recipients
       }.to_json
     end
 

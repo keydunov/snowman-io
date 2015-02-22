@@ -12,7 +12,7 @@ module SnowmanIO
       @alerts = {}
       @at = at
       mail(
-        to: ENV["REPORT_RECIPIENTS"] || "test@example.com",
+        to: SnowmanIO.report_recipients,
         subject: "SnowmanIO daily report at #{at.strftime("%Y-%m-%d")}"
       ) do |format|
         format.html { 
