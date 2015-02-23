@@ -21,9 +21,24 @@ module SnowmanIO
       def request_headers
         env.inject({}){|acc, (k,v)| acc[$1.downcase] = v if k =~ /^http_(.*)/i; acc}
       end
+
+      def set_base_url_key
+        unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
+          SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
+        end
+      end
+
+      # TODO
+      def authenticate!
+        unless request_headers['authorization'] == 'Token token="token", email="admin"'
+          halt 403, 'Access Denied'
+        end
+      end
     end
 
     before do
+      set_base_url_key
+
       if request.path =~ /^\/api/
 
         # TODO: make it as a middleware
@@ -40,12 +55,6 @@ module SnowmanIO
         end
 
         content_type :json
-
-        unless request.path.index("login")
-          unless request_headers['authorization'] == 'Token token="token", email="admin"'
-            halt 403, 'Access Denied'
-          end
-        end
       elsif request.path =~ /^\/agent/
         # do nonthing
       else
@@ -61,47 +70,23 @@ module SnowmanIO
       "PONG"
     end
 
-    get "/login" do
-      erb :login
-    end
+    # Create user
+    post "/api/users" do
+      # TODO: quick hack to create user
+      payload = JSON.load(request.body.read)
+      halt 400 if payload["user"]["password"].blank? || payload["user"]["email"].blank?
+      email = payload["user"]["email"]
+      password_digest = BCrypt::Password.create(payload["user"]["password"])
+      authentication_token = SecureRandom.hex
 
-    post "/login" do
-      if BCrypt::Password.new(SnowmanIO.storage.get(Storage::ADMIN_PASSWORD_KEY)) == params["password"]
-        session[:user] = "admin"
-        redirect to('/')
-      else
-        @wrong_password_warning = true
-        erb :login
-      end
-    end
-
-    get "/logout" do
-      session[:user] = nil
-      redirect to("/login")
-    end
-
-    get "/unpacking" do
-      unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
-        SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
-      end
-      erb :unpacking
-    end
-
-    post "/unpacking" do
-      if params["password"].empty?
-        @empty_password_warning = true
-        erb :unpacking
-      else
-        session[:user] = "admin"
-        SnowmanIO.storage.set(Storage::ADMIN_PASSWORD_KEY, BCrypt::Password.create(params["password"]))
-        redirect to('/')
-      end
+      SnowmanIO.storage.set("admin", { email: email, password_digest: password_digest, authentication_token: authentication_token })
+      JSON.dump({ user: { email: email, authentication_token: authentication_token } })
     end
 
     post "/api/users/login" do
-      puts params
-      if params["user"]["email"] == "admin" && params["user"]["password"] == "12345"
-        JSON.dump({ token: "token", email: "admin" })
+      user = SnowmanIO.storage.get('admin')
+      if BCrypt::Password.new(user["password_digest"]) == params["user"]["password"]
+        JSON.dump({ token: user["authentication_token"], email: user["email"] })
       else
         halt 401, JSON.dump({ message: "Wrong email or password" })
       end
