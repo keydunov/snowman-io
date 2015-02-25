@@ -18,6 +18,7 @@ require 'active_support/core_ext/enumerable'
 
 require "snowman-io/version"
 require "snowman-io/utils"
+require "snowman-io/web"
 require "snowman-io/api"
 require "snowman-io/options"
 require "snowman-io/launcher"
@@ -38,11 +39,11 @@ require "snowman-io/models/user"
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"
 if ENV["DEV_MODE"].to_i == 1
-  require "letter_opener"
-  ActionMailer::Base.add_delivery_method :letter_opener,
-    LetterOpener::DeliveryMethod,
-    :location => File.expand_path('../../tmp/letter_opener', __FILE__)
-  ActionMailer::Base.delivery_method = :letter_opener
+  #require "letter_opener"
+  #ActionMailer::Base.add_delivery_method :letter_opener,
+  #  LetterOpener::DeliveryMethod,
+  #  :location => File.expand_path('../../tmp/letter_opener', __FILE__)
+  #ActionMailer::Base.delivery_method = :letter_opener
 else
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {

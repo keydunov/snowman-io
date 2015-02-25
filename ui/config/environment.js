@@ -26,7 +26,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
 
-    ENV.baseHost = 'http://localhost:4567';
+    //ENV.baseHost = 'http://localhost:4567';
     ENV.contentSecurityPolicy = {
       'connect-src': "'self' http://localhost:4567",
       'style-src': "'self' 'unsafe-inline'"
@@ -60,8 +60,8 @@ module.exports = function(environment) {
   }
 
   if (environment === 'development') {
-    ENV['simple-auth-devise']['serverTokenEndpoint'] = 'http://localhost:4567/api/users/login';
-    ENV['simple-auth']['crossOriginWhitelist'] = ['http://localhost:4567'];
+    //ENV['simple-auth-devise']['serverTokenEndpoint'] = 'http://localhost:4567/api/users/login';
+    //ENV['simple-auth']['crossOriginWhitelist'] = ['http://localhost:4567'];
   }
 
   return ENV;

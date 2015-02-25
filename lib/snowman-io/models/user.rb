@@ -10,6 +10,7 @@ module SnowmanIO
     key :authentication_token, String
 
     validates :email, :authentication_token, presence: true
+    validates :email, uniqueness: true
 
     before_validation on: :create do
       self.authentication_token = generate_token(:authentication_token)
