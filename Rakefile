@@ -8,7 +8,7 @@ namespace :dev do
   task :run do
     pids = [
       spawn("cd demo-app && DEV_MODE=1 rerun -d ../lib 'bundle exec snowman -v'"),
-      spawn("cd ui && ./node_modules/.bin/ember server"),
+      spawn("cd ui && ./node_modules/.bin/ember server --proxy http://localhost:4567"),
     ]
 
     trap "INT" do

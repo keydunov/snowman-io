@@ -8,7 +8,6 @@ module SnowmanIO
     include StorageImpl::Metrics
     include StorageImpl::Aggregation
     include StorageImpl::Reports
-    include StorageImpl::Apps
 
     private
 

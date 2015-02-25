@@ -7,7 +7,8 @@ module SnowmanIO
     end
 
     def start
-      @web_server = WebServer.supervise_as(:web_server, API, @options.slice(:port, :host, :verbose))
+      app = Rack::Cascade.new [API::Root, Web]
+      @web_server = WebServer.supervise_as(:web_server, app, @options.slice(:port, :host, :verbose))
       @ping = Loop::Ping.supervise_as(:ping)
       @main = Loop::Main.supervise_as(:main)
     end

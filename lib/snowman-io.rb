@@ -1,10 +1,12 @@
 require 'logger'
 require 'bcrypt'
 require 'mongo'
+require 'mongo_mapper'
 require 'pp'
 require 'celluloid/autostart'
 require 'action_mailer'
 require 'premailer'
+require 'active_model'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
@@ -16,6 +18,7 @@ require 'active_support/core_ext/enumerable'
 
 require "snowman-io/version"
 require "snowman-io/utils"
+require "snowman-io/web"
 require "snowman-io/api"
 require "snowman-io/options"
 require "snowman-io/launcher"
@@ -25,20 +28,23 @@ require "snowman-io/storage_impl/system"
 require "snowman-io/storage_impl/metrics"
 require "snowman-io/storage_impl/aggregation"
 require "snowman-io/storage_impl/reports"
-require "snowman-io/storage_impl/apps"
 require "snowman-io/storage"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
 require "snowman-io/report_mailer"
 
+require "snowman-io/models/concerns/tokenable"
+require "snowman-io/models/user"
+require "snowman-io/models/app"
+
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"
 if ENV["DEV_MODE"].to_i == 1
-  require "letter_opener"
-  ActionMailer::Base.add_delivery_method :letter_opener,
-    LetterOpener::DeliveryMethod,
-    :location => File.expand_path('../../tmp/letter_opener', __FILE__)
-  ActionMailer::Base.delivery_method = :letter_opener
+  #require "letter_opener"
+  #ActionMailer::Base.add_delivery_method :letter_opener,
+  #  LetterOpener::DeliveryMethod,
+  #  :location => File.expand_path('../../tmp/letter_opener', __FILE__)
+  #ActionMailer::Base.delivery_method = :letter_opener
 else
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
@@ -54,14 +60,7 @@ end
 module SnowmanIO
   def self.mongo
     @mongo ||= begin
-      # Try all posible Heroku Mongo addons one after another
-      url =
-        ENV["MONGOHQ_URL"] ||
-        ENV["MONGOLAB_URI"] ||
-        ENV["MONGOSOUP_URL"] ||
-        ENV["MONGO_URL"] ||
-        "mongodb://localhost:27017/db"
-
+      url = mongo_url
       db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
       client = ::Mongo::MongoClient.from_uri(url)
       Struct.new(:client, :db).new(client, client.db(db_name))
@@ -79,4 +78,15 @@ module SnowmanIO
   def self.report_recipients
     ENV["REPORT_RECIPIENTS"] || "test@example.com"
   end
+
+  def self.mongo_url
+    # Try all posible Heroku Mongo addons one after another
+    ENV["MONGOHQ_URL"] ||
+    ENV["MONGOLAB_URI"] ||
+    ENV["MONGOSOUP_URL"] ||
+    ENV["MONGO_URL"] ||
+    "mongodb://localhost:27017/db"
+  end
 end
+
+MongoMapper.setup({'production' => {'uri' => SnowmanIO.mongo_url}}, 'production')
