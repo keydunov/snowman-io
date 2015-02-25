@@ -17,7 +17,7 @@ module SnowmanIO
 
         attributes = {name: name}
         if app
-          attributes[:app_id] = BSON::ObjectId(app["id"])
+          attributes[:app_id] = BSON::ObjectId(app.id.to_s)
         end
         if options[:kind]
           attributes[:kind] = options[:kind]

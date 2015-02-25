@@ -6,7 +6,7 @@ module SnowmanIO
       namespace :apps do
         desc "List apps"
         get do
-          { apps: SnowmanIO.storage.apps_all }
+          { apps: App.all  }
         end
 
         desc "Creates app"
@@ -16,14 +16,17 @@ module SnowmanIO
           end
         end
         post do
-          { app: SnowmanIO.storage.apps_create(permitted_params[:app]) }
+          { app: App.create(permitted_params[:app]) }
         end
 
         route_param :id do
+          before do
+            @app = App.find(params[:id])
+          end
 
           desc "Returns app"
           get do
-            { app: SnowmanIO.storage.apps_find(params[:id]) }
+            { app: @app }
           end
 
           desc "Updates app"
@@ -33,12 +36,12 @@ module SnowmanIO
             end
           end
           put do
-            { app: SnowmanIO.storage.apps_update(params[:id], permitted_params[:app]) }
+            { app: @app.update_attributes(params[:app]) }
           end
 
           desc "Deletes app"
           delete do
-            SnowmanIO.storage.apps_delete(params[:id])
+            @app.destroy
           end
 
         end

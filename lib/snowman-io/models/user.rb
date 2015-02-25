@@ -2,6 +2,7 @@ module SnowmanIO
   class User
     include MongoMapper::Document
     include ActiveModel::SecurePassword
+    include Concerns::Tokenable
 
     has_secure_password
 
@@ -14,15 +15,6 @@ module SnowmanIO
 
     before_validation on: :create do
       self.authentication_token = generate_token(:authentication_token)
-    end
-
-    private
-
-    def generate_token(token)
-      loop do
-        token = SecureRandom.hex
-        break token unless self.class.where(token: token).first
-      end
     end
   end
 end
