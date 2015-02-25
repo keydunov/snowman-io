@@ -1,4 +1,5 @@
 module SnowmanIO
+  module API
     module AuthHelpers
       extend ActiveSupport::Concern
       TOKEN_REGEX = /^Token /
@@ -69,4 +70,5 @@ module SnowmanIO
         end
       end
     end
+  end
 end
