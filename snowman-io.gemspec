@@ -26,6 +26,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "reel", ">= 0.5.0"
   spec.add_dependency "mongo", "~> 1.11"
   spec.add_dependency "bson_ext", "~> 1.11"
+  spec.add_dependency "mongo_mapper", "~> 0.13.1"
+  spec.add_dependency "activemodel", "~> 4.1"
   spec.add_dependency "activesupport", "~> 4.1"
   spec.add_dependency "actionmailer", "~> 4.1"
   spec.add_dependency "bcrypt", "~> 3.1"

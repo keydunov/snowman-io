@@ -1,10 +1,12 @@
 require 'logger'
 require 'bcrypt'
 require 'mongo'
+require 'mongo_mapper'
 require 'pp'
 require 'celluloid/autostart'
 require 'action_mailer'
 require 'premailer'
+require 'active_model'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
@@ -31,6 +33,8 @@ require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
 require "snowman-io/report_mailer"
 
+require "snowman-io/models/user"
+
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"
 if ENV["DEV_MODE"].to_i == 1
@@ -50,6 +54,8 @@ else
     :enable_starttls_auto => true
   }
 end
+
+MongoMapper.setup({'production' => {'uri' => "mongodb://localhost:27017/db"}}, 'production')
 
 module SnowmanIO
   def self.mongo

@@ -72,20 +72,18 @@ module SnowmanIO
 
     # Create user
     post "/api/users" do
-      # TODO: quick hack to create user
       payload = JSON.load(request.body.read)
       halt 400 if payload["user"]["password"].blank? || payload["user"]["email"].blank?
-      email = payload["user"]["email"]
-      password_digest = BCrypt::Password.create(payload["user"]["password"])
-      authentication_token = SecureRandom.hex
 
-      SnowmanIO.storage.set("admin", { email: email, password_digest: password_digest, authentication_token: authentication_token })
-      JSON.dump({ user: { email: email, authentication_token: authentication_token } })
+      if user = User.create(payload["user"])
+        JSON.dump({ user: { email: user.email, authentication_token: user.authentication_token } })
+      else
+        hasl 400, "bad request"
+      end
     end
 
     post "/api/users/login" do
-      user = SnowmanIO.storage.get('admin')
-      if BCrypt::Password.new(user["password_digest"]) == params["user"]["password"]
+      if (user = User.find_by_email(params["user"]["email"])) && user.authenticate(params["user"]["password"])
         JSON.dump({ token: user["authentication_token"], email: user["email"] })
       else
         halt 401, JSON.dump({ message: "Wrong email or password" })
