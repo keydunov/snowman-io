@@ -11,6 +11,10 @@ module SnowmanIO
             current_user || render_unauthorized
           end
 
+          def render_unauthorized
+            error! 'Unauthorized', 401, 'WWW-Authenticate' => 'Token realm="Application"'
+          end
+
           def current_user
             @current_user ||= authenticate_user_from_token
           end
@@ -38,10 +42,6 @@ module SnowmanIO
             end
           end
 
-          def render_unauthorized
-            error! 'Unauthorized', 401, 'WWW-Authenticate' => 'Token realm="Application"'
-          end
-
           def authorization_request
             headers["Authorization"]
           end
@@ -60,7 +60,6 @@ module SnowmanIO
             array_params.each { |param| param.last.gsub! %r/^"|"$/, '' }
           end
 
-          # This method takes an authorization body and splits up the key-value
           # pairs by the standardized `:`, `;`, or `\t` delimiters defined in
           # `AUTHN_PAIR_DELIMITERS`.
           def raw_params(auth)

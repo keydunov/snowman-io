@@ -5,11 +5,9 @@ module SnowmanIO
     set :public_folder, File.dirname(__FILE__) + "/api/public"
     set :views, File.dirname(__FILE__) + "/api/views"
 
-    helpers do
-      def set_base_url_key
-        unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
-          SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
-        end
+    before do
+      unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
+        SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
       end
     end
 

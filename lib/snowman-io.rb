@@ -28,7 +28,6 @@ require "snowman-io/storage_impl/system"
 require "snowman-io/storage_impl/metrics"
 require "snowman-io/storage_impl/aggregation"
 require "snowman-io/storage_impl/reports"
-require "snowman-io/storage_impl/apps"
 require "snowman-io/storage"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
@@ -58,19 +57,10 @@ else
   }
 end
 
-MongoMapper.setup({'production' => {'uri' => "mongodb://localhost:27017/db"}}, 'production')
-
 module SnowmanIO
   def self.mongo
     @mongo ||= begin
-      # Try all posible Heroku Mongo addons one after another
-      url =
-        ENV["MONGOHQ_URL"] ||
-        ENV["MONGOLAB_URI"] ||
-        ENV["MONGOSOUP_URL"] ||
-        ENV["MONGO_URL"] ||
-        "mongodb://localhost:27017/db"
-
+      url = mongo_url
       db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
       client = ::Mongo::MongoClient.from_uri(url)
       Struct.new(:client, :db).new(client, client.db(db_name))
@@ -88,4 +78,15 @@ module SnowmanIO
   def self.report_recipients
     ENV["REPORT_RECIPIENTS"] || "test@example.com"
   end
+
+  def self.mongo_url
+    # Try all posible Heroku Mongo addons one after another
+    ENV["MONGOHQ_URL"] ||
+    ENV["MONGOLAB_URI"] ||
+    ENV["MONGOSOUP_URL"] ||
+    ENV["MONGO_URL"] ||
+    "mongodb://localhost:27017/db"
+  end
 end
+
+MongoMapper.setup({'production' => {'uri' => SnowmanIO.mongo_url}}, 'production')
