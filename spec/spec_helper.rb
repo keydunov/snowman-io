@@ -1,3 +1,5 @@
+ENV["MONGO_URL"] = "mongodb://localhost:27017/test"
+
 require 'snowman-io'
 require 'celluloid/rspec'
 require 'coveralls'
@@ -6,7 +8,6 @@ require 'rack/test'
 Coveralls.wear!
 
 Dir[File.expand_path("../support/**/*.rb", __FILE__)].each { |f| require f }
-ENV["MONGO_URL"] = "mongodb://localhost:27017/test"
 
 include SnowmanIO
 
