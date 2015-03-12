@@ -2,8 +2,8 @@ require 'sinatra'
 
 module SnowmanIO
   class Web < Sinatra::Base
-    set :public_folder, File.dirname(__FILE__) + "/api/public"
-    set :views, File.dirname(__FILE__) + "/api/views"
+    set :public_folder, File.dirname(__FILE__) + "/ui"
+    set :views, File.dirname(__FILE__) + "/ui"
 
     before do
       unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
@@ -30,7 +30,7 @@ module SnowmanIO
 
     # Ember application
     get '/*' do
-      erb :index, layout: false
+      send_file File.expand_path("../ui/index.html", __FILE__)
     end
   end
 end
