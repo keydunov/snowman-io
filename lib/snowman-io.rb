@@ -1,12 +1,10 @@
 require 'logger'
 require 'bcrypt'
-require 'mongo'
-require 'mongo_mapper'
-require 'pp'
 require 'celluloid/autostart'
 require 'action_mailer'
 require 'premailer'
 require 'active_model'
+require 'mongoid'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
 require 'active_support/core_ext/hash/slice'
@@ -36,15 +34,20 @@ require "snowman-io/report_mailer"
 require "snowman-io/models/concerns/tokenable"
 require "snowman-io/models/user"
 require "snowman-io/models/app"
+require "snowman-io/models/metric"
+require "snowman-io/models/data_point"
+require "snowman-io/models/aggregation"
+require "snowman-io/models/setting"
 
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"
 if ENV["DEV_MODE"].to_i == 1
-  #require "letter_opener"
-  #ActionMailer::Base.add_delivery_method :letter_opener,
-  #  LetterOpener::DeliveryMethod,
-  #  :location => File.expand_path('../../tmp/letter_opener', __FILE__)
-  #ActionMailer::Base.delivery_method = :letter_opener
+  Object.send(:remove_const, :Rails)
+  require "letter_opener"
+  ActionMailer::Base.add_delivery_method :letter_opener,
+    LetterOpener::DeliveryMethod,
+    :location => File.expand_path('../../tmp/letter_opener', __FILE__)
+  ActionMailer::Base.delivery_method = :letter_opener
 else
   ActionMailer::Base.delivery_method = :smtp
   ActionMailer::Base.smtp_settings = {
@@ -58,15 +61,6 @@ else
 end
 
 module SnowmanIO
-  def self.mongo
-    @mongo ||= begin
-      url = mongo_url
-      db_name = url[%r{/([^/\?]+)(\?|$)}, 1]
-      client = ::Mongo::MongoClient.from_uri(url)
-      Struct.new(:client, :db).new(client, client.db(db_name))
-    end
-  end
-
   def self.storage
     @storage ||= Storage.new
   end
@@ -78,15 +72,6 @@ module SnowmanIO
   def self.report_recipients
     ENV["REPORT_RECIPIENTS"] || "test@example.com"
   end
-
-  def self.mongo_url
-    # Try all posible Heroku Mongo addons one after another
-    ENV["MONGOHQ_URL"] ||
-    ENV["MONGOLAB_URI"] ||
-    ENV["MONGOSOUP_URL"] ||
-    ENV["MONGO_URL"] ||
-    "mongodb://localhost:27017/db"
-  end
 end
 
-MongoMapper.setup({'production' => {'uri' => SnowmanIO.mongo_url}}, 'production')
+Mongoid.load!(File.expand_path("../config/mongoid.yml", __FILE__), :production)

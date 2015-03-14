@@ -16,7 +16,7 @@ module SnowmanIO
           end
         end
         post do
-          { app: App.create(permitted_params[:app]) }
+          { app: App.create(permitted_params[:app].to_h) }
         end
 
         route_param :id do

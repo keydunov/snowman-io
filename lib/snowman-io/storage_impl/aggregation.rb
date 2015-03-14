@@ -3,28 +3,25 @@ module SnowmanIO
     module Aggregation
       # Aggregate 5mins metrics
       def metrics_aggregate_5min
-        SnowmanIO.mongo.db["metrics"].find({}, fields: ["realtime"]).each do |metric|
+        Metric.all.each do |metric|
           aggr = {}
 
           # collect
-          metric["realtime"].each do |at, values|
-            key = Utils.floor_5min(Time.at(at.to_i)).to_i
+          metric.data_points.each do |point|
+            key = Utils.floor_5min(point.at)
             aggr[key] ||= []
-            aggr[key] += values
+            aggr[key] << point.value
           end
 
           # aggregrate
-          aggr.each do |key, values|
-            SnowmanIO.mongo.db["metrics"].update(
-              {"_id" => metric["_id"]},
-              {"$set" => {
-                "5min.#{key}.count" => values.length,
-                "5min.#{key}.min" => values.min,
-                "5min.#{key}.avg" => Utils.avg(values),
-                "5min.#{key}.up" => Utils.up(values),
-                "5min.#{key}.max" => values.max,
-                "5min.#{key}.sum" => values.inject(&:+)
-              }}
+          aggr.each do |at, values|
+            metric.aggregations.where(precision: "5min", at: at).first_or_create!.update_attributes!(
+              count: values.length,
+              min: values.min,
+              avg: Utils.avg(values),
+              up: Utils.up(values),
+              max: values.max,
+              sum: values.inject(&:+)
             )
           end
         end
@@ -32,21 +29,17 @@ module SnowmanIO
 
       # Aggregate daily metrics
       def metrics_aggregate_daily
-        SnowmanIO.mongo.db["metrics"].find({}, fields: ["5min"]).each do |metric|
-          next if metric["5min"].empty?
-
+        Metric.all.each do |metric|
           out = {}
-
-          # accumulate
-          metric["5min"].each do |at, chunk|
-            key = Time.at(at.to_i).beginning_of_day.to_i
+          metric.aggregations.where(precision: "5min").each do |aggr|
+            key = aggr.at.beginning_of_day
             out[key] ||= {"count" => 0, "avg" => 0, "up" => 0, "sum" => 0}
-            out[key]["count"] += chunk["count"]
-            out[key]["min"] = chunk["min"] if !out[key]["min"] || out[key]["min"] > chunk["min"]
-            out[key]["avg"] += chunk["avg"]*chunk["count"]
-            out[key]["up"] += chunk["up"]*chunk["count"]
-            out[key]["max"] = chunk["max"] if !out[key]["max"] || out[key]["max"] < chunk["max"]
-            out[key]["sum"] += chunk["sum"]
+            out[key]["count"] += aggr["count"]
+            out[key]["min"] = aggr["min"] if !out[key]["min"] || out[key]["min"] > aggr["min"]
+            out[key]["avg"] += aggr["avg"]*aggr["count"]
+            out[key]["up"] += aggr["up"]*aggr["count"]
+            out[key]["max"] = aggr["max"] if !out[key]["max"] || out[key]["max"] < aggr["max"]
+            out[key]["sum"] += aggr["sum"]
           end
 
           # normalize
@@ -55,79 +48,19 @@ module SnowmanIO
             chunk["up"] /= chunk["count"]
           end
 
-          # transform
-          daily = {}
-          out.each do |key, chunk|
-            daily["daily.#{key}.count"] = chunk["count"]
-            daily["daily.#{key}.min"] = chunk["min"]
-            daily["daily.#{key}.avg"] = chunk["avg"]
-            daily["daily.#{key}.up"] = chunk["up"]
-            daily["daily.#{key}.max"] = chunk["max"]
-            daily["daily.#{key}.sum"] = chunk["sum"]
-          end
-
           # store
-          SnowmanIO.mongo.db["metrics"].update(
-            {"_id" => metric["_id"]},
-            {"$set" => daily}
-          )
+          out.each do |at, chunk|
+            metric.aggregations.where(precision: "daily", at: at).first_or_create!.update_attributes!(chunk)
+          end
         end
       end
 
       # Clean old records
       def metrics_clean_old
         now = Time.now
-
-        # clear realtime
-        key_to_keep = Utils.floor_5min(now - 1.minutes).to_i
-        SnowmanIO.mongo.db["metrics"].find({}, fields: ["realtime"]).each do |metric|
-          unset = {}
-          metric["realtime"].each do |key, __|
-            if key.to_i < key_to_keep
-              unset["realtime.#{key}"] = ""
-            end
-          end
-          if unset.present?
-            SnowmanIO.mongo.db["metrics"].update(
-              {"_id" => metric["_id"]},
-              {"$unset" => unset}
-            )
-          end
-        end
-
-        # clear 5 min
-        key_to_keep = (now - 25.hours).beginning_of_day.to_i
-        SnowmanIO.mongo.db["metrics"].find({}, fields: ["5min"]).each do |metric|
-          unset = {}
-          metric["5min"].each do |key, __|
-            if key.to_i < key_to_keep
-              unset["5min.#{key}"] = ""
-            end
-          end
-          if unset.present?
-            SnowmanIO.mongo.db["metrics"].update(
-              {"_id" => metric["_id"]},
-              {"$unset" => unset}
-            )
-          end
-        end
-
-        # clear daily
-        key_to_keep = (now - 365.days).beginning_of_day.to_i
-        SnowmanIO.mongo.db["metrics"].find({}, fields: ["daily"]).each do |metric|
-          unset = {}
-          metric["daily"].each do |key, __|
-            if key.to_i < key_to_keep
-              unset["daily.#{key}"] = ""
-            end
-          end
-          if unset.present?
-            SnowmanIO.mongo.db["metrics"].update(
-              {"_id" => metric["_id"]},
-              {"$unset" => unset}
-            )
-          end
-        end
+        DataPoint.where(:at.lt => Utils.floor_5min(now - 1.minutes)).delete_all
+        SnowmanIO::Aggregation.where(precision: "5min", :at.lt => (now - 25.hours).beginning_of_day).delete_all
+        SnowmanIO::Aggregation.where(precision: "daily", :at.lt => (now - 365.days).beginning_of_day).delete_all
       end
     end
   end

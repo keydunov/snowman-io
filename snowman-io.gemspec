@@ -23,15 +23,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency "grape", "~> 0.11.0"
   spec.add_dependency "celluloid", "~> 0.16.0"
   spec.add_dependency "reel", ">= 0.5.0"
-  spec.add_dependency "mongo", "~> 1.11"
-  spec.add_dependency "bson_ext", "~> 1.11"
-  spec.add_dependency "mongo_mapper", "~> 0.13.1"
-  spec.add_dependency "activemodel", "~> 4.1"
   spec.add_dependency "activesupport", "~> 4.1"
   spec.add_dependency "actionmailer", "~> 4.1"
   spec.add_dependency "bcrypt", "~> 3.1"
   spec.add_dependency "nokogiri", "~> 1.6"
   spec.add_dependency "premailer", "~> 1.8"
+  spec.add_dependency "mongoid", "~> 4.0.0"
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
@@ -42,4 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'launchy', "~> 2.4"
   spec.add_development_dependency 'letter_opener', "~> 1.3"
   spec.add_development_dependency 'rack-test', "~> 0.6.3"
+  spec.add_development_dependency 'rack-cors', "~> 0.3"
 end

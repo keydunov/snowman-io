@@ -17,10 +17,9 @@ module SnowmanIO
 
     post '/agent/metrics' do
       payload = JSON.load(request.body.read)
-      if app = App.find_by_token(payload["token"])
+      if app = App.where(token: payload["token"]).first
         payload["metrics"].each do |metric|
-          options = { at: metric['at'], kind: metric['kind'], app: app }
-          SnowmanIO.storage.metrics_register_value(metric["name"], metric["value"].to_f, options)
+          SnowmanIO.storage.metrics_register_value(app, metric["name"], metric["kind"], metric["value"].to_f, Time.now)
         end
         "OK"
       else

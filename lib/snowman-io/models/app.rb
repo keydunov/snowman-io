@@ -1,10 +1,11 @@
 module SnowmanIO
   class App
-    include MongoMapper::Document
+    include Mongoid::Document
     include Concerns::Tokenable
+    has_many :metrics
 
-    key :name,  String
-    key :token, String
+    field :name,  type: String
+    field :token, type: String
 
     validates :name, :token, presence: true
 
@@ -13,11 +14,11 @@ module SnowmanIO
     end
 
     def as_json(options = {})
-      super(options.merge(methods: :requestsJSON))
+      super(options.merge(methods: :requestsJSON)).tap { |o| o["id"] = o.delete("_id").to_s }
     end
 
     def requestsJSON
-      SnowmanIO.storage.send(:_daily_metrics_for_app, self.id.to_s, Time.now).to_json
+      SnowmanIO.storage.daily_metrics_for_app(self, Time.now).to_json
     end
   end
 end

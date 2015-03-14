@@ -22,7 +22,7 @@ module SnowmanIO
           def authenticate_user_from_token
             authenticate_with_http_token do |token, options|
               user_email    = options[:email]
-              user_email && User.find_by_email_and_authentication_token(user_email, token)
+              user_email && User.where(email: user_email, authentication_token: token).first
             end
           end
 
