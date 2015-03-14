@@ -14,6 +14,6 @@ install:
   - pushd ui && bower install && popd
 script:
   - bundle exec rspec
-  - cd ui && ember test
+  # - cd ui && ember test
 services:
   - mongodb
