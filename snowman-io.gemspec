@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alexey Vakhov", "Artyom Keydunov"]
   spec.email         = ["vakhov@gmail.com"]
   spec.summary       = %q{The heart of snowman}
-  spec.description   = %q{Gem for continuously parameters checks}
+  spec.description   = %q{SnowmanIO - your personal assistent}
   spec.homepage      = "http://snowman.io"
   spec.license       = "MIT"
 
