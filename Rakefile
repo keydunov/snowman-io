@@ -40,11 +40,5 @@ namespace :dev do
   task :report_send do
     SnowmanIO.storage.report_send(Time.now.beginning_of_day)
   end
-
-  desc "Run checks on metrics"
-  task :alerts do
-    metrics = SnowmanIO.mongo.db['metrics'].find({}, { fields: ["name", "daily", "kind"] })
-    puts SnowmanIO::ChecksRunner.new(metrics).start
-  end
 end
 

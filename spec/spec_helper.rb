@@ -34,6 +34,6 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
 
   config.before(:each) {
-    SnowmanIO.mongo.client.drop_database("test")
+    Mongoid.purge!
   }
 end

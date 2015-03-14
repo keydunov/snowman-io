@@ -1,61 +1,26 @@
 module SnowmanIO
   module StorageImpl
     module Metrics
-      def metrics_raw_find_by_app_id_and_kind(app_id, kind, fields = [])
-        SnowmanIO.mongo.db["metrics"].find(
-          {
-            app_id: BSON::ObjectId(app_id),
-            kind: kind
-          },
-          fields: fields
-        ).first
+      def metrics_register_value(app, name, kind, value, at)
+        metric = app.metrics.where(name: name, kind: kind).first_or_create!
+        metric.update_attributes!(last_value: value)
+        metric.data_points.create!(at: at, value: value)
       end
 
-      def metrics_register_value(name, value, options = {})
-        app = options[:app]
-        at = options[:at] || Time.now
-
-        attributes = {name: name}
-        if app
-          attributes[:app_id] = BSON::ObjectId(app.id.to_s)
-        end
-        if options[:kind]
-          attributes[:kind] = options[:kind]
-        end
-
-        SnowmanIO.mongo.db["metrics"].update(
-          attributes,
-          {
-            "$set" => attributes.merge(last_value: value.to_f),
-            "$push" => {"realtime.#{at.to_i}" => value}
-          },
-          upsert: true
-        )
-      end
-
-      protected
-
-      def _daily_metrics_for_app(app_id, at)
+      def daily_metrics_for_app(app, at)
         json = {}
-        today_key = at.beginning_of_day.to_i.to_s
-        yesterday_key = (at - 1.day).beginning_of_day.to_i.to_s
+        metric = app.metrics.where(kind: "request").first
 
-        if m = metrics_raw_find_by_app_id_and_kind(app_id, "request", ["daily"])
-          today =  m["daily"].try(:[], today_key)
-          yesterday =  m["daily"].try(:[], yesterday_key)
-          if today
-            json["today"] = {
-              "count" => today["count"]
-            }
-          end
-          if yesterday
-            json["yesterday"] = {
-              "count" => yesterday["count"]
-            }
-          end
-          json["total"] = {
-            "count" => m["daily"].values.map { |a| a["count"] }.inject(:+)
-          }
+        if metric && (aggr = metric.aggregations.where(precision: "daily", at: at.beginning_of_day).first)
+          json["today"] = {"count" => aggr.count}
+        end
+
+        if metric && (aggr = metric.aggregations.where(precision: "daily", at: at.beginning_of_day - 1.day).first)
+          json["yesterday"] = {"count" => aggr.count}
+        end
+
+        if metric
+          json["total"] = {"count" => metric.aggregations.where(precision: "daily").sum(:count)}
         end
 
         json

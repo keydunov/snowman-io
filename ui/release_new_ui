@@ -1,15 +1,12 @@
 #!/bin/bash
 cd $(dirname $0)
 
-dest=../lib/snowman-io/api/public
+dest=../lib/snowman-io/ui
 
 echo Start Building UI
 # build ember app
 rm -fr $dest
 ember build --environment=production --output-path=$dest
-
-# create index.erb
-mv $dest/index.html  $dest/../views/index.erb
 
 # copy bootstrap for Sinatra
 cp -r vendor/bootstrap-3.3.1 $dest/

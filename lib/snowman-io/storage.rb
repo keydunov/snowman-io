@@ -8,16 +8,5 @@ module SnowmanIO
     include StorageImpl::Metrics
     include StorageImpl::Aggregation
     include StorageImpl::Reports
-
-    private
-
-    # Mongo ObjectId => String ID
-    def idfy(obj)
-      if obj.is_a?(Array)
-        obj.map { |o| idfy(o) }
-      elsif obj.is_a?(Hash)
-        obj.merge("id" => obj.delete("_id").to_s)
-      end
-    end
   end
 end

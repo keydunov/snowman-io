@@ -1,14 +1,14 @@
 module SnowmanIO
   class User
-    include MongoMapper::Document
+    include Mongoid::Document
     include ActiveModel::SecurePassword
     include Concerns::Tokenable
 
     has_secure_password
 
-    key :email,                String
-    key :password_digest,      String
-    key :authentication_token, String
+    field :email,                type: String
+    field :password_digest,      type: String
+    field :authentication_token, type: String
 
     validates :email, :authentication_token, presence: true
     validates :email, uniqueness: true

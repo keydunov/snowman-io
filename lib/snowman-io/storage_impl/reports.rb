@@ -4,10 +4,10 @@ module SnowmanIO
       def report_send(at)
         report = {apps: []}
 
-        SnowmanIO.mongo.db["apps"].find().sort(:name).to_a.each { |app|
-          json = _daily_metrics_for_app(app["_id"].to_s, at)
-          report[:apps].push(json.merge(name: app["name"]))
-        }
+        App.order_by(:name => :desc).each do |app|
+          json = daily_metrics_for_app(app, at)
+          report[:apps].push(json.merge(name: app.name))
+        end
 
         ReportMailer.daily_report(at, report).deliver
       end

@@ -2,20 +2,11 @@ module SnowmanIO
   module StorageImpl
     module System
       def set(key, value)
-        SnowmanIO.mongo.db["system"].update({key: key}, {key: key, value: value}, upsert: true)
+        Setting.find_or_create_by!(name: key).update_attributes!(value: value)
       end
 
       def get(key)
-        SnowmanIO.mongo.db["system"].find({key: key}).first.try(:[], "value")
-      end
-
-      def incr(key)
-        SnowmanIO.mongo.db["system"].find_and_modify(
-          query: {key: key},
-          upsert: true,
-          new: true,
-          update: {"$inc" => {value: 1}}
-        )["value"]
+        Setting.where(name: key).first.try(:value)
       end
     end
   end 
