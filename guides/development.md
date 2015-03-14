@@ -6,7 +6,8 @@ UI is Ember.js application backed with Sinatra. The UI was developed with help o
 ## Prepare
 
 ``` bash
-cd ui && npm install && bower install
+bundle
+cd ui && npm install && bower install && cd ..
 ```
 
 ## Run
