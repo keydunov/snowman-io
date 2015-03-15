@@ -27,14 +27,14 @@ module SnowmanIO
         Aggregate.metrics_clean_old
 
         # init report time
-        unless Setting.get(Storage::NEXT_REPORT_DATE)
-          Setting.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)
+        unless Setting.get(SnowmanIO::NEXT_REPORT_DATE)
+          Setting.set(SnowmanIO::NEXT_REPORT_DATE, next_report_date.to_i)
         end
 
         # send report at 7:00 next day
-        if now.to_i > Setting.get(Storage::NEXT_REPORT_DATE) + 1.day + 7.hours
-          Reports.report_send(Time.at(Setting.get(Storage::NEXT_REPORT_DATE)))
-          Setting.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)
+        if now.to_i > Setting.get(SnowmanIO::NEXT_REPORT_DATE) + 1.day + 7.hours
+          Reports.report_send(Time.at(Setting.get(SnowmanIO::NEXT_REPORT_DATE)))
+          Setting.set(SnowmanIO::NEXT_REPORT_DATE, next_report_date.to_i)
         end
       end
     end

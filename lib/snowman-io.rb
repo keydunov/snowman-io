@@ -23,7 +23,6 @@ require "snowman-io/cli"
 require "snowman-io/web_server"
 require "snowman-io/aggregate"
 require "snowman-io/reports"
-require "snowman-io/storage"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
 require "snowman-io/report_mailer"
@@ -58,9 +57,9 @@ else
 end
 
 module SnowmanIO
-  def self.storage
-    @storage ||= Storage.new
-  end
+  ADMIN_PASSWORD_KEY = "admin_password_hash"
+  BASE_URL_KEY = "base_url"
+  NEXT_REPORT_DATE = "next_report_date"
 
   def self.logger
     @logger ||= Logger.new(STDERR)
