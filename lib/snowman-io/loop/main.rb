@@ -33,7 +33,7 @@ module SnowmanIO
 
         # send report at 7:00 next day
         if now.to_i > SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE) + 1.day + 7.hours
-          SnowmanIO.storage.report_send(Time.at(SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)))
+          Reports.report_send(Time.at(SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)))
           SnowmanIO.storage.set(Storage::NEXT_REPORT_DATE, next_report_date.to_i)
         end
       end

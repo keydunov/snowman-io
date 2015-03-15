@@ -38,7 +38,7 @@ namespace :dev do
 
   desc "Send report"
   task :report_send do
-    SnowmanIO.storage.report_send(Time.now.beginning_of_day)
+    SnowmanIO::Reports.report_send(Time.now.beginning_of_day)
   end
 
   desc "Dump DB"
