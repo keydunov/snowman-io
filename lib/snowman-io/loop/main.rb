@@ -22,9 +22,9 @@ module SnowmanIO
 
         # aggregate
         start = Time.now.to_f
-        SnowmanIO.storage.metrics_aggregate_5min
-        SnowmanIO.storage.metrics_aggregate_daily
-        SnowmanIO.storage.metrics_clean_old
+        Aggregate.metrics_aggregate_5min
+        Aggregate.metrics_aggregate_daily
+        Aggregate.metrics_clean_old
 
         # init report time
         unless SnowmanIO.storage.get(Storage::NEXT_REPORT_DATE)

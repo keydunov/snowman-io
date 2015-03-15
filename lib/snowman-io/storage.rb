@@ -6,7 +6,6 @@ module SnowmanIO
 
     include StorageImpl::System
     include StorageImpl::Metrics
-    include StorageImpl::Aggregation
     include StorageImpl::Reports
   end
 end

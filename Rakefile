@@ -23,17 +23,17 @@ namespace :dev do
 
   desc "Aggregate 5min metrics"
   task :aggregate_5min do
-    SnowmanIO.storage.metrics_aggregate_5min
+    SnowmanIO::Aggregate.metrics_aggregate_5min
   end
 
   desc "Aggregate daily metrics"
   task :aggregate_daily do
-    SnowmanIO.storage.metrics_aggregate_daily
+    SnowmanIO::Aggregate.metrics_aggregate_daily
   end
 
   desc "Clean old metrics"
   task :clean_old do
-    SnowmanIO.storage.metrics_clean_old
+    SnowmanIO::Aggregate.metrics_clean_old
   end
 
   desc "Send report"
