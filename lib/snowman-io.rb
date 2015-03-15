@@ -66,7 +66,7 @@ module SnowmanIO
   end
 
   def self.report_recipients
-    ENV["REPORT_RECIPIENTS"] || "test@example.com"
+    User.order_by(:email => :asc).map(&:email)
   end
 end
 
