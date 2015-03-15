@@ -48,8 +48,6 @@ module SnowmanIO
       metric.data_points.create!(at: at, value: value)
     end
 
-    private
-
     def requestsJSON
       daily_metrics(Time.now).to_json
     end

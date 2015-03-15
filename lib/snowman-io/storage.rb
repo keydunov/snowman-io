@@ -3,7 +3,5 @@ module SnowmanIO
     ADMIN_PASSWORD_KEY = "admin_password_hash"
     BASE_URL_KEY = "base_url"
     NEXT_REPORT_DATE = "next_report_date"
-
-    include StorageImpl::System
   end
 end

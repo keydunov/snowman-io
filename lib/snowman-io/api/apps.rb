@@ -6,7 +6,7 @@ module SnowmanIO
       namespace :apps do
         desc "List apps"
         get do
-          { apps: App.all  }
+          { apps: App.all }
         end
 
         desc "Creates app"

@@ -6,8 +6,8 @@ module SnowmanIO
     set :views, File.dirname(__FILE__) + "/ui"
 
     before do
-      unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
-        SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
+      unless Setting.get(Storage::BASE_URL_KEY).present?
+        Setting.set(Storage::BASE_URL_KEY, request.base_url)
       end
     end
 
