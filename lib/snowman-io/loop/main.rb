@@ -16,6 +16,7 @@ module SnowmanIO
 
       def perform
         now = Time.now
+
         # next time let send report for today
         next_report_date = Time.now.beginning_of_day
 

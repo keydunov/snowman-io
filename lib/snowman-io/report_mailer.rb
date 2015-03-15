@@ -13,7 +13,7 @@ module SnowmanIO
       @at = at
       mail(
         to: SnowmanIO.report_recipients,
-        subject: "SnowmanIO daily report at #{at.strftime("%Y-%m-%d")}"
+        subject: "SnowmanIO daily report for #{at.strftime("%Y-%m-%d")}"
       ) do |format|
         format.html { 
           Premailer.new(render(:"report_mailer/daily_report", layout: "main"), {

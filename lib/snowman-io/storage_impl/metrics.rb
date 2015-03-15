@@ -11,16 +11,21 @@ module SnowmanIO
         json = {}
         metric = app.metrics.where(kind: "request").first
 
-        if metric && (aggr = metric.aggregations.where(precision: "daily", at: at.beginning_of_day).first)
-          json["today"] = {"count" => aggr.count}
+        today = at.beginning_of_day
+        yesterday = at.beginning_of_day - 1.day
+        json["today"] = {"at" => today.strftime("%Y-%m-%d")}
+        json["yesterday"] = {"at" => yesterday.strftime("%Y-%m-%d")}
+
+        if metric && (aggr = metric.aggregations.where(precision: "daily", at: today).first)
+          json["today"]["count"] =  aggr.count.to_i
         end
 
-        if metric && (aggr = metric.aggregations.where(precision: "daily", at: at.beginning_of_day - 1.day).first)
-          json["yesterday"] = {"count" => aggr.count}
+        if metric && (aggr = metric.aggregations.where(precision: "daily", at: yesterday).first)
+          json["yesterday"]["count"] = aggr.count.to_i
         end
 
         if metric
-          json["total"] = {"count" => metric.aggregations.where(precision: "daily").sum(:count)}
+          json["total"] = {"count" => metric.aggregations.where(precision: "daily").sum(:count).to_i}
         end
 
         json

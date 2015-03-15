@@ -29,14 +29,14 @@
       <table width="100%" cellpadding="0" cellspacing="0" class="app-stats">
         <tr>
           <th class="first"></th>
-          <th>Today</th>
-          <th>Yesterday</th>
+          <th>today</th>
+          <th>yesterday</th>
         </tr>
         <tr>
           <td>Requests</td>
           <td class="value">
-            <%= app["today"].try(:[], "count") || "-" %>
-            <% if app.key?("today") && app.key?("yesterday") %>
+            <%= app["today"]["count"] || "-" %>
+            <% if app["today"].key?("count") && app["yesterday"].key?("count") %>
               <% if app["today"]["count"] > app["yesterday"]["count"] %>
                 <span class="neutral">&#x25B2;</span>
               <% elsif app["today"]["count"] == app["yesterday"]["count"] %>
@@ -48,7 +48,7 @@
               <span class="white">&#x25B2;</span>
             <% end %>
           </td>
-          <td class="value"><%= app["yesterday"].try(:[], "count") || "-" %></td>
+          <td class="value"><%= app["yesterday"]["count"] || "-" %></td>
         </tr>
       </table>
     </td></tr>
