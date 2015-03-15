@@ -6,8 +6,8 @@ module SnowmanIO
     set :views, File.dirname(__FILE__) + "/ui"
 
     before do
-      unless SnowmanIO.storage.get(Storage::BASE_URL_KEY).present?
-        SnowmanIO.storage.set(Storage::BASE_URL_KEY, request.base_url)
+      unless Setting.get(SnowmanIO::BASE_URL_KEY).present?
+        Setting.set(SnowmanIO::BASE_URL_KEY, request.base_url)
       end
     end
 
@@ -19,7 +19,7 @@ module SnowmanIO
       payload = JSON.load(request.body.read)
       if app = App.where(token: payload["token"]).first
         payload["metrics"].each do |metric|
-          SnowmanIO.storage.metrics_register_value(app, metric["name"], metric["kind"], metric["value"].to_f, Time.now)
+          app.register_metric_value(metric["name"], metric["kind"], metric["value"].to_f, Time.now)
         end
         "OK"
       else

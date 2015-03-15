@@ -16,7 +16,7 @@ module SnowmanIO
       private
 
       def perform
-        if base_url = SnowmanIO.storage.get(Storage::BASE_URL_KEY)
+        if base_url = Setting.get(SnowmanIO::BASE_URL_KEY)
           open(base_url + "/ping")
         end
       end

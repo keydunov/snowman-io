@@ -6,7 +6,7 @@ module SnowmanIO
       namespace :apps do
         desc "List apps"
         get do
-          { apps: App.all  }
+          { apps: App.all }
         end
 
         desc "Creates app"
@@ -16,7 +16,7 @@ module SnowmanIO
           end
         end
         post do
-          { app: App.create(permitted_params[:app].to_h) }
+          { app: App.create!(permitted_params[:app].to_h) }
         end
 
         route_param :id do
@@ -36,14 +36,13 @@ module SnowmanIO
             end
           end
           put do
-            { app: @app.update_attributes(params[:app]) }
+            { app: @app.tap { |app| app.update_attributes!(permitted_params[:app].to_h) } }
           end
 
           desc "Deletes app"
           delete do
             @app.destroy
           end
-
         end
       end
     end

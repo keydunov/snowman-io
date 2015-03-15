@@ -3,7 +3,6 @@ require 'bcrypt'
 require 'celluloid/autostart'
 require 'action_mailer'
 require 'premailer'
-require 'active_model'
 require 'mongoid'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/strip'
@@ -22,11 +21,8 @@ require "snowman-io/options"
 require "snowman-io/launcher"
 require "snowman-io/cli"
 require "snowman-io/web_server"
-require "snowman-io/storage_impl/system"
-require "snowman-io/storage_impl/metrics"
-require "snowman-io/storage_impl/aggregation"
-require "snowman-io/storage_impl/reports"
-require "snowman-io/storage"
+require "snowman-io/aggregate"
+require "snowman-io/reports"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
 require "snowman-io/report_mailer"
@@ -61,16 +57,16 @@ else
 end
 
 module SnowmanIO
-  def self.storage
-    @storage ||= Storage.new
-  end
+  ADMIN_PASSWORD_KEY = "admin_password_hash"
+  BASE_URL_KEY = "base_url"
+  NEXT_REPORT_DATE = "next_report_date"
 
   def self.logger
     @logger ||= Logger.new(STDERR)
   end
 
   def self.report_recipients
-    ENV["REPORT_RECIPIENTS"] || "test@example.com"
+    User.order_by(:email => :asc).map(&:email)
   end
 end
 

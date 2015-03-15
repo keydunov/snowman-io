@@ -23,22 +23,34 @@ namespace :dev do
 
   desc "Aggregate 5min metrics"
   task :aggregate_5min do
-    SnowmanIO.storage.metrics_aggregate_5min
+    SnowmanIO::Aggregate.metrics_aggregate_5min
   end
 
   desc "Aggregate daily metrics"
   task :aggregate_daily do
-    SnowmanIO.storage.metrics_aggregate_daily
+    SnowmanIO::Aggregate.metrics_aggregate_daily
   end
 
   desc "Clean old metrics"
   task :clean_old do
-    SnowmanIO.storage.metrics_clean_old
+    SnowmanIO::Aggregate.metrics_clean_old
   end
 
   desc "Send report"
   task :report_send do
-    SnowmanIO.storage.report_send(Time.now.beginning_of_day)
+    SnowmanIO::Reports.report_send(Time.now.beginning_of_day)
+  end
+
+  desc "Dump DB"
+  task :dump_db do
+    db = Mongoid::Sessions.default
+    db.collections.each do |collection|
+      puts "++++ #{collection.name}"
+      collection.find.each do |record|
+        puts record.to_json
+      end
+      puts ""
+    end
   end
 end
 
