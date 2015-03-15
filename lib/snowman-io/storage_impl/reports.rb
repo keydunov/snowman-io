@@ -5,7 +5,7 @@ module SnowmanIO
         report = {apps: []}
 
         App.order_by(:name => :desc).each do |app|
-          json = daily_metrics_for_app(app, at)
+          json = app.daily_metrics(at)
           report[:apps].push(json.merge(name: app.name))
         end
 
