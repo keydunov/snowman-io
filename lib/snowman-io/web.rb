@@ -19,7 +19,7 @@ module SnowmanIO
       payload = JSON.load(request.body.read)
       if app = App.where(token: payload["token"]).first
         payload["metrics"].each do |metric|
-          SnowmanIO.storage.metrics_register_value(app, metric["name"], metric["kind"], metric["value"].to_f, Time.now)
+          app.register_metric_value(metric["name"], metric["kind"], metric["value"].to_f, Time.now)
         end
         "OK"
       else

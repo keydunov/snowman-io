@@ -42,6 +42,12 @@ module SnowmanIO
       json
     end
 
+    def register_metric_value(name, kind, value, at)
+      metric = metrics.where(name: name, kind: kind).first_or_create!
+      metric.update_attributes!(last_value: value)
+      metric.data_points.create!(at: at, value: value)
+    end
+
     private
 
     def requestsJSON

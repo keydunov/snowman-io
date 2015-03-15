@@ -5,7 +5,6 @@ module SnowmanIO
     NEXT_REPORT_DATE = "next_report_date"
 
     include StorageImpl::System
-    include StorageImpl::Metrics
     include StorageImpl::Reports
   end
 end
