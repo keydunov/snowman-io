@@ -2,7 +2,7 @@ module SnowmanIO
   class App
     include Mongoid::Document
     include Concerns::Tokenable
-    has_many :metrics
+    has_many :metrics, dependent: :destroy
 
     field :name,  type: String
     field :token, type: String

@@ -40,5 +40,17 @@ namespace :dev do
   task :report_send do
     SnowmanIO.storage.report_send(Time.now.beginning_of_day)
   end
+
+  desc "Dump DB"
+  task :dump_db do
+    db = Mongoid::Sessions.default
+    db.collections.each do |collection|
+      puts "++++ #{collection.name}"
+      collection.find.each do |record|
+        puts record.to_json
+      end
+      puts ""
+    end
+  end
 end
 

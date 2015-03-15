@@ -10,7 +10,7 @@ bundle
 cd ui && npm install && bower install && cd ..
 ```
 
-## Run
+## Run for Development
 
 ``` bash
 rake dev:run
