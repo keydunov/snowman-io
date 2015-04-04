@@ -6,6 +6,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     return Ember.$.get(this._infoUrl());
   },
 
+  setupController: function(controller, model) {
+    controller.set('baseUrl', model.base_url);
+    controller.set('reportRecipients', model.report_recipients);
+    controller.set('hgStatus', model.hg_status);
+    controller.set('hgKey', model.hg_key);
+  },
+
   _infoUrl: function() {
     var adapter = this.container.lookup('adapter:application');
     return adapter.buildURL("") + "/info";

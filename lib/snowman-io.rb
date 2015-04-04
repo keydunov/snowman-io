@@ -60,6 +60,8 @@ module SnowmanIO
   ADMIN_PASSWORD_KEY = "admin_password_hash"
   BASE_URL_KEY = "base_url"
   NEXT_REPORT_DATE = "next_report_date"
+  HG_STATUS = "hg_status"
+  HG_KEY = "hg_key"
 
   def self.logger
     @logger ||= Logger.new(STDERR)
