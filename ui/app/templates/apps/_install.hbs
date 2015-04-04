@@ -11,9 +11,11 @@ heroku config:set \
   SNOWMANIO_SECRET_TOKEN={{app.token}}
 </pre>
 
-<b>Standalone:</b>
+<b>Standalone:</b><br>
 <pre>
-TODO: add description
+# Add environment variables to production application
+SNOWMANIO_SERVER={{info.base_url}}
+SNOWMANIO_SECRET_TOKEN={{app.token}}
 </pre>
 
 <h2>Send Test Request</h2>
