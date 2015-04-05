@@ -9,7 +9,7 @@ Router.map(function() {
   this.route('unpacking');
   this.route('login');
 
-  this.route('snow', {path: '/'}, function() {
+  this.resource('snow', {path: '/'}, function() {
     this.route('dashboard', {path: '/'});
     this.route('settings');
 
