@@ -1,6 +1,9 @@
 {{#if requests.total.count}}
   <div class="page-header">
-    <h1>{{name}}</h1>
+    <h1>
+      {{name}}
+      <small>{{#link-to "snow.apps/edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
+    </h1>
   </div>
 
   <div role="tabpanel">
@@ -23,7 +26,10 @@
 
 {{else}}
   <div class="page-header">
-    <h1>{{name}} - Installation</h1>
+    <h1>
+      {{name}} - Installation
+      <small>{{#link-to "snow.apps/edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
+  </h1>
   </div>
   {{partial "snow/apps/install"}}
 {{/if}}
