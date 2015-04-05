@@ -9,12 +9,14 @@ Router.map(function() {
   this.route('unpacking');
   this.route('login');
 
-  this.route('dashboard', {path: '/'});
-  this.route('settings');
+  this.route('snow', {path: '/'}, function() {
+    this.route('dashboard', {path: '/'});
+    this.route('settings');
 
-  this.route('apps/new', {path: '/apps/new'});
-  this.route('apps/show', {path: '/apps/:id'});
-  this.route('apps/edit', {path: '/apps/:id/edit'});
+    this.route('apps/new', {path: '/apps/new'});
+    this.route('apps/show', {path: '/apps/:id'});
+    this.route('apps/edit', {path: '/apps/:id/edit'});
+  });
 });
 
 export default Router;

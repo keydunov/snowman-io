@@ -1,14 +1,14 @@
 <div class="row-fluid text-right">
-  {{#link-to "apps/new" class="btn btn-default"}}Register App{{/link-to}}
+  {{#link-to "snow.apps/new" class="btn btn-default"}}Register App{{/link-to}}
 </div>
 
 <div class="row-fluid dashboard">
   {{#each app in apps}}
     <div class="col-md-3 app-slot">
       <h4>
-        {{#link-to "apps/show" app.id}}{{app.name}}{{/link-to}}
+        {{#link-to "snow.apps/show" app.id}}{{app.name}}{{/link-to}}
         <small class="pull-right">
-          {{#link-to "apps/edit" app}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
+          {{#link-to "snow.apps/edit" app}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
           <a href="#" {{action "destroy" app}}><span class="glyphicon glyphicon-trash"></span></a>
         </small>
       </h4>
@@ -31,7 +31,7 @@
   {{else}}
     <div>&nbsp;</div>
     <h1 class="text-center">
-      You don't track any app yet, {{#link-to "apps/new"}}register one{{/link-to}}.
+      You don't track any app yet, {{#link-to "snow.apps/new"}}register one{{/link-to}}.
     </h1>
   {{/each}}
 </div>

@@ -1,0 +1,33 @@
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <span class="navbar-brand">SnowmanIO</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        {{#link-to "snow.dashboard" tagName="li" href=false}}
+          {{#link-to "snow.dashboard"}}Dashboard{{/link-to}}
+        {{/link-to}}
+        {{#link-to "snow.settings" tagName="li" href=false}}
+          {{#link-to "snow.settings"}}Settings{{/link-to}}
+        {{/link-to}}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="#" {{ action 'invalidateSession' }}>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-main container-fluid">
+  {{outlet}}
+</div>
