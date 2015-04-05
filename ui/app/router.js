@@ -10,14 +10,14 @@ Router.map(function() {
   this.route('login');
 
   this.resource('snow', {path: '/'}, function() {
-    this.route('dashboard', {path: '/'});
     this.route('settings');
 
-    this.route('apps/new', {path: '/apps/new'});
-    this.route('apps/show', {path: '/apps/:id'});
-    this.route('apps/edit', {path: '/apps/:id/edit'});
+    this.resource('apps', {path: '/'}, function() {
+      this.route('new', {path: 'apps/new'});
+      this.route('show', {path: 'apps/:id'});
+      this.route('edit', {path: 'apps/:id/edit'});
+    });
   });
-  this.route('snow/settings');
 });
 
 export default Router;

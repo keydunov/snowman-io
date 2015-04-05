@@ -3,7 +3,7 @@ import {
   test
 } from 'ember-qunit';
 
-moduleFor('controller:snow/apps/edit', 'AppsEditController', {
+moduleFor('controller:apps/edit', 'AppsEditController', {
   // Specify the other units that are required for this test.
   // needs: ['controller:foo']
 });

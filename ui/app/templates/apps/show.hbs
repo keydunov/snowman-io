@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1>
       {{name}}
-      <small>{{#link-to "snow.apps/edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
+      <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
     </h1>
   </div>
 
@@ -15,11 +15,11 @@
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="info">
         <div>&nbsp;</div>
-        {{partial "snow/apps/info"}}
+        {{partial "apps/info"}}
       </div>
       <div role="tabpanel" class="tab-pane" id="install">
         <div>&nbsp;</div>
-        {{partial "snow/apps/install"}}
+        {{partial "apps/install"}}
       </div>
     </div>
   </div>
@@ -28,9 +28,9 @@
   <div class="page-header">
     <h1>
       {{name}} - Installation
-      <small>{{#link-to "snow.apps/edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
+      <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
   </h1>
   </div>
-  {{partial "snow/apps/install"}}
+  {{partial "apps/install"}}
 {{/if}}
 
