@@ -15,7 +15,6 @@ Router.map(function() {
   this.route('apps/new', {path: '/apps/new'});
   this.route('apps/show', {path: '/apps/:id'});
   this.route('apps/edit', {path: '/apps/:id/edit'});
-  this.route('signup');
 });
 
 export default Router;
