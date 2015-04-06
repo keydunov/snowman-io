@@ -1,22 +1,24 @@
-<div class="page-header">
-  <h1>SnowmanIO</h1>
-</div>
-
-{{#if errorMessage }}
-  <div class="alert alert-danger">
-    {{ errorMessage }}
+<div class="container">
+  <div class="page-header">
+    <h1>SnowmanIO</h1>
   </div>
-{{/if}}
 
-<div class="col-sm-6">
-  <form {{action 'authenticate' on='submit'}} role="form">
-    <div class="form-group">
-      <label for=identification>Email</label>
-      {{input id='identification'  class='form-control' value=identification}}
-      <br>
-      <label for=password>Password</label>
-      {{input id='password' class='form-control' type='password' value=password}}
+  {{#if errorMessage }}
+    <div class="alert alert-danger">
+      {{ errorMessage }}
     </div>
-    <input type=submit value="Login" class="btn btn-default">
-  </form>
+  {{/if}}
+
+  <div class="col-sm-6">
+    <form {{action 'authenticate' on='submit'}} role="form">
+      <div class="form-group">
+        <label for=identification>Email</label>
+        {{input id='identification'  class='form-control' value=identification}}
+        <br>
+        <label for=password>Password</label>
+        {{input id='password' class='form-control' type='password' value=password}}
+      </div>
+      <input type=submit value="Login" class="btn btn-default">
+    </form>
+  </div>
 </div>

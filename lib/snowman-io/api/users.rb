@@ -22,12 +22,14 @@ module SnowmanIO
         desc "User Signin"
         params do
           requires :user, type: Hash do
-            requires :password, type: String
             requires :email, type: String
+            optional :password, type: String
           end
         end
         post "login" do
-          if (user = User.where(email: permitted_params[:user][:email]).first) && user.authenticate(permitted_params[:user][:password])
+          email = permitted_params[:user][:email]
+          password = permitted_params[:user][:password]
+          if (user = User.where(email: email).first) && password.present? && user.authenticate(password)
             { token: user.authentication_token, email: user.email }
           else
             status 400

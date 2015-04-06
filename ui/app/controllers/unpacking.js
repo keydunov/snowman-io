@@ -8,7 +8,7 @@ export default Ember.ObjectController.extend({
       user.save().then(function() {
         var authOptions = { identification: user.get("email"), password: user.get("password") };
         _this.get("session").authenticate('simple-auth-authenticator:devise', authOptions).then(function() {
-          _this.transitionToRoute("dashboard");
+          _this.transitionToRoute("apps");
         });
       });
     }
