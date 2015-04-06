@@ -6,5 +6,5 @@ export default Ember.ObjectController.extend({
 
   hasRequests: function() {
     return this.get("requests.today") && this.get("requests.yesterday");
-  }.property()
+  }.property("requests.today", "requests.yesterday")
 });
