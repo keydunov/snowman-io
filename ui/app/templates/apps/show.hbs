@@ -1,36 +1,39 @@
-{{#if requests.total.count}}
-  <div class="page-header">
-    <h1>
-      {{name}}
-      <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
-    </h1>
-  </div>
+<div class="page-header">
+  <h1>
+    {{name}}
+    <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
+  </h1>
+</div>
 
-  <div role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#info" role="tab" data-toggle="tab">Info</a></li>
-      <li role="presentation"><a href="#install" role="tab" data-toggle="tab">Install</a></li>
-    </ul>
+<div role="tabpanel">
+  <ul class="nav nav-tabs" role="tablist">
+    {{#if requests.total.count}}
+      <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+    {{/if}}
+    <li {{bind-attr class="requests.total.count::active"}}><a href="#install" data-toggle="tab">Install</a></li>
+    {{#if isHgEnabled}}
+      <li><a href="#hg" data-toggle="tab">Add HG Metric</a></li>
+    {{/if}}
+  </ul>
 
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="info">
+  <div class="tab-content">
+    {{#if requests.total.count}}
+      <div class="tab-pane active" id="info">
         <div>&nbsp;</div>
         {{partial "apps/info"}}
       </div>
-      <div role="tabpanel" class="tab-pane" id="install">
-        <div>&nbsp;</div>
-        {{partial "apps/install"}}
-      </div>
+    {{/if}}
+    <div {{bind-attr class=":tab-pane requests.total.count::active"}} id="install">
+      <div>&nbsp;</div>
+      {{partial "apps/install"}}
     </div>
+    {{#if isHgEnabled}}
+      <div class="tab-pane" id="hg">
+        <div>&nbsp;</div>
+        {{partial "apps/new_hg_metric"}}
+      </div>
+    {{/if}}
   </div>
+</div>
 
-{{else}}
-  <div class="page-header">
-    <h1>
-      {{name}} - Installation
-      <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
-  </h1>
-  </div>
-  {{partial "apps/install"}}
-{{/if}}
 
