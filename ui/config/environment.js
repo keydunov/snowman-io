@@ -56,7 +56,7 @@ module.exports = function(environment) {
 
   ENV['simple-auth'] = {
     authorizer: 'simple-auth-authorizer:devise',
-    routeAfterAuthentication: 'dashboard'
+    routeAfterAuthentication: 'apps'
   }
 
   if (environment === 'development') {
