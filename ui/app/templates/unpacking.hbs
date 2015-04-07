@@ -7,10 +7,10 @@
     <form {{action 'setup' on='submit'}} role="form">
       <div class="form-group">
         <label for=email>Email</label>
-        {{input id='email'  class='form-control' value=email}}
+        {{input id='email'  class='form-control' value=model.email}}
         <br>
         <label for=password>Password</label>
-        {{input id='password' class='form-control' type='password' value=password}}
+        {{input id='password' class='form-control' type='password' value=model.password}}
       </div>
       <input type=submit value="Login" class="btn btn-default">
     </form>

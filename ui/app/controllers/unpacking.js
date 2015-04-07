@@ -1,14 +1,15 @@
 import Ember from 'ember';
 
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
   actions: {
     setup: function() {
-      var _this = this;
-      var user = this.get("model");
-      user.save().then(function() {
-        var authOptions = { identification: user.get("email"), password: user.get("password") };
-        _this.get("session").authenticate('simple-auth-authenticator:devise', authOptions).then(function() {
-          _this.transitionToRoute("apps");
+      var me    = this;
+      var model = this.model;
+
+      model.save().then(function() {
+        var authOptions = { identification: model.get("email"), password: model.get("password") };
+        me.get("session").authenticate('simple-auth-authenticator:devise', authOptions).then(function() {
+          me.transitionToRoute("apps");
         });
       });
     }
