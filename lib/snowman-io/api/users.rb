@@ -10,13 +10,8 @@ module SnowmanIO
           end
         end
         post do
-          if user = User.create(permitted_params[:user].to_h)
-            { user: { email: user.email, authentication_token: user.authentication_token } }
-          else
-            # TODO
-            status 400
-            { message: user.errors }
-          end
+          user = User.create!(permitted_params[:user].to_h)
+          { user: { email: user.email, authentication_token: user.authentication_token } }
         end
 
         desc "User Signin"

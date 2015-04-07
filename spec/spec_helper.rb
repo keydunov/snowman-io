@@ -25,7 +25,6 @@ module Helpers
   def json_response
     JSON.parse(last_response.body)
   end
-  alias_method :last_response_parsed, :json_response
 
 end
 
@@ -33,7 +32,7 @@ RSpec.configure do |config|
   config.include Helpers
   config.include Rack::Test::Methods
 
-  config.before(:each) {
+  config.before(:each) do
     Mongoid.purge!
-  }
+  end
 end
