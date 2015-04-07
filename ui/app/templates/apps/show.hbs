@@ -7,23 +7,23 @@
 
 <div role="tabpanel">
   <ul class="nav nav-tabs" role="tablist">
-    {{#if requests.total.count}}
+    {{#if model.requests.total.count}}
       <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
     {{/if}}
-    <li {{bind-attr class="requests.total.count::active"}}><a href="#install" data-toggle="tab">Install</a></li>
+    <li {{bind-attr class="model.requests.total.count::active"}}><a href="#install" data-toggle="tab">Install</a></li>
     {{#if isHgEnabled}}
       <li><a href="#hg" data-toggle="tab">Add HG Metric</a></li>
     {{/if}}
   </ul>
 
   <div class="tab-content">
-    {{#if requests.total.count}}
+    {{#if model.requests.total.count}}
       <div class="tab-pane active" id="info">
         <div>&nbsp;</div>
         {{partial "apps/info"}}
       </div>
     {{/if}}
-    <div {{bind-attr class=":tab-pane requests.total.count::active"}} id="install">
+    <div {{bind-attr class=":tab-pane model.requests.total.count::active"}} id="install">
       <div>&nbsp;</div>
       {{partial "apps/install"}}
     </div>
