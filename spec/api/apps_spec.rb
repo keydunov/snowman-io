@@ -8,7 +8,7 @@ describe API::Apps do
     it "returns list of apps" do
       get "api/apps"
       expect(last_response.status).to eq(200)
-      expect(last_response_parsed["apps"].size).to eq(0)
+      expect(json_response["apps"].size).to eq(0)
     end
   end
 end
