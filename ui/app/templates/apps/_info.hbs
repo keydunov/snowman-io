@@ -6,11 +6,11 @@
     <tr>
       <td>
         <b>Today</b><br>
-        {{#if requests.today}}{{requests.today.count}}{{else}}-{{/if}}
+        {{#if model.requests.today}}{{model.requests.today.count}}{{else}}-{{/if}}
       </td>
       <td>
         <b>Yesterday</b><br>
-        {{#if requests.yesterday}}{{requests.yesterday.count}}{{else}}-{{/if}}
+        {{#if model.requests.yesterday}}{{model.requests.yesterday.count}}{{else}}-{{/if}}
       </td>
     </tr>
   </table>
