@@ -7,15 +7,16 @@ export default Ember.Controller.extend({
   hgStatus: Ember.computed.alias("controllers.snow.model.hg_status"),
   hgKey: Ember.computed.alias("controllers.snow.model.hg_key"),
 
-  hgFormShow: false,
-  hgSaving: false,
+  resetHgForm: function() {
+    this.set("hgSaving", false);
+    this.set("hgFormShow", false);
+    this.set("isHgDisabled", this.get("hgStatus") == "disabled");
+    this.set("hgFormKey", this.get("hgKey"));
+  },
 
-  hgStatusDisabled: Ember.computed.equal("hgStatus", "disabled"),
-  isHgDisabled: Ember.computed.oneWay('hgStatusDisabled'),
-  isHgEnabled: Ember.computed.not('isHgDisabled'),
-
-  isHgKeyEmpty: Ember.computed.empty("hgKey"),
-  isHgSaveBtnDisabled: Ember.computed.and("isHgEnabled", "isHgKeyEmpty"),
+  isHgFormValid: function() {
+    return this.get("isHgDisabled") || Ember.isPresent(this.get("hgFormKey"));
+  }.property("isHgDisabled", "hgFormKey"),
 
   hgStatusText: function() {
     if (this.get("hgSaving")) {
@@ -39,13 +40,13 @@ export default Ember.Controller.extend({
     },
 
     hgCancel: function() {
-      this.set("hgFormShow", false);
+      this.resetHgForm();
     },
 
     hgSave: function() {
       var that = this;
       var hgStatus = that.get('isHgDisabled') ? "disabled" : "enabled";
-      var hgKey = that.get("hgKey");
+      var hgKey = hgStatus == "enabled" ? that.get("hgFormKey") : "";
       that.set("hgFormShow", false);
       that.set("hgSaving", true);
       Ember.$.post(that._baseUrl() + "/hg", {hg_status: hgStatus, hg_key: hgKey}, function(data) {
