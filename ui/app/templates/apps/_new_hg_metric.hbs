@@ -1,4 +1,3 @@
-<h4>New HG Metric</h4>
 <form class="form-horizontal">
   <div class="form-group">
     <label for="hgName" class="col-sm-2 control-label">Name</label>
@@ -10,7 +9,7 @@
   <div class="form-group">
     <label for="hgMetricName" class="col-sm-2 control-label">HG Metric Name</label>
     <div class="col-sm-6">
-      {{input value=hgMetricName placeholder="for example 'app.facebook.users'" id="hgMetricName" class="form-control"}}
+      {{input value=hgMetricName placeholder="for example 'apps.facebook.users'" id="hgMetricName" class="form-control"}}
     </div>
   </div>
 
@@ -23,7 +22,7 @@
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" {{bind-attr class=":btn :btn-info hgFormValid::disabled"}}>Add</button>
+      <button type="submit" {{action "hgSubmit"}} {{bind-attr class=":btn :btn-info hgFormValid::disabled"}}>Add{{#if hgSaving}} ...{{/if}}</button>
     </div>
   </div>
 </form>

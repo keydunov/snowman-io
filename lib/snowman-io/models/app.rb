@@ -3,6 +3,7 @@ module SnowmanIO
     include Mongoid::Document
     include Concerns::Tokenable
     has_many :metrics, dependent: :destroy
+    has_many :hg_metrics, dependent: :destroy
 
     field :name,  type: String
     field :token, type: String
@@ -14,7 +15,7 @@ module SnowmanIO
     end
 
     def as_json(options = {})
-      super(options.merge(methods: :requestsJSON)).tap { |o| o["id"] = o.delete("_id").to_s }
+      super(options.merge(methods: [:requestsJSON, :hgMetrics])).tap { |o| o["id"] = o.delete("_id").to_s }
     end
 
     # Returns amount of requests for `at` and day before
@@ -50,6 +51,10 @@ module SnowmanIO
 
     def requestsJSON
       daily_metrics(Time.now).to_json
+    end
+
+    def hgMetrics
+      hg_metrics.map { |m| {id: m._id.to_s} }
     end
   end
 end
