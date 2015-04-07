@@ -13,6 +13,11 @@ module SnowmanIO
       format :json
       default_error_formatter :json
 
+      rescue_from Mongoid::Errors::Validations do |e|
+        response = {errors: e.document.errors}
+        rack_response response.to_json, 400
+      end
+
       helpers do
         def permitted_params
           @permitted_params ||= declared(params, include_missing: false)
