@@ -39,5 +39,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'launchy', "~> 2.4"
   spec.add_development_dependency 'letter_opener', "1.3"
   spec.add_development_dependency 'rack-test', "~> 0.6.3"
-  spec.add_development_dependency 'rack-cors', "0.3.1"
 end
