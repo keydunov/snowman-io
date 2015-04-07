@@ -54,7 +54,7 @@ module SnowmanIO
     end
 
     def hgMetrics
-      hg_metrics.map { |m| {id: m._id.to_s} }
+      hg_metric_ids.map(&:to_s)
     end
   end
 end
