@@ -29,7 +29,7 @@ export default Ember.Controller.extend({
       me.set("hgSaving", true);
       metric.save().then(function() {
         me.set("hgSaving", false);
-        $('.nav-tabs a[href="#info"]').tab('show');
+        Ember.$('.nav-tabs a[href="#info"]').tab('show');
       });
     }
   }

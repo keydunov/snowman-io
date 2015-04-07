@@ -10,7 +10,7 @@ export default Ember.Controller.extend({
   resetHgForm: function() {
     this.set("hgSaving", false);
     this.set("hgFormShow", false);
-    this.set("isHgDisabled", this.get("hgStatus") == "disabled");
+    this.set("isHgDisabled", this.get("hgStatus") === "disabled");
     this.set("hgFormKey", this.get("hgKey"));
   },
 
@@ -46,7 +46,7 @@ export default Ember.Controller.extend({
     hgSave: function() {
       var that = this;
       var hgStatus = that.get('isHgDisabled') ? "disabled" : "enabled";
-      var hgKey = hgStatus == "enabled" ? that.get("hgFormKey") : "";
+      var hgKey = hgStatus === "enabled" ? that.get("hgFormKey") : "";
       that.set("hgFormShow", false);
       that.set("hgSaving", true);
       Ember.$.post(that._baseUrl() + "/hg", {hg_status: hgStatus, hg_key: hgKey}, function(data) {
