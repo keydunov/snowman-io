@@ -15,7 +15,10 @@ module SnowmanIO
     end
 
     def as_json(options = {})
-      super(options.merge(methods: [:requestsJSON, :hgMetrics])).tap { |o| o["id"] = o.delete("_id").to_s }
+      super(options.merge(methods: [:requestsJSON, :hg_metric_ids])).tap do |o|
+        o["id"] = o.delete("_id").to_s
+        o["hg_metric_ids"] = o["hg_metric_ids"].map(&:to_s)
+      end
     end
 
     # Returns amount of requests for `at` and day before
@@ -51,10 +54,6 @@ module SnowmanIO
 
     def requestsJSON
       daily_metrics(Time.now).to_json
-    end
-
-    def hgMetrics
-      hg_metric_ids.map(&:to_s)
     end
   end
 end

@@ -3,23 +3,18 @@ module SnowmanIO
     class HgMetrics < Grape::API
       before(&:authenticate!)
 
-      namespace :hgMetrics do
-        # desc "List apps"
-        # get do
-        #   { apps: App.all }
-        # end
-
+      namespace :hg_metrics do
         params do
-          requires :hgMetric, type: Hash do
-            requires :app, type: String
+          requires :hg_metric, type: Hash do
+            requires :app_id, type: String
             requires :name, type: String
-            requires :metricName, type: String
+            requires :metric_name, type: String
             requires :kind, type: String
           end
         end
         post do
-          app = App.find(permitted_params[:hgMetric][:app])
-          { hgMetric: app.hg_metrics.create!(permitted_params[:hgMetric].to_h.except("app")) }
+          app = App.find(permitted_params[:hg_metric][:app_id])
+          { hg_metric: app.hg_metrics.create!(permitted_params[:hg_metric].to_h.except("app_id")) }
         end
 
         route_param :id do
@@ -28,7 +23,7 @@ module SnowmanIO
           end
 
           get do
-            { hgMetric: @hg_metric }
+            { hg_metric: @hg_metric }
           end
 
         #   desc "Updates app"

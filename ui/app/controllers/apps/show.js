@@ -20,7 +20,7 @@ export default Ember.Controller.extend({
     hgSubmit: function() {
       var me = this;
       var app = this.get("model");
-      var metric = this.store.createRecord("hgMetric", {
+      var metric = this.store.createRecord("hg-metric", {
         name: this.get("hgName"),
         metricName: this.get("hgMetricName"),
         kind: this.get("hgKind")

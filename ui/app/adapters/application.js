@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 import config from '../config/environment';
 
-export default DS.RESTAdapter.extend({
+export default DS.ActiveModelAdapter.extend({
   host: config.baseHost,
   namespace: 'api'
 });
