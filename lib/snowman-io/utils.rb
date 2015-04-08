@@ -9,7 +9,7 @@ module SnowmanIO
     end
 
     # `up` value is close to 90 percentile by meaning, but it slightly
-    # depends of every element (weighted avarage). This metric is usefull for small arrays.
+    # depends of every element (weighted avarage). This metric is especially usefull for small arrays.
     def self.up(arr)
       sorted = arr.sort
       if sorted.length <= 1

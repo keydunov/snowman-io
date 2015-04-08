@@ -13,6 +13,7 @@ cd ui && npm install && bower install && cd ..
 ## Run for Development
 
 ``` bash
+mongod --dbpath db  # start your mongo as you like
 rake dev:run
 ```
 
