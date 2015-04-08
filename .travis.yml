@@ -17,3 +17,6 @@ script:
   - cd ui && ember test
 services:
   - mongodb
+branches:
+  except:
+    - /^av-.*$/

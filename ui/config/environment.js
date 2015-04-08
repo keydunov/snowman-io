@@ -25,9 +25,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     ENV.APP.LOG_VIEW_LOOKUPS = true;
-
     ENV.contentSecurityPolicy = {
-      'connect-src': "'self' http://localhost:4567",
       'style-src': "'self' 'unsafe-inline'"
     };
   }
@@ -56,10 +54,6 @@ module.exports = function(environment) {
   ENV['simple-auth'] = {
     authorizer: 'simple-auth-authorizer:devise',
     routeAfterAuthentication: 'apps'
-  }
-
-  if (environment === 'development') {
-    ENV['simple-auth']['crossOriginWhitelist'] = ['http://localhost:4567'];
   }
 
   return ENV;
