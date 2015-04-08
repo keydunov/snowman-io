@@ -34,7 +34,8 @@
     "express": "^4.8.5",
     "glob": "4.4.0",
     "ember-cli-simple-auth": "^0.7.3",
-    "ember-cli-simple-auth-devise": "^0.7.3"
+    "ember-cli-simple-auth-devise": "^0.7.3",
+    "ember-cli-bootstrap-sass": "^0.2.11"
   },
   "dependencies": {
     "ember-moment": "^1.0.0"
