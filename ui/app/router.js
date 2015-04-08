@@ -18,7 +18,6 @@ Router.map(function() {
       this.route('edit', {path: 'apps/:id/edit'});
     });
   });
-  this.route('snow/settings');
 });
 
 export default Router;
