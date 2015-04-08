@@ -16,5 +16,10 @@ module SnowmanIO
     before_validation on: :create do
       self.authentication_token = generate_token(:authentication_token)
     end
+
+    def as_json(options = {})
+      super(options).tap { |o| o["id"] = o.delete("_id").to_s }
+    end
+
   end
 end

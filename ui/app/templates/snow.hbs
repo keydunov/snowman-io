@@ -19,11 +19,10 @@
           {{#link-to "snow.settings"}}Settings{{/link-to}}
         {{/link-to}}
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="#" {{ action 'invalidateSession' }}>Logout</a>
-        </li>
-      </ul>
+      <p class="navbar-text navbar-right">
+        Logged as {{ currentUser.email }} |
+        <a href="#" {{ action 'invalidateSession' }}>Logout</a>
+      </p>
     </div>
   </div>
 </nav>
