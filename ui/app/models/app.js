@@ -18,5 +18,10 @@ export default DS.Model.extend({
 
   isInitiated: function() {
     return this.get("requests").total.count > 0 || this.get("hgMetrics.length");
-  }.property("requests", "hgMetrics")
+  }.property("requests", "hgMetrics"),
+
+  hgMetricsAmountHuman: function() {
+    var amount = this.get("hgMetrics.length");
+    return amount + " HG Metric" + (amount > 1 ? "s" : "");
+  }.property("hgMetrics")
 });

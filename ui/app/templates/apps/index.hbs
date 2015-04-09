@@ -27,6 +27,13 @@
               {{#if app.requests.yesterday}}{{app.requests.yesterday.count}}{{else}}-{{/if}}
             </td>
           </tr>
+          {{#if app.hgMetrics}}
+            <tr>
+              <td colspan="2">
+                {{app.hgMetricsAmountHuman}}
+              </td>
+            </tr>
+          {{/if}}
         </tbody>
       </table>
     </div>
