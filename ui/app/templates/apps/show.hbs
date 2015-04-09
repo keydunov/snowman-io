@@ -7,31 +7,22 @@
 
 <div role="tabpanel">
   <ul class="nav nav-tabs" role="tablist">
-    {{#if model.requests.total.count}}
-      <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+    {{#if model.isInitiated}}
+      {{#link-to "apps.show.info" model tagName="li" href=false}}
+        {{#link-to "apps.show.info" model}}Info{{/link-to}}
+      {{/link-to}}
     {{/if}}
-    <li {{bind-attr class="model.requests.total.count::active"}}><a href="#install" data-toggle="tab">Install</a></li>
+
+    {{#link-to "apps.show.install" model tagName="li" href=false}}
+      {{#link-to "apps.show.install" model}}Install{{/link-to}}
+    {{/link-to}}
+
     {{#if isHgEnabled}}
-      <li><a href="#hg" data-toggle="tab">Add HG Metric</a></li>
+      {{#link-to "apps.show.add_hg_metric" model tagName="li" href=false}}
+        {{#link-to "apps.show.add_hg_metric" model}}Add HG Metric{{/link-to}}
+      {{/link-to}}
     {{/if}}
   </ul>
-
-  <div class="tab-content">
-    {{#if model.requests.total.count}}
-      <div class="tab-pane active" id="info">
-        <div>&nbsp;</div>
-        {{partial "apps/info"}}
-      </div>
-    {{/if}}
-    <div {{bind-attr class=":tab-pane model.requests.total.count::active"}} id="install">
-      <div>&nbsp;</div>
-      {{partial "apps/install"}}
-    </div>
-    {{#if isHgEnabled}}
-      <div class="tab-pane" id="hg">
-        <div>&nbsp;</div>
-        {{partial "apps/new_hg_metric"}}
-      </div>
-    {{/if}}
-  </div>
+  <div>&nbsp;</div>
+  {{outlet}}
 </div>

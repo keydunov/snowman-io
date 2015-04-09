@@ -1,0 +1,29 @@
+{{#if model.requests.total.count}}
+  <div class="row-fluid app-slot">
+    <table class="table table-striped" style="width:30%">
+      <tbody>
+        <tr>
+          <th colspan="2">Requests</th>
+        </tr>
+        <tr>
+          <td>
+            <b>Today</b><br>
+            {{#if model.requests.today}}{{model.requests.today.count}}{{else}}-{{/if}}
+          </td>
+          <td>
+            <b>Yesterday</b><br>
+            {{#if model.requests.yesterday}}{{model.requests.yesterday.count}}{{else}}-{{/if}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{{/if}}
+
+{{#if model.hgMetrics}}
+  <div class="row-fluid">
+    {{#each hgMetric in model.hgMetrics}}
+      <div>{{hgMetric.name}}</div>
+    {{/each}}
+  </div>
+{{/if}}
