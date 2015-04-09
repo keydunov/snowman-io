@@ -23,7 +23,7 @@
 {{#if model.hgMetrics}}
   <div class="row-fluid">
     {{#each hgMetric in model.hgMetrics}}
-      <div>{{hgMetric.name}}</div>
+      <div>{{hgMetric.name}} : {{hgMetric.metricName}} : {{hgMetric.kind}}</div>
     {{/each}}
   </div>
 {{/if}}
