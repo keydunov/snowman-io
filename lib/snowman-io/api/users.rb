@@ -25,12 +25,19 @@ module SnowmanIO
           email = permitted_params[:user][:email]
           password = permitted_params[:user][:password]
           if (user = User.where(email: email).first) && password.present? && user.authenticate(password)
-            { token: user.authentication_token, email: user.email }
+            { token: user.authentication_token, email: user.email, user_id: user.id.to_s }
           else
             status 400
             { message: "Wrong email or password" }
           end
         end
+
+        desc "Get user by id"
+        get ":id" do
+          authenticate!
+          { user: User.find(params[:id]) }
+        end
+
       end
     end
   end
