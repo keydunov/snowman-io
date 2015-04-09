@@ -14,5 +14,9 @@ export default DS.Model.extend({
   isNameEmpty: Ember.computed.empty('name'),
   requests: function () {
     return JSON.parse(this.get("requestsJSON"));
-  }.property("requestsJSON")
+  }.property("requestsJSON"),
+
+  isInitiated: function() {
+    return this.get("requests").total.count > 0 || this.get("hgMetrics.length");
+  }.property("requests", "hgMetrics")
 });

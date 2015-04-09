@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
       var model = this.model;
 
       model.save().then(function() {
-        me.transitionToRoute("apps.show", model);
+        me.transitionToRoute("apps.show.info", model);
       });
     }
   }
