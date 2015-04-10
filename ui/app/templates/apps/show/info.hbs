@@ -23,7 +23,11 @@
 {{#if model.hgMetrics}}
   <div class="row-fluid">
     {{#each hgMetric in model.hgMetrics}}
-      <div>{{hgMetric.name}} : {{hgMetric.metricName}} : {{hgMetric.kind}}</div>
+      <div>
+        {{graphite-graph target='apps.uchiru.request' hgKey=hgKey}}
+
+        {{hgMetric.name}} : {{hgMetric.metricName}} : {{hgMetric.kind}}
+      </div>
     {{/each}}
   </div>
 {{/if}}
