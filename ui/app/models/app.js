@@ -23,5 +23,11 @@ export default DS.Model.extend({
   hgMetricsAmountHuman: function() {
     var amount = this.get("hgMetrics.length");
     return amount + " HG Metric" + (amount > 1 ? "s" : "");
-  }.property("hgMetrics")
+  }.property("hgMetrics"),
+
+  hgDeployMetric: function() {
+    return this.get("hgMetrics").find(function(hgMetric){
+      return hgMetric.get("kind") === "deploy";
+    });
+  }.property("hgMetrics.@each.kind"),
 });
