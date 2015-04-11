@@ -1,36 +1,28 @@
-{{#if model.requests.total.count}}
-  <div class="page-header">
-    <h1>
-      {{model.name}}
-      <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
-    </h1>
-  </div>
-
-  <div role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#info" role="tab" data-toggle="tab">Info</a></li>
-      <li role="presentation"><a href="#install" role="tab" data-toggle="tab">Install</a></li>
-    </ul>
-
-    <div class="tab-content">
-      <div role="tabpanel" class="tab-pane active" id="info">
-        <div>&nbsp;</div>
-        {{partial "apps/info"}}
-      </div>
-      <div role="tabpanel" class="tab-pane" id="install">
-        <div>&nbsp;</div>
-        {{partial "apps/install"}}
-      </div>
-    </div>
-  </div>
-
-{{else}}
-  <div class="page-header">
-    <h1>
-      {{model.name}} - Installation
-      <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
+<div class="page-header">
+  <h1>
+    {{model.name}}
+    <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
   </h1>
-  </div>
-  {{partial "apps/install"}}
-{{/if}}
+</div>
 
+<div role="tabpanel">
+  <ul class="nav nav-tabs" role="tablist">
+    {{#if model.isInitiated}}
+      {{#link-to "apps.show.info" model tagName="li" href=false}}
+        {{#link-to "apps.show.info" model}}Info{{/link-to}}
+      {{/link-to}}
+    {{/if}}
+
+    {{#link-to "apps.show.install" model tagName="li" href=false}}
+      {{#link-to "apps.show.install" model}}Install{{/link-to}}
+    {{/link-to}}
+
+    {{#if isHgEnabled}}
+      {{#link-to "apps.show.add_hg_metric" model tagName="li" href=false}}
+        {{#link-to "apps.show.add_hg_metric" model}}Add HG Metric{{/link-to}}
+      {{/link-to}}
+    {{/if}}
+  </ul>
+  <div>&nbsp;</div>
+  {{outlet}}
+</div>

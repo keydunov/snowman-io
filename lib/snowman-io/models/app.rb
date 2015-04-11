@@ -3,6 +3,7 @@ module SnowmanIO
     include Mongoid::Document
     include Concerns::Tokenable
     has_many :metrics, dependent: :destroy
+    has_many :hg_metrics, dependent: :destroy
 
     field :name,  type: String
     field :token, type: String
@@ -14,7 +15,10 @@ module SnowmanIO
     end
 
     def as_json(options = {})
-      super(options.merge(methods: :requestsJSON)).tap { |o| o["id"] = o.delete("_id").to_s }
+      super(options.merge(methods: [:requestsJSON, :hg_metric_ids])).tap do |o|
+        o["id"] = o.delete("_id").to_s
+        o["hg_metric_ids"] = o["hg_metric_ids"].map(&:to_s)
+      end
     end
 
     # Returns amount of requests for `at` and day before
@@ -24,8 +28,9 @@ module SnowmanIO
 
       today = at.beginning_of_day
       yesterday = at.beginning_of_day - 1.day
-      json["today"] = {"at" => today.strftime("%Y-%m-%d")}
-      json["yesterday"] = {"at" => yesterday.strftime("%Y-%m-%d")}
+      json["today"] = {"at" => today.strftime("%Y-%m-%d"), "count" => 0}
+      json["yesterday"] = {"at" => yesterday.strftime("%Y-%m-%d"), "count" => 0}
+      json["total"] = {"count" => 0}
 
       if metric && (aggr = metric.aggregations.where(precision: "daily", at: today).first)
         json["today"]["count"] =  aggr.count.to_i
@@ -36,7 +41,7 @@ module SnowmanIO
       end
 
       if metric
-        json["total"] = {"count" => metric.aggregations.where(precision: "daily").sum(:count).to_i}
+        json["total"]["count"] = metric.aggregations.where(precision: "daily").sum(:count).to_i
       end
 
       json

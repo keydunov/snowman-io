@@ -3,9 +3,9 @@ import {
   test
 } from 'ember-qunit';
 
-moduleForModel('app', {
+moduleForModel('hg-metric', {
   // Specify the other units that are required for this test.
-  needs: ['model:hg-metric']
+  needs: ['model:app']
 });
 
 test('it exists', function(assert) {

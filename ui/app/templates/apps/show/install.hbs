@@ -7,18 +7,18 @@ gem 'snowagent'
 <b>Heroku:</b>
 <pre>
 heroku config:set \
-  SNOWMANIO_SERVER={{base_url}} \
+  SNOWMANIO_SERVER={{baseUrl}} \
   SNOWMANIO_SECRET_TOKEN={{model.token}}
 </pre>
 
 <b>Standalone:</b>
 <pre>
 # Add environment variables to production application
-SNOWMANIO_SERVER={{base_url}}
+SNOWMANIO_SERVER={{baseUrl}}
 SNOWMANIO_SECRET_TOKEN={{model.token}}
 </pre>
 
 <h2>Send Test Request</h2>
 <pre>
-curl {{base_url}}/agent/metrics -d '{"token":"{{model.token}}","metrics":[{"name":"request","value":0.15,"kind":"request"}]}'
+curl {{baseUrl}}/agent/metrics -d '{"token":"{{model.token}}","metrics":[{"name":"request","value":0.15,"kind":"request"}]}'
 </pre>

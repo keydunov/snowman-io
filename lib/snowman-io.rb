@@ -31,6 +31,7 @@ require "snowman-io/models/concerns/tokenable"
 require "snowman-io/models/user"
 require "snowman-io/models/app"
 require "snowman-io/models/metric"
+require "snowman-io/models/hg_metric"
 require "snowman-io/models/data_point"
 require "snowman-io/models/aggregation"
 require "snowman-io/models/setting"
@@ -60,6 +61,8 @@ module SnowmanIO
   ADMIN_PASSWORD_KEY = "admin_password_hash"
   BASE_URL_KEY = "base_url"
   NEXT_REPORT_DATE = "next_report_date"
+  HG_STATUS = "hg_status"
+  HG_KEY = "hg_key"
 
   def self.logger
     @logger ||= Logger.new(STDERR)
