@@ -29,7 +29,7 @@ export default Ember.Component.extend({
     var targets = [];
 
     if ((kind === "time" || kind === "amount") && this.get("duration") === "24h") {
-      targets.concat([
+      targets = targets.concat([
         "color(timeShift("+metric+",'168h'),'FF009740')",
         "color(timeShift("+metric+",'144h'),'A200FF40')",
         "color(timeShift("+metric+",'120h'),'00ABA940')",
