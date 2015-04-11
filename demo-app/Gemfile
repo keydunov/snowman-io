@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.3'
+ruby '2.1.5'
 
 gem 'snowman-io', path: '..'
 gem 'rerun', '0.10.0'
