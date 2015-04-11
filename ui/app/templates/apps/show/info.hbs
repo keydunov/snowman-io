@@ -25,7 +25,8 @@
     {{#each hgMetric in model.hgMetrics}}
       <div>
         <h4>{{hgMetric.name}}</h4>
-        {{graphite-graph hgMetric=hgMetric hgKey=hgKey}}
+        {{graphite-graph hgMetric=hgMetric hgKey=hgKey duration="24h"}}
+        {{graphite-graph hgMetric=hgMetric hgKey=hgKey duration="1h"}}
       </div>
     {{/each}}
   </div>
