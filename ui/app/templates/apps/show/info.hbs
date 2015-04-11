@@ -24,9 +24,8 @@
   <div class="row-fluid">
     {{#each hgMetric in model.hgMetrics}}
       <div>
-        {{graphite-graph target='apps.uchiru.request' hgKey=hgKey}}
-
-        {{hgMetric.name}} : {{hgMetric.metricName}} : {{hgMetric.kind}}
+        <h4>{{hgMetric.name}}</h4>
+        {{graphite-graph hgMetric=hgMetric hgKey=hgKey}}
       </div>
     {{/each}}
   </div>

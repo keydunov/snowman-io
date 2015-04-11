@@ -19,8 +19,8 @@ export default Ember.Component.extend({
   },
 
   customGraphiteOptions: function() {
-    return Ember.$.extend({target: this.get("target")}, this.get("defaultGraphiteOptions"));
-  }.property("target"),
+    return Ember.$.extend({target: this.get("hgMetric.metricName")}, this.get("defaultGraphiteOptions"));
+  }.property("hgMetric.metricName"),
 
   src: function() {
     var src = "https://www.hostedgraphite.com" + this.get("hgKey") + "/graphite/render?";
@@ -31,7 +31,7 @@ export default Ember.Component.extend({
               src += "&target=" + value;
           });
       } else if (value !== null && key !== "url") {
-          src += "&" + key + "=" + value;
+        src += "&" + key + "=" + value;
       }
     });
 
