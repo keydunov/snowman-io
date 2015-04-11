@@ -12,7 +12,7 @@ proxy.on('error', function (err, req, res) {
     'Content-Type': 'text/plain'
   });
 
-  res.end("Something went wrong. And we are reporting a custom error message.\n");
+  res.end("Something went wrong.\n");
 });
 
 console.log("listening on port 4566")
