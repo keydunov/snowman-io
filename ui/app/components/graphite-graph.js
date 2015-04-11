@@ -21,26 +21,23 @@ export default Ember.Component.extend({
     var metric = this.get("hgMetric.metricName");
     var deployMetric = this.get("hgDeployMetric.metricName");
     var kind = this.get("hgMetric.kind");
+    var second = null;
+    if (kind === "time") {
+      second = metric;
+      metric += ":90pct";
+    }
+    var targets = [];
 
-    if ((kind == "time" || kind == "amount") && this.get("duration") == "24h") {
-      var base = null;
-      var second = null;
-      if (kind == "time") {
-        base = metric + ":90pct";
-        second = metric;
-      } else  {
-        base = metric;
-      }
-
-      var targets = [
-        "color(timeShift("+base+",'168h'),'FF009740')",
-        "color(timeShift("+base+",'144h'),'A200FF40')",
-        "color(timeShift("+base+",'120h'),'00ABA940')",
-        "color(timeShift("+base+",'96h' ),'8CBF2640')",
-        "color(timeShift("+base+",'72h' ),'A0500040')",
-        "color(timeShift("+base+",'48h' ),'E671B840')",
-        "color(timeShift("+base+",'24h' ),'F0960940')",
-      ];
+    if ((kind === "time" || kind === "amount") && this.get("duration") === "24h") {
+      targets.concat([
+        "color(timeShift("+metric+",'168h'),'FF009740')",
+        "color(timeShift("+metric+",'144h'),'A200FF40')",
+        "color(timeShift("+metric+",'120h'),'00ABA940')",
+        "color(timeShift("+metric+",'96h' ),'8CBF2640')",
+        "color(timeShift("+metric+",'72h' ),'A0500040')",
+        "color(timeShift("+metric+",'48h' ),'E671B840')",
+        "color(timeShift("+metric+",'24h' ),'F0960940')",
+      ]);
 
       if (deployMetric) {
         targets.push("drawAsInfinite(color("+deployMetric+",'ff000077'))");
@@ -51,7 +48,7 @@ export default Ember.Component.extend({
       }
 
       targets = targets.concat([
-        "color(lineWidth("+base+",2),'green')",
+        "color(lineWidth("+metric+",2),'green')",
       ]);
 
       return Ember.$.extend({}, this.get("defaultGraphiteOptions"), {
@@ -60,29 +57,20 @@ export default Ember.Component.extend({
       });
 
 
-    } else if ((kind == "time" || kind == "amount") && this.get("duration") == "1h") {
-      var base = null;
-      var second = null;
-      if (kind == "time") {
-        base = metric + ":90pct";
-        second = metric;
-      } else  {
-        base = metric;
-      }
-
-      var targets = [
-        "color(lineWidth(timeShift("+base+",'11h'),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'10h'),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'9h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'8h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'7h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'6h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'5h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'4h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'3h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'2h' ),2),'d0d0d0')",
-        "color(lineWidth(timeShift("+base+",'1h' ),2),'d0d0d0')",
-      ];
+    } else if ((kind === "time" || kind === "amount") && this.get("duration") === "1h") {
+      targets = targets.concat([
+        "color(lineWidth(timeShift("+metric+",'11h'),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'10h'),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'9h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'8h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'7h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'6h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'5h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'4h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'3h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'2h' ),2),'d0d0d0')",
+        "color(lineWidth(timeShift("+metric+",'1h' ),2),'d0d0d0')",
+      ]);
 
       if (deployMetric) {
         targets.push("drawAsInfinite(color("+deployMetric+",'ff000077'))");
@@ -93,7 +81,7 @@ export default Ember.Component.extend({
       }
 
       targets = targets.concat([
-        "color(lineWidth("+base+",2),'green')",
+        "color(lineWidth("+metric+",2),'green')",
       ]);
 
       return Ember.$.extend({}, this.get("defaultGraphiteOptions"), {
@@ -103,8 +91,8 @@ export default Ember.Component.extend({
       });
 
 
-    } else if (kind == "counter" && this.get("duration") == "24h") {
-      var targets = [
+    } else if (kind === "counter" && this.get("duration") === "24h") {
+      targets = targets.concat([
         "secondYAxis(color(timeShift(integral("+metric+"),'168h'),'magenta'))",
         "secondYAxis(color(timeShift(integral("+metric+"),'144h'),'gray'   ))",
         "secondYAxis(color(timeShift(integral("+metric+"),'120h'),'yellow' ))",
@@ -112,7 +100,7 @@ export default Ember.Component.extend({
         "secondYAxis(color(timeShift(integral("+metric+"),'72h' ),'purple' ))",
         "secondYAxis(color(timeShift(integral("+metric+"),'48h' ),'brown'  ))",
         "secondYAxis(color(timeShift(integral("+metric+"),'24h' ),'aqua'   ))",
-      ];
+      ]);
 
       if (deployMetric) {
         targets.push("drawAsInfinite(color("+deployMetric+",'ff000077'))");
@@ -129,8 +117,8 @@ export default Ember.Component.extend({
       });
 
 
-    } else if (kind == "counter" && this.get("duration") == "1h") {
-      var targets = [
+    } else if (kind === "counter" && this.get("duration") === "1h") {
+      targets = targets.concat([
         "secondYAxis(color(lineWidth(timeShift(integral("+metric+"),'11h'),2),'d0d0d0'))",
         "secondYAxis(color(lineWidth(timeShift(integral("+metric+"),'10h'),2),'d0d0d0'))",
         "secondYAxis(color(lineWidth(timeShift(integral("+metric+"),'9h' ),2),'d0d0d0'))",
@@ -142,7 +130,7 @@ export default Ember.Component.extend({
         "secondYAxis(color(lineWidth(timeShift(integral("+metric+"),'3h' ),2),'d0d0d0'))",
         "secondYAxis(color(lineWidth(timeShift(integral("+metric+"),'2h' ),2),'d0d0d0'))",
         "secondYAxis(color(lineWidth(timeShift(integral("+metric+"),'1h' ),2),'d0d0d0'))",
-      ];
+      ]);
 
       if (deployMetric) {
         targets.push("drawAsInfinite(color("+deployMetric+",'ff000077'))");
