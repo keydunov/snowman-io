@@ -6,4 +6,6 @@ export default DS.Model.extend({
   name: DS.attr('string'),
   metricName: DS.attr('string'),
   kind: DS.attr('string'),
+
+  isDeploy: Ember.computed.equal("kind", "deploy")
 });

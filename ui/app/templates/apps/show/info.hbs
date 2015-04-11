@@ -23,11 +23,13 @@
 {{#if model.hgMetrics}}
   <div class="row-fluid">
     {{#each hgMetric in model.hgMetrics}}
-      <div>
-        <h4>{{hgMetric.name}}</h4>
-        {{graphite-graph hgMetric=hgMetric hgKey=hgKey duration="24h"}}
-        {{graphite-graph hgMetric=hgMetric hgKey=hgKey duration="1h"}}
-      </div>
+      {{#unless hgMetric.isDeploy}}
+        <div>
+          <h4>{{hgMetric.name}}</h4>
+          {{graphite-graph hgMetric=hgMetric hgDeployMetric=model.hgDeployMetric hgKey=hgKey duration="24h"}}
+          {{graphite-graph hgMetric=hgMetric hgDeployMetric=model.hgDeployMetric hgKey=hgKey duration="1h"}}
+        </div>
+      {{/unless}}
     {{/each}}
   </div>
 {{/if}}
