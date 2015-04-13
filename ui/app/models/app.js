@@ -30,4 +30,10 @@ export default DS.Model.extend({
       return hgMetric.get("kind") === "deploy";
     });
   }.property("hgMetrics.@each.kind"),
+
+  hgNonDeployMetric: function() {
+    return this.get("hgMetrics").filter(function(hgMetric){
+      return hgMetric.get("kind") !== "deploy";
+    });
+  }.property("hgMetrics.@each.kind"),
 });

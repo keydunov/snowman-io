@@ -1,0 +1,22 @@
+<div class="row-fluid text-right">
+  {{#link-to "hg_metrics.new" class="btn btn-default"}}Add HG Metric{{/link-to}}
+</div>
+
+{{#each hgMetric in model.hgNonDeployMetric}}
+  <div class="row-fluid">
+    <h4>{{hgMetric.name}}</h4>
+    {{graphite-graph hgMetric=hgMetric hgDeployMetric=model.hgDeployMetric hgKey=hgKey duration="24h"}}
+    {{graphite-graph hgMetric=hgMetric hgDeployMetric=model.hgDeployMetric hgKey=hgKey duration="1h"}}
+    <div class="pull-right">
+      {{#link-to "hg_metrics.edit" model hgMetric}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
+      <a href="#" {{action "destroy" hgMetric}}><span class="glyphicon glyphicon-trash"></span></a>
+    </div>
+  </div>
+{{else}}
+  <div class="row-fluid">
+    <div>&nbsp;</div>
+    <h1 class="text-center">
+      You haven't any metrics yet, {{#link-to "hg_metrics.new" model}}add the first{{/link-to}}.
+    </h1>
+  </div>
+{{/each}}

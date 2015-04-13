@@ -17,8 +17,10 @@ Router.map(function() {
       this.route('show', {path: 'apps/:app_id'}, function() {
         this.route('info');
         this.route('install');
-        this.route('add_hg_metric', {path: 'hg_metrics/new'});
-        this.route('edit_hg_metric', {path: 'hg_metrics/:hg_metric_id/edit'});
+        this.resource('hg_metrics', function() {
+          this.route('new');
+          this.route('edit', {path: ':hg_metric_id/edit'});
+        });
       });
       this.route('edit', {path: 'apps/:id/edit'});
     });

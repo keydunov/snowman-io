@@ -35,7 +35,7 @@ module SnowmanIO
             end
           end
           put do
-            { hg_metric: @hg_metric.tap { |m| m.update_attributes!(permitted_params[:app].to_h.except("app_id")) } }
+            { hg_metric: @hg_metric.tap { |m| m.update_attributes!(permitted_params[:hg_metric].to_h.except("app_id")) } }
           end
 
           delete do

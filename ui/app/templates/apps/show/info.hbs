@@ -1,4 +1,4 @@
-{{#if model.requests.total.count}}
+{{#if model.isInitiated }}
   <div class="row-fluid app-slot">
     <table class="table table-striped" style="width:30%">
       <tbody>
@@ -15,25 +15,16 @@
             {{#if model.requests.yesterday}}{{model.requests.yesterday.count}}{{else}}-{{/if}}
           </td>
         </tr>
+        {{#if model.hgMetrics}}
+          <tr>
+            <td colspan="2">
+              {{model.hgMetricsAmountHuman}}
+            </td>
+          </tr>
+        {{/if}}
       </tbody>
     </table>
   </div>
-{{/if}}
-
-{{#if model.hgMetrics}}
-  <div class="row-fluid">
-    {{#each hgMetric in model.hgMetrics}}
-      {{#unless hgMetric.isDeploy}}
-        <div>
-          <h4>{{hgMetric.name}}</h4>
-          {{graphite-graph hgMetric=hgMetric hgDeployMetric=model.hgDeployMetric hgKey=hgKey duration="24h"}}
-          {{graphite-graph hgMetric=hgMetric hgDeployMetric=model.hgDeployMetric hgKey=hgKey duration="1h"}}
-          <div class="pull-right">
-            {{#link-to "apps.show.edit_hg_metric" model hgMetric}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
-            <a href="#" {{action "hgDestroy" hgMetric}}><span class="glyphicon glyphicon-trash"></span></a>
-          </div>
-        </div>
-      {{/unless}}
-    {{/each}}
-  </div>
+{{else}}
+  {{partial "apps/show/install"}}
 {{/if}}
