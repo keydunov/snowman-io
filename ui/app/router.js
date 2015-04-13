@@ -19,6 +19,7 @@ Router.map(function() {
         this.route('install');
         this.resource('hg_metrics', function() {
           this.route('new');
+          this.route('show', {path: ':hg_metric_id'});
           this.route('edit', {path: ':hg_metric_id/edit'});
         });
       });
