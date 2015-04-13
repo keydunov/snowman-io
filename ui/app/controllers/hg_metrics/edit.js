@@ -13,7 +13,7 @@ export default Ember.Controller.extend({
       me.set("saving", true);
       metric.save().then(function() {
         me.set("saving", false);
-        me.transitionToRoute("hg_metrics", app);
+        me.transitionToRoute("hg_metrics.show", app, metric);
       });
     }
   }

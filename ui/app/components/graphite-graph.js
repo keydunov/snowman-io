@@ -28,7 +28,22 @@ export default Ember.Component.extend({
     }
     var targets = [];
 
-    if ((kind === "time" || kind === "amount") && this.get("duration") === "24h") {
+    if (kind === "deploy" && this.get("duration") === "24h") {
+      targets.push("drawAsInfinite(color("+metric+",'ff000077'))");
+      return Ember.$.extend({}, this.get("defaultGraphiteOptions"), {
+        width: 800,
+        targets: targets
+      });
+
+    } else if (kind === "deploy" && this.get("duration") === "1h") {
+      targets.push("drawAsInfinite(color("+metric+",'ff000077'))");
+      return Ember.$.extend({}, this.get("defaultGraphiteOptions"), {
+        from: '-1h',
+        width: 300,
+        targets: targets
+      });
+
+    } else if ((kind === "time" || kind === "amount") && this.get("duration") === "24h") {
       targets = targets.concat([
         "color(timeShift("+metric+",'168h'),'FF009740')",
         "color(timeShift("+metric+",'144h'),'A200FF40')",

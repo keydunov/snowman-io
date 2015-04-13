@@ -2,7 +2,7 @@
   {{#link-to "hg_metrics.new" class="btn btn-default"}}Add HG Metric{{/link-to}}
 </div>
 
-{{#if model.hgNonDeployMetric}}
+{{#if model.hgMetrics}}
   <div class="table-responsive">
     <table class="table table-striped">
       <thead>
@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each hgMetric in model.hgNonDeployMetric}}
+        {{#each hgMetric in model.hgMetrics}}
           <tr>
             <td>{{link-to hgMetric.name "hg_metrics.show" model hgMetric}}</td>
             <td>{{hgMetric.metricName}}</td>

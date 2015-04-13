@@ -8,6 +8,7 @@ export default Ember.Route.extend({
   setupController: function(controller, model) {
     this._super(controller, model);
     controller.set("app", this.modelFor("apps.show"));
+    controller.set("fixedName", model.get("name"));
   },
 
   deactivate: function() {
