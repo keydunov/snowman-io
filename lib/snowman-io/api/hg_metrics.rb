@@ -26,21 +26,21 @@ module SnowmanIO
             { hg_metric: @hg_metric }
           end
 
-        #   desc "Updates app"
-        #   # params do
-        #   #   requires :app, type: Hash do
-        #   #     requires :name, type: String
-        #   #   end
-        #   # end
-        #   put do
-        #     p params
-        #     # { app: @app.tap { |app| app.update_attributes!(permitted_params[:app].to_h) } }
-        #   end
-        #
-        #   desc "Deletes app"
-        #   delete do
-        #     @app.destroy
-        #   end
+          params do
+            requires :hg_metric, type: Hash do
+              requires :app_id, type: String
+              requires :name, type: String
+              requires :metric_name, type: String
+              requires :kind, type: String
+            end
+          end
+          put do
+            { hg_metric: @hg_metric.tap { |m| m.update_attributes!(permitted_params[:hg_metric].to_h.except("app_id")) } }
+          end
+
+          delete do
+            @hg_metric.destroy
+          end
         end
       end
     end

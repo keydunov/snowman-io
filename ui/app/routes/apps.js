@@ -12,7 +12,6 @@ export default Ember.Route.extend({
 
   deactivate: function() {
     Ember.run.cancel(this.get("timer"));
-    this.set("timer", null);
   },
 
   _schedule: function() {

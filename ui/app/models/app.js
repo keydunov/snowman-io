@@ -29,5 +29,5 @@ export default DS.Model.extend({
     return this.get("hgMetrics").find(function(hgMetric){
       return hgMetric.get("kind") === "deploy";
     });
-  }.property("hgMetrics.@each.kind"),
+  }.property("hgMetrics.@each.kind")
 });

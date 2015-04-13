@@ -7,19 +7,19 @@
 
 <div role="tabpanel">
   <ul class="nav nav-tabs" role="tablist">
-    {{#if model.isInitiated}}
-      {{#link-to "apps.show.info" model tagName="li" href=false}}
-        {{#link-to "apps.show.info" model}}Info{{/link-to}}
-      {{/link-to}}
-    {{/if}}
-
-    {{#link-to "apps.show.install" model tagName="li" href=false}}
-      {{#link-to "apps.show.install" model}}Install{{/link-to}}
+    {{#link-to "apps.show.info" model tagName="li" href=false}}
+      {{#link-to "apps.show.info" model}}Info{{/link-to}}
     {{/link-to}}
 
     {{#if isHgEnabled}}
-      {{#link-to "apps.show.add_hg_metric" model tagName="li" href=false}}
-        {{#link-to "apps.show.add_hg_metric" model}}Add HG Metric{{/link-to}}
+      {{#link-to "hg_metrics" model tagName="li" href=false}}
+        {{#link-to "hg_metrics" model current-when=""}}HG Metrics{{/link-to}}
+      {{/link-to}}
+    {{/if}}
+
+    {{#if model.isInitiated}}
+      {{#link-to "apps.show.install" model tagName="li" href=false}}
+        {{#link-to "apps.show.install" model}}Install{{/link-to}}
       {{/link-to}}
     {{/if}}
   </ul>

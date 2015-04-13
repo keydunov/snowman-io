@@ -1,7 +1,7 @@
 {{#if showMenu}}
   <ul class="nav nav-tabs">
     {{#each app in model}}
-      {{#link-to "apps.show.info" app tagName="li" href=false current-when="apps.show.info apps.show.install apps.show.add_hg_metric"}}
+      {{#link-to "apps.show.info" app tagName="li" href=false current-when="apps.show"}}
         {{link-to app.name "apps.show.info" app}}
       {{/link-to}}
     {{/each}}

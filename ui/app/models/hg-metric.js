@@ -8,5 +8,7 @@ export default DS.Model.extend({
   metricName: DS.attr('string'),
   kind: DS.attr('string'),
 
+  availableKinds: ["time", "counter", "amount", "deploy"],
+
   isDeploy: Ember.computed.equal("kind", "deploy")
 });

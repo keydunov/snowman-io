@@ -14,10 +14,14 @@ Router.map(function() {
 
     this.resource('apps', {path: '/'}, function() {
       this.route('new', {path: 'apps/new'});
-      this.route('show', {path: 'apps/:id'}, function() {
+      this.route('show', {path: 'apps/:app_id'}, function() {
         this.route('info');
         this.route('install');
-        this.route('add_hg_metric');
+        this.resource('hg_metrics', function() {
+          this.route('new');
+          this.route('show', {path: ':hg_metric_id'});
+          this.route('edit', {path: ':hg_metric_id/edit'});
+        });
       });
       this.route('edit', {path: 'apps/:id/edit'});
     });
