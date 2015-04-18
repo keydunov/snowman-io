@@ -2,17 +2,13 @@
   <div class="form-group">
     <label for="inputName" class="col-sm-2 control-label">Name</label>
     <div class="col-sm-8">
-      {{input class="form-control" id="inputName" value=model.name placeholder="Application Name"}}
+      {{input class="form-control" id="inputName" value=appName placeholder="Application Name"}}
     </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-8">
-      <button type="submit" class="btn btn-primary" {{bind-attr disabled=model.isNameEmpty}} {{action "save"}}>
-        {{#if model.isNew}}
-          Register
-        {{else}}
-          Update
-        {{/if}}
+      <button type="submit" class="btn btn-primary" {{bind-attr disabled=isFormInvalid}} {{action "save"}}>
+        Save
       </button>
     </div>
   </div>

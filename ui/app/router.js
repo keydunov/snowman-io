@@ -17,13 +17,13 @@ Router.map(function() {
       this.route('show', {path: 'apps/:app_id'}, function() {
         this.route('info');
         this.route('install');
+        this.route('edit');
         this.resource('hg_metrics', function() {
           this.route('new');
           this.route('show', {path: ':hg_metric_id'});
           this.route('edit', {path: ':hg_metric_id/edit'});
         });
       });
-      this.route('edit', {path: 'apps/:id/edit'});
     });
   });
 });

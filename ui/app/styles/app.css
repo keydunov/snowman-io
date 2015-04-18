@@ -27,3 +27,7 @@ body {
 .app-slot .yesterday {
   color: #999;
 }
+
+.panel-custom {
+  margin-top: 35px;
+}
