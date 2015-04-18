@@ -1,12 +1,16 @@
-<div class="page-header">
-  <h1>
-    {{model.name}}
-    <small>{{#link-to "apps.edit" model}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}</small>
-  </h1>
-</div>
-
 <div role="tabpanel">
   <ul class="nav nav-tabs" role="tablist">
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        {{model.name}} <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        {{#each app in apps}}
+          <li>{{link-to app.name "apps.show.info" app}}</li>
+        {{/each}}
+      </ul>
+    </li>
+
     {{#link-to "apps.show.info" model tagName="li" href=false}}
       {{#link-to "apps.show.info" model}}Info{{/link-to}}
     {{/link-to}}
@@ -22,6 +26,10 @@
         {{#link-to "apps.show.install" model}}Install{{/link-to}}
       {{/link-to}}
     {{/if}}
+
+    {{#link-to "apps.show.edit" model tagName="li" href=false}}
+      {{#link-to "apps.show.edit" model}}Settings{{/link-to}}
+    {{/link-to}}
   </ul>
   <div>&nbsp;</div>
   {{outlet}}

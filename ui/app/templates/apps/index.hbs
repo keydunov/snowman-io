@@ -7,10 +7,6 @@
     <div class="col-md-3 app-slot">
       <h4>
         {{#link-to "apps.show.info" app.id}}{{app.name}}{{/link-to}}
-        <small class="pull-right">
-          {{#link-to "apps.edit" app}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
-          <a href="#" {{action "destroy" app}}><span class="glyphicon glyphicon-trash"></span></a>
-        </small>
       </h4>
       <table class="table table-striped">
         <tbody>
