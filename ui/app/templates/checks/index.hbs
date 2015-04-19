@@ -10,7 +10,7 @@
       <tbody>
         {{#each check in model.checks}}
           <tr>
-            <td></td>
+            <td>{{render "checks/human" check}}</td>
             <td>
               <a href="#" {{action "destroy" check}}><span class="glyphicon glyphicon-trash"></span></a>
             </td>
