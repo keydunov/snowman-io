@@ -1,11 +1,11 @@
 module SnowmanIO
   module API
-    class HgMetrics < Grape::API
+    class Metrics < Grape::API
       before(&:authenticate!)
 
-      namespace :hg_metrics do
+      namespace :metrics do
         params do
-          requires :hg_metric, type: Hash do
+          requires :metric, type: Hash do
             requires :app_id, type: String
             requires :name, type: String
             requires :metric_name, type: String
@@ -13,21 +13,21 @@ module SnowmanIO
           end
         end
         post do
-          app = App.find(permitted_params[:hg_metric][:app_id])
-          { hg_metric: app.hg_metrics.create!(permitted_params[:hg_metric].to_h.except("app_id")) }
+          app = App.find(permitted_params[:metric][:app_id])
+          { metric: app.metrics.create!(permitted_params[:metric].to_h.except("app_id")) }
         end
 
         route_param :id do
           before do
-            @hg_metric = HgMetric.find(params[:id])
+            @metric = Metric.find(params[:id])
           end
 
           get do
-            { hg_metric: @hg_metric }
+            { metric: @metric }
           end
 
           params do
-            requires :hg_metric, type: Hash do
+            requires :metric, type: Hash do
               requires :app_id, type: String
               requires :name, type: String
               requires :metric_name, type: String
@@ -35,11 +35,11 @@ module SnowmanIO
             end
           end
           put do
-            { hg_metric: @hg_metric.tap { |m| m.update_attributes!(permitted_params[:hg_metric].to_h.except("app_id")) } }
+            { metric: @metric.tap { |m| m.update_attributes!(permitted_params[:metric].to_h.except("app_id")) } }
           end
 
           delete do
-            @hg_metric.destroy
+            @metric.destroy
           end
         end
       end

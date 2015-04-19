@@ -2,10 +2,10 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
   actions: {
-    destroy: function(hgMetric) {
+    destroy: function(metric) {
       if (confirm("Are you sure?")) {
-        hgMetric.deleteRecord();
-        hgMetric.save();
+        metric.deleteRecord();
+        metric.save();
       }
     }
   }

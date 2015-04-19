@@ -3,7 +3,6 @@ module SnowmanIO
     include Mongoid::Document
     include Concerns::Tokenable
     has_many :metrics, dependent: :destroy
-    has_many :hg_metrics, dependent: :destroy
 
     field :name,  type: String
     field :token, type: String
@@ -15,9 +14,9 @@ module SnowmanIO
     end
 
     def as_json(options = {})
-      super(options.merge(methods: [:requestsJSON, :hg_metric_ids])).tap do |o|
+      super(options.merge(methods: [:requestsJSON, :metric_ids])).tap do |o|
         o["id"] = o.delete("_id").to_s
-        o["hg_metric_ids"] = o["hg_metric_ids"].map(&:to_s)
+        o["metric_ids"] = o["metric_ids"].map(&:to_s)
       end
     end
 

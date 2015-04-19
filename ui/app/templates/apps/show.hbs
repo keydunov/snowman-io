@@ -15,11 +15,9 @@
       {{#link-to "apps.show.info" model}}Info{{/link-to}}
     {{/link-to}}
 
-    {{#if isHgEnabled}}
-      {{#link-to "hg_metrics" model tagName="li" href=false}}
-        {{#link-to "hg_metrics" model current-when=""}}HG Metrics{{/link-to}}
-      {{/link-to}}
-    {{/if}}
+    {{#link-to "metrics" model tagName="li" href=false}}
+      {{#link-to "metrics" model current-when=""}}Metrics{{/link-to}}
+    {{/link-to}}
 
     {{#if model.isInitiated}}
       {{#link-to "apps.show.install" model tagName="li" href=false}}

@@ -5,7 +5,7 @@ export default DS.Model.extend({
   name: DS.attr('string'),
   token: DS.attr('string'),
 
-  hgMetrics: DS.hasMany('hg-metric', { async: true }),
+  metrics: DS.hasMany('metric', { async: true }),
 
   // Rails app
   requestsJSON: DS.attr('string'),
@@ -17,17 +17,17 @@ export default DS.Model.extend({
   }.property("requestsJSON"),
 
   isInitiated: function() {
-    return this.get("requests").total.count > 0 || this.get("hgMetrics.length");
-  }.property("requests", "hgMetrics"),
+    return this.get("requests").total.count > 0 || this.get("metrics.length");
+  }.property("requests", "metrics"),
 
-  hgMetricsAmountHuman: function() {
-    var amount = this.get("hgMetrics.length");
-    return amount + " HG Metric" + (amount > 1 ? "s" : "");
-  }.property("hgMetrics"),
+  metricsAmountHuman: function() {
+    var amount = this.get("metrics.length");
+    return amount + " Metric" + (amount !== 1 ? "s" : "");
+  }.property("metrics"),
 
   hgDeployMetric: function() {
     return this.get("hgMetrics").find(function(hgMetric){
       return hgMetric.get("kind") === "deploy";
     });
-  }.property("hgMetrics.@each.kind")
+  }.property("metrics.@each.kind")
 });
