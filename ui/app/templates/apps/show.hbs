@@ -15,13 +15,13 @@
       {{#link-to "apps.show.info" model}}Info{{/link-to}}
     {{/link-to}}
 
-    {{#if isHgEnabled}}
-      {{#link-to "hg_metrics" model tagName="li" href=false}}
-        {{#link-to "hg_metrics" model current-when=""}}HG Metrics{{/link-to}}
+    {{#if isMetricsTabVisible}}
+      {{#link-to "metrics" model tagName="li" href=false}}
+        {{#link-to "metrics" model current-when=""}}Metrics{{/link-to}}
       {{/link-to}}
     {{/if}}
 
-    {{#if model.isInitiated}}
+    {{#if model.metrics.length}}
       {{#link-to "apps.show.install" model tagName="li" href=false}}
         {{#link-to "apps.show.install" model}}Install{{/link-to}}
       {{/link-to}}

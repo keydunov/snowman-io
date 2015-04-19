@@ -6,10 +6,18 @@ export default DS.Model.extend({
   checks: DS.hasMany('check', { async: true }),
 
   name: DS.attr('string'),
-  metricName: DS.attr('string'),
+  source: DS.attr('string'),
   kind: DS.attr('string'),
+
+  // source: hg
+  metricName: DS.attr('string'),
 
   availableKinds: ["time", "counter", "amount", "deploy"],
 
-  isDeploy: Ember.computed.equal("kind", "deploy")
+  isDeploy: Ember.computed.equal("kind", "deploy"),
+  isEditable: function() {
+    return this.get("isSourceHg");
+  }.property("source"),
+
+  isSourceHg: Ember.computed.equal("source", "hg"),
 });

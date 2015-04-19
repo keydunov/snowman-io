@@ -1,0 +1,44 @@
+{{#if isMetricAllowToAdd}}
+  <div class="row-fluid text-right">
+    {{#link-to "metrics.new" class="btn btn-default"}}Add Metric{{/link-to}}
+  </div>
+{{/if}}
+
+{{#if model.metrics}}
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Source</th>
+          <th>Kind</th>
+          <th>Checks</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each metric in model.metrics}}
+          <tr>
+            <td>{{link-to metric.name "metrics.show" model metric}}</td>
+            <td>{{metric.source}}</td>
+            <td>{{metric.kind}}</td>
+            <td>{{metric.checks.length}}</td>
+            <td>
+              {{#if metric.isEditable}}
+                {{#link-to "metrics.edit" model metric}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
+                <a href="#" {{action "destroy" metric}}><span class="glyphicon glyphicon-trash"></span></a>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+{{else}}
+  <div class="row-fluid">
+    <div>&nbsp;</div>
+    <h1 class="text-center">
+      You haven't any metrics yet, {{#link-to "metrics.new" model}}add the first{{/link-to}}.
+    </h1>
+  </div>
+{{/if}}
