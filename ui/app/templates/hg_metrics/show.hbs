@@ -8,6 +8,6 @@
 <div class="row-fluid">
   {{graphite-graph hgMetric=model hgDeployMetric=app.hgDeployMetric hgKey=hgKey duration="24h"}}
   {{graphite-graph hgMetric=model hgDeployMetric=app.hgDeployMetric hgKey=hgKey duration="1h"}}
-  <div class="pull-right">
-  </div>
 </div>
+
+{{render "checks/index" model}}

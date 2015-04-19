@@ -1,0 +1,26 @@
+{{#if model.checks}}
+  <div class="table-response">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Check</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each check in model.checks}}
+          <tr>
+            <td>{{render "checks/human" check}}</td>
+            <td>
+              <a href="#" {{action "destroy" check}}><span class="glyphicon glyphicon-trash"></span></a>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+{{/if}}
+
+<div class="row-fluid">
+  {{render "checks/add" model}}
+</div>
