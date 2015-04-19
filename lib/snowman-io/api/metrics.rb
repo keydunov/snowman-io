@@ -8,8 +8,9 @@ module SnowmanIO
           requires :metric, type: Hash do
             requires :app_id, type: String
             requires :name, type: String
-            requires :metric_name, type: String
+            requires :source, type: String
             requires :kind, type: String
+            optional :metric_name, type: String
           end
         end
         post do
@@ -30,8 +31,9 @@ module SnowmanIO
             requires :metric, type: Hash do
               requires :app_id, type: String
               requires :name, type: String
-              requires :metric_name, type: String
+              requires :source, type: String
               requires :kind, type: String
+              optional :metric_name, type: String
             end
           end
           put do

@@ -1,4 +1,4 @@
-{{#if model.isInitiated }}
+{{#if model.metrics.length }}
   <div class="row-fluid app-slot">
     <table class="table table-striped" style="width:30%">
       <tbody>
@@ -15,13 +15,11 @@
             {{#if model.requests.yesterday}}{{model.requests.yesterday.count}}{{else}}-{{/if}}
           </td>
         </tr>
-        {{#if model.hgMetrics}}
-          <tr>
-            <td colspan="2">
-              {{model.hgMetricsAmountHuman}}
-            </td>
-          </tr>
-        {{/if}}
+        <tr>
+          <td colspan="2">
+            {{model.metricsAmountHuman}}
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>

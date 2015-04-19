@@ -1,6 +1,8 @@
-<div class="row-fluid text-right">
-  {{#link-to "metrics.new" class="btn btn-default"}}Add Metric{{/link-to}}
-</div>
+{{#if isMetricAllowToAdd}}
+  <div class="row-fluid text-right">
+    {{#link-to "metrics.new" class="btn btn-default"}}Add Metric{{/link-to}}
+  </div>
+{{/if}}
 
 {{#if model.metrics}}
   <div class="table-responsive">
@@ -8,20 +10,22 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>Metric Name</th>
+          <th>Source</th>
           <th>Kind</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {{#each hgMetric in model.hgMetrics}}
+        {{#each metric in model.metrics}}
           <tr>
-            <td>{{link-to hgMetric.name "hg_metrics.show" model hgMetric}}</td>
-            <td>{{hgMetric.metricName}}</td>
-            <td>{{hgMetric.kind}}</td>
+            <td>{{link-to metric.name "metrics.show" model metric}}</td>
+            <td>{{metric.source}}</td>
+            <td>{{metric.kind}}</td>
             <td>
-              {{#link-to "hg_metrics.edit" model hgMetric}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
-              <a href="#" {{action "destroy" hgMetric}}><span class="glyphicon glyphicon-trash"></span></a>
+              {{#if metric.isEditable}}
+                {{#link-to "metrics.edit" model metric}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
+                <a href="#" {{action "destroy" metric}}><span class="glyphicon glyphicon-trash"></span></a>
+              {{/if}}
             </td>
           </tr>
         {{/each}}
@@ -32,7 +36,7 @@
   <div class="row-fluid">
     <div>&nbsp;</div>
     <h1 class="text-center">
-      You haven't any metrics yet, {{#link-to "hg_metrics.new" model}}add the first{{/link-to}}.
+      You haven't any metrics yet, {{#link-to "metrics.new" model}}add the first{{/link-to}}.
     </h1>
   </div>
 {{/if}}

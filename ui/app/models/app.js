@@ -16,18 +16,14 @@ export default DS.Model.extend({
     return JSON.parse(this.get("requestsJSON"));
   }.property("requestsJSON"),
 
-  isInitiated: function() {
-    return this.get("requests").total.count > 0 || this.get("metrics.length");
-  }.property("requests", "metrics"),
-
   metricsAmountHuman: function() {
     var amount = this.get("metrics.length");
     return amount + " Metric" + (amount !== 1 ? "s" : "");
   }.property("metrics"),
 
   hgDeployMetric: function() {
-    return this.get("hgMetrics").find(function(hgMetric){
-      return hgMetric.get("kind") === "deploy";
+    return this.get("metrics").find(function(metric){
+      return metric.get("source") === "hg" && metric.get("kind") === "deploy";
     });
-  }.property("metrics.@each.kind")
+  }.property("metrics.@each.kind", "metrics.@each.source"),
 });

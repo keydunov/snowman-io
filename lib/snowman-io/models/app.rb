@@ -23,7 +23,7 @@ module SnowmanIO
     # Returns amount of requests for `at` and day before
     def daily_metrics(at)
       json = {}
-      metric = metrics.where(kind: "request").first
+      metric = metrics.where(source: Metric::SOURCE_SNOWMAN, kind: "request").first
 
       today = at.beginning_of_day
       yesterday = at.beginning_of_day - 1.day
@@ -47,7 +47,7 @@ module SnowmanIO
     end
 
     def register_metric_value(name, kind, value, at)
-      metric = metrics.where(name: name, kind: kind).first_or_create!
+      metric = metrics.where(source: Metric::SOURCE_SNOWMAN, name: name, kind: kind).first_or_create!
       metric.update_attributes!(last_value: value)
       metric.data_points.create!(at: at, value: value)
     end
