@@ -25,6 +25,7 @@ require "snowman-io/aggregate"
 require "snowman-io/reports"
 require "snowman-io/loop/ping"
 require "snowman-io/loop/main"
+require "snowman-io/loop/checks"
 require "snowman-io/report_mailer"
 
 require "snowman-io/models/concerns/tokenable"
