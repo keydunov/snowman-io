@@ -19,7 +19,7 @@ export default DS.Model.extend({
   metricsAmountHuman: function() {
     var amount = this.get("metrics.length");
     return amount + " Metric" + (amount !== 1 ? "s" : "");
-  }.property("metrics"),
+  }.property("metrics.length"),
 
   hgDeployMetric: function() {
     return this.get("metrics").find(function(metric){
