@@ -1,15 +1,11 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  collapsed: true,
-  cmp: "more",
-  value: 0,
-
   resetForm: function() {
     this.set("collapsed", true);
     this.set("cmp", "more");
     this.set("value", 0);
-  },
+  }.on("init"),
 
   isSupported: function() {
     return this.get("model.kind") === "amount";
