@@ -7,18 +7,18 @@ export default Ember.Route.extend({
 
   // regular polling of apps (idea from http://yoranbrondsema.com/live-polling-system-ember-js/)
   activate: function() {
-    // this.set("timer", this._schedule());
+    this.set("timer", this._schedule());
   },
 
   deactivate: function() {
-    // Ember.run.cancel(this.get("timer"));
+    Ember.run.cancel(this.get("timer"));
   },
 
   _schedule: function() {
-    // return Ember.run.later(this, function() {
-    //   this._tick();
-    //   this.set("timer", this._schedule());
-    // }, 3000);
+    return Ember.run.later(this, function() {
+      this._tick();
+      this.set("timer", this._schedule());
+    }, 3000);
   },
 
   _tick: function() {
