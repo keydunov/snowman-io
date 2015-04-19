@@ -2,6 +2,7 @@ module SnowmanIO
   class HgMetric
     include Mongoid::Document
     belongs_to :app
+    has_many :checks, dependent: :destroy
 
     field :name, type: String
     field :metric_name, type: String

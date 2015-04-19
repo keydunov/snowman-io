@@ -5,6 +5,7 @@ require 'snowman-io/api/users'
 require 'snowman-io/api/apps'
 require 'snowman-io/api/info'
 require 'snowman-io/api/hg_metrics'
+require 'snowman-io/api/checks'
 
 module SnowmanIO
   module API
@@ -29,6 +30,7 @@ module SnowmanIO
       mount Apps
       mount Info
       mount HgMetrics
+      mount Checks
     end
   end
 end
