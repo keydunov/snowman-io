@@ -5,5 +5,5 @@ export default DS.Model.extend({
   hgMetric: DS.belongsTo('hg-metric'),
 
   cmp: DS.attr('string'),
-  value: DS.attr('number')
+  value: DS.attr('number'),
 });

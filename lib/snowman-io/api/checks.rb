@@ -16,15 +16,15 @@ module SnowmanIO
           { check: hg_metric.checks.create!(permitted_params[:check].to_h.except("hg_metric_id")) }
         end
 
-        # route_param :id do
-        #   before do
-        #     @hg_metric = HgMetric.find(params[:id])
-        #   end
-        #
-        #   get do
-        #     { hg_metric: @hg_metric }
-        #   end
-        #
+        route_param :id do
+          before do
+            @check = Check.find(params[:id])
+          end
+
+          get do
+            { check: @check }
+          end
+
         #   params do
         #     requires :hg_metric, type: Hash do
         #       requires :app_id, type: String
@@ -40,7 +40,7 @@ module SnowmanIO
         #   delete do
         #     @hg_metric.destroy
         #   end
-        # end
+        end
       end
     end
   end

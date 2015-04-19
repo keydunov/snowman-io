@@ -5,8 +5,14 @@ export default Ember.Controller.extend({
   cmp: "more",
   value: 0,
 
+  resetForm: function() {
+    this.set("collapsed", true);
+    this.set("cmp", "more");
+    this.set("value", 0);
+  },
+
   isSupported: function() {
-    return this.get("model.kind") == "amount";
+    return this.get("model.kind") === "amount";
   }.property("model.kind"),
 
   actions: {
@@ -15,7 +21,7 @@ export default Ember.Controller.extend({
     },
 
     cancel: function() {
-      this.set("collapsed", true);
+      this.resetForm();
     },
 
     clickMore: function() {
@@ -33,7 +39,7 @@ export default Ember.Controller.extend({
       check.set("cmp", this.get("cmp"));
       check.set("value", this.get("value"));
       check.save().then(function() {
-        me.set("collapsed", true);
+        me.resetForm();
       });
     },
   }

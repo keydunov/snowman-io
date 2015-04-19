@@ -4,7 +4,7 @@
   {{else}}
     <span>Add Check</span> - <a href="#" {{action "cancel"}}>Cancel</a>
     <div class="well">
-      <form class="form-inline">
+      <form class="form-inline" {{action "save" on="submit"}}>
         Snowman, notify when <b>{{model.name}}</b> will be 
         <div class="btn-group">
           <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
