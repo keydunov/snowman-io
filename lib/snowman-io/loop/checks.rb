@@ -1,3 +1,5 @@
+require 'snowman-io/loop/check_processor'
+
 module SnowmanIO
   module Loop
     class Checks
@@ -15,8 +17,16 @@ module SnowmanIO
       private
 
       def perform
-        Check.all.each do |check|
-          puts "TODO: process: #{check.inspect}"
+        # Run checks only if hg enabled for now
+        return if Setting.get(SnowmanIO::HG_STATUS) != "enabled"
+
+        Check.active.each do |check|
+          if CheckProcessor.new(check).process
+            puts "Check for #{check.metric.name} triggered"
+            check.triggered = true
+            check.save!
+            # notify, send email...
+          end
         end
       end
     end
