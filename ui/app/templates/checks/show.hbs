@@ -1,13 +1,16 @@
 <tr>
   <td>
     {{#if isEditing}}
+      {{render "checks/form" model}}
     {{else}}
       {{render "checks/human" model}}
     {{/if}}
   </td>
   <td>{{model.triggered}}</td>
   <td>
-    <a href="#" {{action "edit"}}><span class="glyphicon glyphicon-pencil"></span></a>
+    {{#unless isEditing}}
+      <a href="#" {{action "edit"}}><span class="glyphicon glyphicon-pencil"></span></a>
+    {{/unless}}
     <a href="#" {{action "destroy"}}><span class="glyphicon glyphicon-trash"></span></a>
   </td>
 </tr>

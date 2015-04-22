@@ -13,6 +13,14 @@ export default Ember.Controller.extend({
 
     edit: function() {
       this.set("isEditing", true);
-    }
+    },
+
+    cancel: function() {
+      this.set("isEditing", false);
+    },
+
+    save: function() {
+      this.set("isEditing", false);
+    },
   }
 });

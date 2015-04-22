@@ -1,0 +1,15 @@
+<form class="form-inline" {{action "save" on="submit"}}>
+  Snowman, notify when <b>{{metricName}}</b> will be 
+  <div class="btn-group">
+    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+      {{cmp}} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#" {{action "clickMore"}}>more</a></li>
+      <li><a href="#" {{action "clickLess"}}>less</a></li>
+    </ul>
+  </div>
+  {{input value=value class="form-control input-sm"}}.
+  <a href=# class="btn btn-sm btn-success" {{action "save"}}>save</a>
+  <a href=# class="btn btn-sm btn-link" {{action "cancel"}}>cancel</a>
+</form>
