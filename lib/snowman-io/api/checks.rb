@@ -35,7 +35,9 @@ module SnowmanIO
             end
           end
           put do
-            { check: @check.tap { |m| m.update_attributes!(permitted_params[:check].to_h.except("metric_id", "triggered")) } }
+            { check: @check.tap { |m| m.update_attributes!(
+              permitted_params[:check].to_h.except("metric_id").merge("triggered" => false)
+            ) } }
           end
 
           delete do

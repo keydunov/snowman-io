@@ -21,7 +21,15 @@
       {{/link-to}}
     {{/if}}
 
-    {{#if model.triggers.length}}
+    {{#if model.checks.length}}
+      {{#link-to "checks" model tagName="li" href=false}}
+        {{#link-to "checks" model}}
+          Checks
+          {{#if model.triggeredChecks.length}}
+            <span class="badge badge-danger">{{model.triggeredChecks.length}}</span>
+          {{/if}}
+        {{/link-to}}
+      {{/link-to}}
     {{/if}}
 
     {{#if model.metrics.length}}
