@@ -21,6 +21,9 @@
       {{/link-to}}
     {{/if}}
 
+    {{#if model.triggers.length}}
+    {{/if}}
+
     {{#if model.metrics.length}}
       {{#link-to "apps.show.install" model tagName="li" href=false}}
         {{#link-to "apps.show.install" model}}Install{{/link-to}}

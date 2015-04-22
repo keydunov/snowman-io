@@ -15,7 +15,7 @@ module SnowmanIO
 
         metric_value = parse_value(HgAPI.get_value(
                         :target => target_for_metric,
-                        :from   => @check.last_run_at.try(&:to_i) || @check.created_at.to_i,
+                        :from   => 20.minutes.ago.to_i
                        ))
 
         @check.cmp_fn.call(metric_value, @check.value)
@@ -25,7 +25,7 @@ module SnowmanIO
 
       def target_for_metric
         if @metric.kind == "amount"
-          "summarize(#{@metric.metric_name}, '#{DEFAULT_METRIC_PERIOD}', 'sum', true)"
+          "keepLastValue(summarize(#{@metric.metric_name}, '#{DEFAULT_METRIC_PERIOD}', 'sum', true))"
         end
       end
 
