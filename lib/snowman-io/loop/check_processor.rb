@@ -13,7 +13,10 @@ module SnowmanIO
       def process
         support_hg_only!
 
-        metric_value = parse_value(HgAPI.get_value(target_for_metric, DEFAULT_METRIC_PERIOD))
+        metric_value = parse_value(HgAPI.get_value(
+                        :target => target_for_metric,
+                        :from   => @check.last_run_at.try(&:to_i) || @check.created_at.to_i,
+                       ))
 
         @check.cmp_fn.call(metric_value, @check.value)
       end
@@ -22,7 +25,7 @@ module SnowmanIO
 
       def target_for_metric
         if @metric.kind == "amount"
-          "summarize(#{@metric.metric_name}, '#{DEFAULT_METRIC_PERIOD}')"
+          "summarize(#{@metric.metric_name}, '#{DEFAULT_METRIC_PERIOD}', 'sum', true)"
         end
       end
 

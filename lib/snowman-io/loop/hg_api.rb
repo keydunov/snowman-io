@@ -1,12 +1,8 @@
 module SnowmanIO
   module Loop
     class HgAPI
-      def self.get_value(target, period)
-        params = {
-          :target => target,
-          :from   => "-#{period}",
-          :format => "json"
-        }
+      def self.get_value(params = {})
+        params.merge!(format: :json)
 
         req = Net::HTTP::Post.new(hg_url.path)
         req.set_form_data(params)

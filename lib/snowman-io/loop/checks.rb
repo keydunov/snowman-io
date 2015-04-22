@@ -21,12 +21,14 @@ module SnowmanIO
         return if Setting.get(SnowmanIO::HG_STATUS) != "enabled"
 
         Check.active.each do |check|
-          if CheckProcessor.new(check).process
+          result = CheckProcessor.new(check).process
+          check.last_run_at = DateTime.now
+          if result
             puts "Check for #{check.metric.name} triggered"
             check.triggered = true
-            check.save!
             # notify, send email...
           end
+          check.save!
         end
       end
     end

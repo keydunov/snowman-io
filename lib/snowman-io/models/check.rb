@@ -1,12 +1,15 @@
 module SnowmanIO
   class Check
     include Mongoid::Document
+    include Mongoid::Timestamps::Created
+
     belongs_to :metric
 
     field :cmp, type: String
     field :value, type: Float
 
     field :triggered, type: Boolean, default: false
+    field :last_run_at, type: DateTime
 
     scope :active, -> { where(triggered: false) }
 
