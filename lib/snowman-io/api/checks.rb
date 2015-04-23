@@ -5,6 +5,13 @@ module SnowmanIO
 
       namespace :checks do
         params do
+          optional :last, type: Integer
+        end
+        get do
+          Extra::Meteor.model_all(:checks, Check, permitted_params[:last])
+        end
+
+        params do
           requires :check, type: Hash do
             requires :metric_id, type: String
             requires :cmp, type: String
@@ -37,7 +44,7 @@ module SnowmanIO
           end
 
           delete do
-            @check.destroy
+            Extra::Meteor.model_destroy(Check, @check)
           end
         end
       end
