@@ -10,7 +10,7 @@ module SnowmanIO
             if last == 0
               deleted = []
             else
-              deleted = Delete.where(model_kind: model.to_s, :created_at.gte => at, :created_at.lt => now).map(&:model_id)
+              deleted = Deleted.where(model_kind: model.to_s, :created_at.gte => at, :created_at.lt => now).map(&:model_id)
             end
 
             {
@@ -24,7 +24,7 @@ module SnowmanIO
         end
 
         def self.model_destroy(model, record)
-          Delete.create!(model_kind: model.to_s, model_id: record.id.to_s)
+          Deleted.create!(model_kind: model.to_s, model_id: record.id.to_s)
           record.destroy
         end
       end

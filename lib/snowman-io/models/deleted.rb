@@ -1,5 +1,5 @@
 module SnowmanIO
-  class Delete
+  class Deleted
     include Mongoid::Document
     include Mongoid::Timestamps::Created
 
