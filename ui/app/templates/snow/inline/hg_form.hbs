@@ -9,17 +9,17 @@
   <div class="well">
     <div class="form-group">
       <div class="btn-group">
-        <a href="#" {{action "selectDisabled"}} {{bind-attr class=":btn :btn-default isHgDisabled:active"}}>Disabled</a>
-        <a href="#" {{action "selectEnabled"}} {{bind-attr class=":btn :btn-default isHgDisabled::active"}}>Enabled</a>
+        <a href="#" {{action "selectDisabled"}} {{bind-attr class=":btn :btn-default disabled:active"}}>Disabled</a>
+        <a href="#" {{action "selectEnabled"}} {{bind-attr class=":btn :btn-default disabled::active"}}>Enabled</a>
       </div>
     </div>
-    <div {{bind-attr class=":form-group isHgDisabled:hidden"}}>
-      <label for="hgFormKey">HG Key</label>
-      {{input value=hgFormKey placeholder="/xxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" id="hgFormKey" class="form-control"}}
+    <div {{bind-attr class=":form-group disabled:hidden"}}>
+      <label for="formKey">HG Key</label>
+      {{input value=formKey placeholder="/xxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" id="formKey" class="form-control"}}
     </div>
 
     <div class="form-group">
-      <a href="#" {{action "save"}} {{bind-attr class=":btn :btn-info isHgFormValid::disabled"}}>Save</a>
+      <a href="#" {{action "save"}} {{bind-attr class=":btn :btn-info formValid::disabled"}}>Save</a>
       <a href="#" {{action "cancel"}} class="btn btn-link">Cancel</a>
     </div>
   </div>
