@@ -8,11 +8,4 @@
   <b>Report recipients:</b> {{reportRecipients}}
 </p>
 
-<p>
-  <b>Hosted Graphite Metrics:</b> {{hgStatusText}}
-  <a href="#" {{action "hgChange"}} {{bind-attr class="hgSaving:hidden"}}>
-    <span class="glyphicon glyphicon-pencil"></span>
-  </a>
-</p>
-
 {{render "snow/inline/hg_form"}}
