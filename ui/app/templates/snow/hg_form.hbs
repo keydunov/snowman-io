@@ -1,0 +1,27 @@
+<p>
+  <b>Hosted Graphite Metrics:</b> {{statusText}}
+  <a href="#" {{action "change"}} {{bind-attr class="saving:hidden"}}>
+    <span class="glyphicon glyphicon-pencil"></span>
+  </a>
+</p>
+
+{{#if show}}
+  <div class="well">
+    <div class="form-group">
+      <div class="btn-group">
+        <a href="#" {{action "selectDisabled"}} {{bind-attr class=":btn :btn-default disabled:active"}}>Disabled</a>
+        <a href="#" {{action "selectEnabled"}} {{bind-attr class=":btn :btn-default disabled::active"}}>Enabled</a>
+      </div>
+    </div>
+    <div {{bind-attr class=":form-group disabled:hidden"}}>
+      <label for="formKey">HG Key</label>
+      {{input value=formKey placeholder="/xxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" id="formKey" class="form-control"}}
+    </div>
+
+    <div class="form-group">
+      <a href="#" {{action "save"}} {{bind-attr class=":btn :btn-info formValid::disabled"}}>Save</a>
+      <a href="#" {{action "cancel"}} class="btn btn-link">Cancel</a>
+    </div>
+  </div>
+{{/if}}
+

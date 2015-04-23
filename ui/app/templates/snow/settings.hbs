@@ -8,29 +8,4 @@
   <b>Report recipients:</b> {{reportRecipients}}
 </p>
 
-<p>
-  <b>Hosted Graphite Metrics:</b> {{hgStatusText}}
-  <a href="#" {{action "hgChange"}} {{bind-attr class="hgSaving:hidden"}}>
-    <span class="glyphicon glyphicon-pencil"></span>
-  </a>
-</p>
-
-{{#if hgFormShow}}
-  <div class="well">
-    <div class="form-group">
-      <div class="btn-group">
-        <a href="#" {{action "hgSelectDisabled"}} {{bind-attr class=":btn :btn-default isHgDisabled:active"}}>Disabled</a>
-        <a href="#" {{action "hgSelectEnabled"}} {{bind-attr class=":btn :btn-default isHgDisabled::active"}}>Enabled</a>
-      </div>
-    </div>
-    <div {{bind-attr class=":form-group isHgDisabled:hidden"}}>
-      <label for="hgFormKey">HG Key</label>
-      {{input value=hgFormKey placeholder="/xxxxxxxx/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" id="hgFormKey" class="form-control"}}
-    </div>
-
-    <div class="form-group">
-      <a href="#" {{action "hgSave"}} {{bind-attr class=":btn :btn-info isHgFormValid::disabled"}}>Save</a>
-      <a href="#" {{action "hgCancel"}} class="btn btn-link">Cancel</a>
-    </div>
-  </div>
-{{/if}}
+{{render "snow/hg_form"}}
