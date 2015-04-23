@@ -24,9 +24,16 @@ export default Ember.Controller.extend({
     },
 
     save: function() {
-      var check = this.get("model");
+      var check;
+      if (this.get("model.isNew")) {
+        check = this.store.createRecord("check");
+        this.get("metric.checks").pushObject(check);
+      } else {
+        check = this.get("model");
+      }
       check.set("cmp", this.get("cmp"));
       check.set("value", this.get("value"));
+      check.save();
       this.resetForm();
       return true;
     },
