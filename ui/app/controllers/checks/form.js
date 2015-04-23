@@ -1,23 +1,18 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  needs: "metrics/show",
+  metric: Ember.computed.alias("controllers.metrics/show.model"),
+
   resetForm: function() {
-    this.set("collapsed", true);
-    this.set("cmp", "more");
-    this.set("value", 0);
+    this.set("cmp", this.get("model.cmp"));
+    this.set("value", this.get("model.value"));
   }.on("init"),
 
-  isSupported: function() {
-    return this.get("model.kind") === "amount";
-  }.property("model.kind"),
-
   actions: {
-    add: function() {
-      this.set("collapsed", false);
-    },
-
     cancel: function() {
       this.resetForm();
+      return true;
     },
 
     clickMore: function() {
@@ -30,13 +25,11 @@ export default Ember.Controller.extend({
 
     save: function() {
       var me = this;
-      var check = this.store.createRecord("check");
-      this.get("model.checks").pushObject(check);
+      var check = this.get("model");
       check.set("cmp", this.get("cmp"));
       check.set("value", this.get("value"));
-      check.save().then(function() {
-        me.resetForm();
-      });
+      this.resetForm();
+      return true;
     },
   }
 });

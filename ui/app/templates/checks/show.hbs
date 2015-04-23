@@ -1,0 +1,15 @@
+<tr>
+  <td>
+    {{#if editing}}
+      {{render "checks/form" check}}
+    {{else}}
+      {{render "checks/human" check}}
+    {{/if}}
+  </td>
+  <td>
+    {{#unless editing}}
+      <a href="#" {{action "edit" check}}><span class="glyphicon glyphicon-pencil"></span></a>
+      <a href="#" {{action "destroy" check}}><span class="glyphicon glyphicon-trash"></span></a>
+    {{/unless}}
+  </td>
+</tr>
