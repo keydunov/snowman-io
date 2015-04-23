@@ -24,7 +24,6 @@ export default Ember.Controller.extend({
     },
 
     save: function() {
-      var me = this;
       var check = this.get("model");
       check.set("cmp", this.get("cmp"));
       check.set("value", this.get("value"));
