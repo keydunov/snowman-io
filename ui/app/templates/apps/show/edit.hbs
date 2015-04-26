@@ -1,9 +1,9 @@
-{{render "apps/form"}}
+{{render "apps/form" model}}
 
 <div class="panel panel-danger panel-custom">
   <div class="panel-heading"><h3 class="panel-title">SnowmanIO Danger Section</h3></div>
   <div class="panel-body">
-    <a href="#" {{action "destroy" app}} class="btn btn-default">Destroy App</a> - this action is inrevertable.
+    <a href="#" {{action "destroy" model}} class="btn btn-default">Destroy App</a> - this action is inrevertable.
   </div>
 </div>
 
