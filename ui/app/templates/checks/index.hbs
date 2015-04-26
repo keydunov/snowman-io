@@ -17,6 +17,15 @@
   </div>
 {{/if}}
 
-<div class="row-fluid">
-  {{render "checks/add" model}}
-</div>
+{{#if isChecksSupported}}
+  <div class="row-fluid">
+    {{#if collapsed}}
+      <a href="#" {{action "toggle"}}>Add Check</a>
+    {{else}}
+      <a href="#" {{action "toggle"}}>Cancel</a>
+      <div class="well">
+        {{render "checks/form" newCheck}}
+      </div>
+    {{/if}}
+  </div>
+{{/if}}

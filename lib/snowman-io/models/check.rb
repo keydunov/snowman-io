@@ -1,7 +1,7 @@
 module SnowmanIO
   class Check
     include Mongoid::Document
-    include Mongoid::Timestamps::Created
+    include Mongoid::Timestamps
 
     belongs_to :metric
 

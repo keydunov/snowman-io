@@ -1,6 +1,7 @@
 module SnowmanIO
   class App
     include Mongoid::Document
+    include Mongoid::Timestamps
     include Concerns::Tokenable
     has_many :metrics, dependent: :destroy
 

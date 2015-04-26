@@ -5,6 +5,13 @@ module SnowmanIO
 
       namespace :checks do
         params do
+          optional :last, type: Integer
+        end
+        get do
+          Extra::Meteor.model_all(:checks, Check, permitted_params[:last])
+        end
+
+        params do
           requires :check, type: Hash do
             requires :metric_id, type: String
             requires :cmp, type: String
@@ -31,17 +38,14 @@ module SnowmanIO
               requires :metric_id, type: String
               requires :cmp, type: String
               requires :value, type: Float
-              optional :triggered
             end
           end
           put do
-            { check: @check.tap { |m| m.update_attributes!(
-              permitted_params[:check].to_h.except("metric_id").merge("triggered" => false)
-            ) } }
+            { check: @check.tap { |m| m.update_attributes!(permitted_params[:check].to_h.except("metric_id")) } }
           end
 
           delete do
-            @check.destroy
+            Extra::Meteor.model_destroy(Check, @check)
           end
         end
       end

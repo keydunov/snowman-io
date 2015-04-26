@@ -5,6 +5,13 @@ module SnowmanIO
 
       namespace :metrics do
         params do
+          optional :last, type: Integer
+        end
+        get do
+          Extra::Meteor.model_all(:metrics, Metric, permitted_params[:last])
+        end
+
+        params do
           requires :metric, type: Hash do
             requires :app_id, type: String
             requires :name, type: String
@@ -41,7 +48,7 @@ module SnowmanIO
           end
 
           delete do
-            @metric.destroy
+            Extra::Meteor.model_destroy(Metric, @metric)
           end
         end
       end

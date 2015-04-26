@@ -4,9 +4,11 @@ module SnowmanIO
       before(&:authenticate!)
 
       namespace :apps do
-        desc "List apps"
+        params do
+          optional :last, type: Integer
+        end
         get do
-          { apps: App.all }
+          Extra::Meteor.model_all(:apps, App, permitted_params[:last])
         end
 
         desc "Creates app"
@@ -41,7 +43,7 @@ module SnowmanIO
 
           desc "Deletes app"
           delete do
-            @app.destroy
+            Extra::Meteor.model_destroy(App, @app)
           end
         end
       end

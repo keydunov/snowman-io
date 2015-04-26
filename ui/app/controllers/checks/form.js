@@ -1,13 +1,20 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
+  needs: "metrics/show",
+  metric: Ember.computed.alias("controllers.metrics/show.model"),
+
   resetForm: function() {
-    this.set("metricName", this.get("model.metric.name"));
     this.set("cmp", this.get("model.cmp"));
     this.set("value", this.get("model.value"));
   }.on("init"),
 
   actions: {
+    cancel: function() {
+      this.resetForm();
+      return true;
+    },
+
     clickMore: function() {
       this.set("cmp", "more");
     },
@@ -17,10 +24,17 @@ export default Ember.Controller.extend({
     },
 
     save: function() {
-      var me = this;
-      this.model.set("cmp", this.get("cmp"));
-      this.model.set("value", this.get("value"));
-      this.model.save();
+      var check;
+      if (this.get("model.isNew")) {
+        check = this.store.createRecord("check");
+        this.get("metric.checks").pushObject(check);
+      } else {
+        check = this.get("model");
+      }
+      check.set("cmp", this.get("cmp"));
+      check.set("value", this.get("value"));
+      check.save();
+      this.resetForm();
       return true;
     },
   }

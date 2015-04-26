@@ -36,6 +36,7 @@ require "snowman-io/models/check"
 require "snowman-io/models/data_point"
 require "snowman-io/models/aggregation"
 require "snowman-io/models/setting"
+require "snowman-io/models/deleted"
 
 ActionMailer::Base.raise_delivery_errors = true
 ActionMailer::Base.view_paths = File.dirname(__FILE__) + "/snowman-io/views"

@@ -1,26 +1,21 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  isEditing: false,
+  reset: function() {
+    this.set("editing", false);
+  }.on("init"),
 
   actions: {
-    destroy: function() {
-      if (confirm("Are you sure?")) {
-        this.model.deleteRecord();
-        this.model.save();
-      }
-    },
-
     edit: function() {
-      this.set("isEditing", true);
+      this.set("editing", true);
     },
 
     cancel: function() {
-      this.set("isEditing", false);
+      this.set("editing", false);
     },
 
     save: function() {
-      this.set("isEditing", false);
+      this.set("editing", false);
     },
   }
 });
