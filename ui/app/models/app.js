@@ -28,8 +28,17 @@ export default DS.Model.extend({
   }.property("metrics.@each.kind", "metrics.@each.source"),
 
   checks: function() {
-    return this.get("metrics").then(function(metrics) {
-      return metrics.mapBy("checks");
+    var out = [];
+    this.get("metrics").forEach(function(item) {
+      item.get("checks").forEach(function(check) {
+        out.push(check);
+      });
     });
-  }.property("metrics.@each.checks")
+    return out;
+  }.property("metrics.@each.checks"),
+
+  checksAmountHuman: function() {
+    var amount = this.get("checks.length");
+    return amount + " Check" + (amount !== 1 ? "s" : "");
+  }.property("checks.length"),
 });

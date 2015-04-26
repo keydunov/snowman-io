@@ -21,6 +21,12 @@
       {{/link-to}}
     {{/if}}
 
+    {{#if model.checks}}
+      {{#link-to "checks" model tagName="li" href=false}}
+        {{#link-to "checks" model current-when=""}}Checks{{/link-to}}
+      {{/link-to}}
+    {{/if}}
+
     {{#if model.metrics.length}}
       {{#link-to "apps.show.install" model tagName="li" href=false}}
         {{#link-to "apps.show.install" model}}Install{{/link-to}}

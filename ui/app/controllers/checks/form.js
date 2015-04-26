@@ -1,9 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  needs: "metrics/show",
-  metric: Ember.computed.alias("controllers.metrics/show.model"),
-
   resetForm: function() {
     this.set("cmp", this.get("model.cmp"));
     this.set("value", this.get("model.value"));
@@ -27,7 +24,7 @@ export default Ember.Controller.extend({
       var check;
       if (this.get("model.isNew")) {
         check = this.store.createRecord("check");
-        this.get("metric.checks").pushObject(check);
+        this.get("model.metric.checks").pushObject(check);
       } else {
         check = this.get("model");
       }

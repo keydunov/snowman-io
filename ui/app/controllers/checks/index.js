@@ -6,7 +6,7 @@ export default Ember.Controller.extend({
 
   reset: function() {
     this.set("collapsed", true);
-    this.set("newCheck", Ember.Object.create({isNew: true, cmp: "more", value: 0}));
+    this.set("newCheck", Ember.Object.create({isNew: true, cmp: "more", value: 0, metric: this.get("metric")}));
   }.on("init"),
 
   isChecksSupported: function() {
