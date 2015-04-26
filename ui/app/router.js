@@ -23,7 +23,6 @@ Router.map(function() {
           this.route('show', {path: ':metric_id'});
           this.route('edit', {path: ':metric_id/edit'});
         });
-        this.resource('checks');
       });
     });
   });

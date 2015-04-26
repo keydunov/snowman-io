@@ -21,17 +21,6 @@
       {{/link-to}}
     {{/if}}
 
-    {{#if model.checks.length}}
-      {{#link-to "checks" model tagName="li" href=false}}
-        {{#link-to "checks" model}}
-          Checks
-          {{#if model.triggeredChecks.length}}
-            <span class="badge badge-danger">{{model.triggeredChecks.length}}</span>
-          {{/if}}
-        {{/link-to}}
-      {{/link-to}}
-    {{/if}}
-
     {{#if model.metrics.length}}
       {{#link-to "apps.show.install" model tagName="li" href=false}}
         {{#link-to "apps.show.install" model}}Install{{/link-to}}
