@@ -1,28 +1,22 @@
-{{yield}}
-<div class="col-md-3 app-slot">
-  <h4>
-    {{#link-to "apps.show.info" app.id}}{{app.name}}{{/link-to}}
-  </h4>
-  <table class="table table-striped">
-    <tbody>
-      <tr>
-        <th colspan="2">Requests</th>
-      </tr>
-      <tr>
-        <td>
-          <b>Today</b><br>
-          {{#if app.requests.today}}{{app.requests.today.count}}{{else}}-{{/if}}
-        </td>
-        <td class="yesterday">
-          <b>Yesterday</b><br>
-          {{#if app.requests.yesterday}}{{app.requests.yesterday.count}}{{else}}-{{/if}}
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          {{app.metricsAmountHuman}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<table class="table table-striped">
+  <tbody>
+    <tr>
+      <th colspan="2">Requests</th>
+    </tr>
+    <tr>
+      <td>
+        <b>Today</b><br>
+        {{#if app.requests.today}}{{app.requests.today.count}}{{else}}-{{/if}}
+      </td>
+      <td class="yesterday">
+        <b>Yesterday</b><br>
+        {{#if app.requests.yesterday}}{{app.requests.yesterday.count}}{{else}}-{{/if}}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        {{app.metricsAmountHuman}}
+      </td>
+    </tr>
+  </tbody>
+</table>

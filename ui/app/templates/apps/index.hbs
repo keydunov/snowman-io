@@ -4,7 +4,10 @@
 
 <div class="row-fluid dashboard">
   {{#each app in model}}
-    {{app-status app=app}}
+    <div class="col-md-3 app-slot">
+      <h4>{{#link-to "apps.show.info" app.id}}{{app.name}}{{/link-to}}</h4>
+      {{app-status app=app}}
+    </div>
   {{else}}
     <div>&nbsp;</div>
     <h1 class="text-center">
