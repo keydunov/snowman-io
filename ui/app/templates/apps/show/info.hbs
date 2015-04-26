@@ -1,30 +1,8 @@
 {{#if model.metrics }}
-  <div class="row-fluid app-slot">
-    <table class="table table-striped" style="width:30%">
-      <tbody>
-        <tr>
-          <th colspan="2">Requests</th>
-        </tr>
-        <tr>
-          <td>
-            <b>Today</b><br>
-            {{#if model.requests.today}}{{model.requests.today.count}}{{else}}-{{/if}}
-          </td>
-          <td>
-            <b>Yesterday</b><br>
-            {{#if model.requests.yesterday}}{{model.requests.yesterday.count}}{{else}}-{{/if}}
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            {{model.metricsAmountHuman}} / {{model.checksAmountHuman}}
-            {{#if model.triggeredChecks.length}}
-              <span class="label label-danger">{{model.triggeredChecks.length}} triggered</span>
-            {{/if}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row-fluid">
+    <div class="col-md-4 app-slot">
+      {{app-status app=model}}
+    </div>
   </div>
 {{else}}
   {{partial "apps/show/install"}}
