@@ -37,6 +37,8 @@ export default DS.Model.extend({
     return out;
   }.property("metrics.@each.checks"),
 
+  triggeredChecks: Ember.computed.filterBy('checks', 'triggered', true),
+
   checksAmountHuman: function() {
     var amount = this.get("checks.length");
     return amount + " Check" + (amount !== 1 ? "s" : "");

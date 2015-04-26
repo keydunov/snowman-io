@@ -26,6 +26,9 @@
           <tr>
             <td colspan="2">
               {{app.metricsAmountHuman}} / {{app.checksAmountHuman}}
+              <span {{bind-attr class=":label app.triggeredChecks.length:label-danger:label-success"}}>
+                {{app.triggeredChecks.length}} triggered
+              </span>
             </td>
           </tr>
         </tbody>
