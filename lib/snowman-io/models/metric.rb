@@ -1,11 +1,12 @@
 module SnowmanIO
   class Metric
-    SOURCE_SNOWMAN = "snowman"
-    SOURCE_HG = "hg"
-
     include Mongoid::Document
+    include Mongoid::Timestamps
     belongs_to :app
     has_many :checks, dependent: :destroy
+
+    SOURCE_SNOWMAN = "snowman"
+    SOURCE_HG = "hg"
 
     field :name, type: String
     field :source, type: String

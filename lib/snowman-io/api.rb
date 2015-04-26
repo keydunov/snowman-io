@@ -1,5 +1,6 @@
 require 'grape'
 
+require 'snowman-io/api/extra/meteor'
 require 'snowman-io/api/auth_helpers'
 require 'snowman-io/api/users'
 require 'snowman-io/api/apps'
