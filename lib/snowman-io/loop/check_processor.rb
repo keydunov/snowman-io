@@ -32,7 +32,7 @@ module SnowmanIO
 
       def parse_value(data)
         if @metric.kind == "amount"
-          data.first["datapoints"].last.first.to_i
+          data.first.try(:[], "datapoints").try(:last).try(:first).try(:to_i)
         end
       end
 
