@@ -13,6 +13,7 @@ module SnowmanIO
       def process
         support_hg_only!
 
+        # Set 20 minutes interval to be sure fetch even rare metric
         metric_value = parse_value(HgAPI.get_value(
                         :target => target_for_metric,
                         :from   => 20.minutes.ago.to_i

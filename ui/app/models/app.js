@@ -28,22 +28,8 @@ export default DS.Model.extend({
   }.property("metrics.@each.kind", "metrics.@each.source"),
 
   checks: function() {
-    var out = [];
-    this.get("metrics").forEach(function(item) {
-      item.get("checks").forEach(function(check) {
-        out.push(check);
-      });
+    return this.get("metrics").then(function(metrics) {
+      return metrics.mapBy("checks");
     });
-    return out;
-  }.property("metrics.@each.checks"),
-
-  triggeredChecks: function() {
-    var out = [];
-    this.get("checks").forEach(function(check) {
-      if (check.get("triggered")) {
-        out.push(check);
-      }
-    });
-    return out;
-  }.property("checks.@each.triggered"),
+  }.property("metrics.@each.checks")
 });

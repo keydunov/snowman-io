@@ -16,12 +16,11 @@ module SnowmanIO
             requires :metric_id, type: String
             requires :cmp, type: String
             requires :value, type: Float
-            optional :triggered
           end
         end
         post do
           metric = Metric.find(permitted_params[:check][:metric_id])
-          { check: metric.checks.create!(permitted_params[:check].to_h.except("metric_id", "triggered")) }
+          { check: metric.checks.create!(permitted_params[:check].to_h.except("metric_id")) }
         end
 
         route_param :id do
