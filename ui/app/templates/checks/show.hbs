@@ -1,4 +1,4 @@
-<tr>
+<tr {{bind-attr class="model.triggered:danger"}}>
   <td>
     {{#if editing}}
       {{render "checks/form" model}}
