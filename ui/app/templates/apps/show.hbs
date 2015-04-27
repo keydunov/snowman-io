@@ -23,7 +23,12 @@
 
     {{#if model.checks}}
       {{#link-to "checks" model tagName="li" href=false}}
-        {{#link-to "checks" model}}Checks{{/link-to}}
+        {{#link-to "checks" model}}
+          Checks
+          {{#if model.triggeredChecks}}
+            <span class="label label-danger">{{model.triggeredChecks.length}}</span>
+          {{/if}}
+        {{/link-to}}
       {{/link-to}}
     {{/if}}
 

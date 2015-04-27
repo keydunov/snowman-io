@@ -18,4 +18,6 @@ export default DS.Model.extend({
   }.property("source"),
 
   isSourceHg: Ember.computed.equal("source", "hg"),
+
+  triggeredChecks: Ember.computed.filterBy('checks', 'triggered', true),
 });

@@ -18,7 +18,7 @@
       </thead>
       <tbody>
         {{#each metric in model.metrics}}
-          <tr>
+          <tr {{bind-attr class="metric.triggeredChecks:danger"}}>
             <td>{{link-to metric.name "metrics.show" model metric}}</td>
             <td>{{metric.source}}</td>
             <td>{{metric.kind}}</td>
