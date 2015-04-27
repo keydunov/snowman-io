@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Controller.extend({
   reset: function() {
     this.set("name", this.get("model.name"));
-  }.on('init'),
+  }.on("init"),
 
   isFormValid: function() {
     return Ember.isPresent(this.get("name"));

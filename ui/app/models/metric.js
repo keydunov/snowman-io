@@ -12,8 +12,6 @@ export default DS.Model.extend({
   // source: hg
   metricName: DS.attr('string'),
 
-  availableKinds: ["time", "counter", "amount", "deploy"],
-
   isDeploy: Ember.computed.equal("kind", "deploy"),
   isEditable: function() {
     return this.get("isSourceHg");

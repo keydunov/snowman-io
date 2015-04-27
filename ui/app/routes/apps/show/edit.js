@@ -8,7 +8,7 @@ export default Ember.Route.extend({
   actions: {
     save: function() {
       var me = this;
-      var app = this.modelFor("apps/show");
+      var app = this.controller.get("model");
       app.save().then(function() {
         me.transitionTo("apps.show.info", app);
       });
