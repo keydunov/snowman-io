@@ -6,7 +6,12 @@ export default Ember.Controller.extend({
 
   reset: function() {
     this.set("collapsed", true);
-    this.set("newCheck", Ember.Object.create({isNew: true, cmp: "more", value: 0}));
+    this.set("newCheck", Ember.Object.create({
+      isNew: true,
+      metric: this.get("metric"),
+      cmp: "more",
+      value: 0
+    }));
   }.on("init"),
 
   isChecksSupported: function() {
@@ -18,8 +23,22 @@ export default Ember.Controller.extend({
       this.set("collapsed", !this.get("collapsed"));
     },
 
-    save: function() {
+    cancel: function() {
       this.reset();
+    },
+
+    save: function() {
+      var me = this;
+      var metric = this.get("metric");
+
+      var check = this.store.createRecord("check", {
+        cmp: this.get("newCheck.cmp"),
+        value: this.get("newCheck.value"),
+      });
+      metric.get("checks").pushObject(check);
+      check.save().then(function() {
+        me.reset();
+      });
     },
 
     destroy: function(check) {
