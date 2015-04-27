@@ -1,16 +1,16 @@
-<tr>
+<tr {{bind-attr class="model.triggered:danger"}}>
   <td>
     {{#if editing}}
-      {{render "checks/form" check}}
+      {{render "checks/form" model}}
     {{else}}
-      {{render "checks/human" check}}
+      {{render "checks/human" model}}
     {{/if}}
   </td>
-  <td>{{check.triggered}}</td>
+  <td>{{model.triggered}}</td>
   <td>
     {{#unless editing}}
-      <a href="#" {{action "edit" check}}><span class="glyphicon glyphicon-pencil"></span></a>
-      <a href="#" {{action "destroy" check}}><span class="glyphicon glyphicon-trash"></span></a>
+      <a href="#" {{action "edit" model}}><span class="glyphicon glyphicon-pencil"></span></a>
+      <a href="#" {{action "destroy" model}}><span class="glyphicon glyphicon-trash"></span></a>
     {{/unless}}
   </td>
 </tr>
