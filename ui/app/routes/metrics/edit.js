@@ -5,14 +5,15 @@ export default Ember.Route.extend({
     return this.store.find("metric", params.metric_id);
   },
 
-  setupController: function(controller, model) {
-    this._super(controller, model);
-    controller.set("fixedName", model.get("name"));
-  },
+  actions: {
+    save: function() {
+      var me = this;
+      var app = this.modelFor("apps/show");
+      var metric = this.controller.get("model");
 
-  deactivate: function() {
-    if (this.controller.get("model.isDirty")) {
-      this.controller.get("model").rollback();
+      metric.save().then(function() {
+        me.transitionTo("metrics.show", app, metric);
+      });
     }
   }
 });
