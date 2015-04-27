@@ -51,6 +51,7 @@ module SnowmanIO
       metric = metrics.where(source: Metric::SOURCE_SNOWMAN, name: name, kind: kind).first_or_create!
       metric.update_attributes!(last_value: value)
       metric.data_points.create!(at: at, value: value)
+      metric.app.touch
     end
 
     def requestsJSON

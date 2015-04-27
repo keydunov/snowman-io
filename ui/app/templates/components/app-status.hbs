@@ -15,7 +15,10 @@
     </tr>
     <tr>
       <td colspan="2">
-        {{app.metricsAmountHuman}}
+        {{app.metricsAmountHuman}} / {{app.checksAmountHuman}}
+        {{#if app.triggeredChecks}}
+          <span class="label label-danger">{{app.triggeredChecks.length}} triggered</span>
+        {{/if}}
       </td>
     </tr>
   </tbody>

@@ -21,11 +21,12 @@ module SnowmanIO
     end
 
     def cmp_fn
+      # TODO: if a.nil?
       case cmp
       when "more"
-        -> (a, b) { a > b }
+        -> (a, b) { a ? a > b : false }
       when "less"
-        -> (a, b) { a < b }
+        -> (a, b) { a ? a < b : false }
       else
         raise "unreachable"
       end

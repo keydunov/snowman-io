@@ -6,6 +6,7 @@
       {{render "checks/human" check}}
     {{/if}}
   </td>
+  <td>{{check.triggered}}</td>
   <td>
     {{#unless editing}}
       <a href="#" {{action "edit" check}}><span class="glyphicon glyphicon-pencil"></span></a>

@@ -17,7 +17,13 @@
 
     {{#if isMetricsTabVisible}}
       {{#link-to "metrics" model tagName="li" href=false}}
-        {{#link-to "metrics" model current-when=""}}Metrics{{/link-to}}
+        {{#link-to "metrics" model}}Metrics{{/link-to}}
+      {{/link-to}}
+    {{/if}}
+
+    {{#if model.checks}}
+      {{#link-to "checks" model tagName="li" href=false}}
+        {{#link-to "checks" model}}Checks{{/link-to}}
       {{/link-to}}
     {{/if}}
 

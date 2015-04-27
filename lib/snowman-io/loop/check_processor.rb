@@ -13,9 +13,10 @@ module SnowmanIO
       def process
         support_hg_only!
 
+        # Set 20 minutes interval to be sure fetch even rare metric
         metric_value = parse_value(HgAPI.get_value(
                         :target => target_for_metric,
-                        :from   => @check.last_run_at.try(&:to_i) || @check.created_at.to_i,
+                        :from   => 20.minutes.ago.to_i
                        ))
 
         @check.cmp_fn.call(metric_value, @check.value)
@@ -25,13 +26,13 @@ module SnowmanIO
 
       def target_for_metric
         if @metric.kind == "amount"
-          "summarize(#{@metric.metric_name}, '#{DEFAULT_METRIC_PERIOD}', 'sum', true)"
+          "keepLastValue(summarize(#{@metric.metric_name}, '#{DEFAULT_METRIC_PERIOD}', 'sum', true))"
         end
       end
 
       def parse_value(data)
         if @metric.kind == "amount"
-          data.first["datapoints"].first.first.to_i
+          data.first.try(:[], "datapoints").try(:last).try(:first).try(:to_i)
         end
       end
 

@@ -26,4 +26,21 @@ export default DS.Model.extend({
       return metric.get("source") === "hg" && metric.get("kind") === "deploy";
     });
   }.property("metrics.@each.kind", "metrics.@each.source"),
+
+  checks: function() {
+    var out = [];
+    this.get("metrics").forEach(function(item) {
+      item.get("checks").forEach(function(check) {
+        out.push(check);
+      });
+    });
+    return out;
+  }.property("metrics.@each.checks"),
+
+  triggeredChecks: Ember.computed.filterBy('checks', 'triggered', true),
+
+  checksAmountHuman: function() {
+    var amount = this.get("checks.length");
+    return amount + " Check" + (amount !== 1 ? "s" : "");
+  }.property("checks.length"),
 });
