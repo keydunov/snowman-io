@@ -1,17 +1,12 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  resetForm: function() {
+  reset: function() {
     this.set("cmp", this.get("model.cmp"));
     this.set("value", this.get("model.value"));
   }.on("init"),
 
   actions: {
-    cancel: function() {
-      this.resetForm();
-      return true;
-    },
-
     clickMore: function() {
       this.set("cmp", "more");
     },
@@ -21,17 +16,8 @@ export default Ember.Controller.extend({
     },
 
     save: function() {
-      var check;
-      if (this.get("model.isNew")) {
-        check = this.store.createRecord("check");
-        this.get("model.metric.checks").pushObject(check);
-      } else {
-        check = this.get("model");
-      }
-      check.set("cmp", this.get("cmp"));
-      check.set("value", this.get("value"));
-      check.save();
-      this.resetForm();
+      this.set("model.cmp", this.get("cmp"));
+      this.set("model.value", this.get("value"));
       return true;
     },
   }

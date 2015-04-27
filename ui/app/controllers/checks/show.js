@@ -15,7 +15,10 @@ export default Ember.Controller.extend({
     },
 
     save: function() {
-      this.set("editing", false);
+      var me = this;
+      this.get("model").save().then(function() {
+        me.reset();
+      });
     },
   }
 });

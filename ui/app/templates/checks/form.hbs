@@ -1,4 +1,4 @@
-<form class="form-inline" {{action "save" model on="submit"}}>
+<form class="form-inline" {{action "save" on="submit"}}>
   Snowman, notify when <b>{{model.metric.name}}</b> will be 
   <div class="btn-group">
     <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
@@ -10,8 +10,6 @@
     </ul>
   </div>
   {{input value=value class="form-control input-sm"}}.
-  <a href=# class="btn btn-sm btn-success" {{action "save" model}}>save</a>
-  {{#unless model.isNew}}
-    <a href=# class="btn btn-sm btn-link" {{action "cancel"}}>cancel</a>
-  {{/unless}}
+  <a href=# class="btn btn-sm btn-success" {{action "save"}}>save</a>
+  <a href=# class="btn btn-sm btn-link" {{action "cancel"}}>cancel</a>
 </form>
