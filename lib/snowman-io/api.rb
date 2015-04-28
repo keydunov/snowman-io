@@ -7,12 +7,13 @@ require 'snowman-io/api/apps'
 require 'snowman-io/api/info'
 require 'snowman-io/api/metrics'
 require 'snowman-io/api/checks'
+require 'snowman-io/api/agent'
 
 module SnowmanIO
   module API
     class Root < Grape::API
       include AuthHelpers
-      prefix :api
+      default_format :json
       format :json
       default_error_formatter :json
 
@@ -27,6 +28,9 @@ module SnowmanIO
         end
       end
 
+      mount Agent
+
+      prefix :api
       mount Users
       mount Apps
       mount Info
