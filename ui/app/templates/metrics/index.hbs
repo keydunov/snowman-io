@@ -26,8 +26,8 @@
             <td>
               {{#if metric.isEditable}}
                 {{#link-to "metrics.edit" model metric}}<span class="glyphicon glyphicon-pencil"></span>{{/link-to}}
-                <a href="#" {{action "destroy" metric}}><span class="glyphicon glyphicon-trash"></span></a>
               {{/if}}
+                <a href="#" {{action "destroy" metric}}><span class="glyphicon glyphicon-trash"></span></a>
             </td>
           </tr>
         {{/each}}

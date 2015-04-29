@@ -11,18 +11,24 @@ module SnowmanIO
       end
 
       def process
-        support_hg_only!
-
-        # Set 20 minutes interval to be sure fetch even rare metric
-        metric_value = parse_value(HgAPI.get_value(
-                        :target => target_for_metric,
-                        :from   => 20.minutes.ago.to_i
-                       ))
-
         @check.cmp_fn.call(metric_value, @check.value)
       end
 
       private
+
+      def metric_value
+        if @metric.metric_name.blank?
+          @metric.last_value
+        else
+
+          # HG metric
+          # Set 20 minutes interval to be sure fetch even rare metric
+          parse_value(HgAPI.get_value(
+            :target => target_for_metric,
+            :from   => 20.minutes.ago.to_i
+          ))
+        end
+      end
 
       def target_for_metric
         if @metric.kind == "amount"
@@ -36,11 +42,6 @@ module SnowmanIO
         end
       end
 
-      def support_hg_only!
-        if @metric.metric_name.blank?
-          raise "CheckProcessor supports only hg metric"
-        end
-      end
     end
   end
 end
