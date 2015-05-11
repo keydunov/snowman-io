@@ -9,10 +9,15 @@ export default DS.Model.extend({
   source: DS.attr('string'),
   kind: DS.attr('string'),
 
+  last_value: DS.attr(),
+  updated_at: DS.attr(),
+
   // source: hg
   metricName: DS.attr('string'),
 
   isDeploy: Ember.computed.equal("kind", "deploy"),
+  isTime: Ember.computed.equal("kind", "time"),
+  isAmount: Ember.computed.equal("kind", "amount"),
   isEditable: function() {
     return this.get("isSourceHg");
   }.property("source"),

@@ -5,6 +5,7 @@ module.exports = function(environment) {
     modulePrefix: 'ui',
     environment: environment,
     baseURL: '/',
+    apiPrefix: 'api',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
@@ -56,6 +57,8 @@ module.exports = function(environment) {
     authorizer: 'simple-auth-authorizer:devise',
     routeAfterAuthentication: 'apps'
   }
+
+  ENV.api = ENV.baseURL + ENV.apiPrefix;
 
   return ENV;
 };

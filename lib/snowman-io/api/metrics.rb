@@ -50,6 +50,22 @@ module SnowmanIO
           delete do
             Extra::Meteor.model_destroy(Metric, @metric)
           end
+
+          # WIP
+          # Returns data to render chart for metric
+          params do
+            requires :target, values: ["avg", "count"]
+            optional :precision, values: ["5min", "daily"], default: "5min"
+          end
+          get "render" do
+            data = @metric.aggregations
+                     .where(precision: params[:precision])
+                     .order("at desc")
+                     .limit(36).sort_by(&:at).map do |datapoint|
+                       { at: datapoint.at, value: datapoint.send(params[:target]) }
+                     end
+            { datapoints: data }
+          end
         end
       end
     end

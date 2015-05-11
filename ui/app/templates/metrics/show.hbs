@@ -5,12 +5,19 @@
   </ol>
 </div>
 
+{{#if model.isAmount }}
+  Last value: {{model.last_value}} at {{moment model.updated_at}}
+{{/if}}
+
 <div class="row-fluid">
   {{#if model.isSourceHg}}
     {{graphite-graph hgMetric=model hgDeployMetric=app.hgDeployMetric hgKey=hgKey duration="24h"}}
     {{graphite-graph hgMetric=model hgDeployMetric=app.hgDeployMetric hgKey=hgKey duration="1h"}}
   {{else}}
-    Graphs are not available for this sort of metrics yet.
+    {{#if model.isTime}}
+      {{snowman-graph metric=model target="avg"}}
+      {{snowman-graph metric=model target="count"}}
+    {{/if}}
   {{/if}}
 </div>
 

@@ -1,0 +1,9 @@
+{{#if loading}}
+  Loading...
+{{else}}
+  <b>{{target}}, last three hours, {{ precision }} precision</b>
+  {{ember-chart type="Line"
+                data=chartData
+                width=600
+                height=300}}
+{{/if}}

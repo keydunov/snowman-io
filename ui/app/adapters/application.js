@@ -3,5 +3,5 @@ import config from '../config/environment';
 
 export default DS.ActiveModelAdapter.extend({
   host: config.baseHost,
-  namespace: 'api'
+  namespace: config.apiPrefix
 });
